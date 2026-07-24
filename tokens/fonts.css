@@ -1,0 +1,14 @@
+/* ============================================================
+   About the Engineer — Web fonts
+   ------------------------------------------------------------
+   Bebas Neue  — primary display / headline face (all-caps, condensed)
+   Bayon       — secondary display, used for product names (Spods, FitConnect)
+   Noto Sans JP — Japanese + Latin body copy
+   Archivo     — Latin UI / metadata / small labels
+
+   These are all served from Google Fonts. The @import below pulls in
+   the upstream @font-face declarations, which the compiler treats as
+   the shipped webfonts. Consumers need network access for these to load.
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Bayon&family=Archivo:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap');

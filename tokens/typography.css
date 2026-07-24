@@ -1,0 +1,79 @@
+/* ============================================================
+   About the Engineer — Typography tokens
+   ------------------------------------------------------------
+   Two display faces drive the brand:
+     Bebas Neue — almost every headline. ALL-CAPS, condensed, set
+                  TIGHT (tracking-tight) at large sizes, and with
+                  generous letter-spacing (tracking-wide) when small
+                  (nav, buttons, labels).
+     Bayon      — reserved for product / sub-brand names.
+   Body copy (mostly Japanese) is Noto Sans JP; Latin metadata uses
+   Archivo. Numerals in stat blocks are Bebas Neue.
+   ============================================================ */
+
+:root {
+  /* ---- Families ---- */
+  --font-display: 'Bebas Neue', 'Oswald', 'Arial Narrow', sans-serif;
+  --font-product: 'Bayon', 'Bebas Neue', sans-serif;
+  --font-body:    'Noto Sans JP', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', system-ui, sans-serif;
+  --font-ui:      'Archivo', 'Noto Sans JP', system-ui, sans-serif;
+
+  /* ---- Display scale (Bebas Neue, line-height ~0.95) ---- */
+  --display-2xl: 9rem;     /* 144px — full-bleed hero */
+  --display-xl:  6rem;     /* 96px  — page hero (md) */
+  --display-lg:  4.5rem;   /* 72px  — big section title */
+  --display-md:  3.75rem;  /* 60px  — section header */
+  --display-sm:  3rem;     /* 48px  — sub-section */
+  --display-xs:  2.25rem;  /* 36px  — card / product title */
+
+  /* ---- Body scale (Noto Sans JP) ---- */
+  --text-2xl: 1.5rem;    /* 24px — lead / subtitle */
+  --text-xl:  1.25rem;   /* 20px — large body */
+  --text-lg:  1.125rem;  /* 18px — default body */
+  --text-base:1rem;      /* 16px — base */
+  --text-sm:  0.875rem;  /* 14px — secondary / nav */
+  --text-xs:  0.75rem;   /* 12px — captions, tags */
+
+  /* ---- Weights ---- */
+  --weight-normal: 400;
+  --weight-medium: 500;
+  --weight-bold:   700;
+
+  /* ---- Line heights ---- */
+  --leading-display: 0.95;  /* condensed headlines */
+  --leading-tight:   1.15;
+  --leading-snug:    1.4;
+  --leading-relaxed: 1.75;  /* Japanese body copy */
+
+  /* ---- Letter spacing ---- */
+  --tracking-tight: -0.02em;  /* large Bebas headlines */
+  --tracking-normal: 0;
+  --tracking-wide:   0.05em;   /* nav, body emphasis */
+  --tracking-wider:  0.1em;    /* buttons, labels, small caps */
+  --tracking-widest: 0.18em;   /* eyebrow / overline */
+}
+
+/* ---- Convenience composite classes (optional, for cards/specimens) ---- */
+.ate-display {
+  font-family: var(--font-display);
+  line-height: var(--leading-display);
+  letter-spacing: var(--tracking-tight);
+  text-transform: uppercase;
+  font-weight: var(--weight-normal);
+}
+.ate-product {
+  font-family: var(--font-product);
+  letter-spacing: var(--tracking-wide);
+}
+.ate-body {
+  font-family: var(--font-body);
+  line-height: var(--leading-relaxed);
+  font-weight: var(--weight-normal);
+}
+.ate-eyebrow {
+  font-family: var(--font-ui);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-widest);
+  font-weight: var(--weight-600, 600);
+  font-size: var(--text-xs);
+}

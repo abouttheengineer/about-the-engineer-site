@@ -1,0 +1,39 @@
+/* ============================================================
+   About the Engineer — Effects: borders, shadows, motion
+   ------------------------------------------------------------
+   The marketing brand leans on BORDERS, not shadows. Cards on light
+   surfaces use a 1px hairline border + a whisper of shadow. Hover
+   states are colour INVERSIONS (fill swaps, border darkening), never
+   lifts. Transitions are uniform 300ms ease. No bounce, no parallax.
+   Product-app UI (Spods) is the exception — it uses soft elevation.
+   ============================================================ */
+
+:root {
+  /* ---- Border widths ---- */
+  --border-hairline: 1px;
+  --border-medium:   2px;   /* outline buttons, dividers */
+  --border-accent:   4px;   /* left-rule on numbered list items */
+  --border-accent-hover: 8px; /* the rule thickens on hover */
+
+  /* ---- Shadows (used sparingly) ---- */
+  --shadow-card:  0 1px 2px rgba(0, 0, 0, 0.05);          /* shadow-sm on light cards */
+  --shadow-image: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+                  0 8px 10px -6px rgba(0, 0, 0, 0.1);      /* product images */
+  --shadow-product: 0 10px 30px -8px rgba(0, 0, 0, 0.18); /* Spods-app elevation */
+  --shadow-none: none;
+
+  /* ---- Motion ---- */
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1); /* @kind other */
+  --duration-fast:  150ms; /* @kind other */
+  --duration-base:  300ms; /* @kind other */ /* the brand default — colour/border transitions */
+  --duration-slow:  500ms; /* @kind other */
+
+  --transition-colors: color var(--duration-base) var(--ease-standard),
+                       background-color var(--duration-base) var(--ease-standard),
+                       border-color var(--duration-base) var(--ease-standard);
+  --transition-all: all var(--duration-base) var(--ease-standard);
+
+  /* ---- Backdrop ---- */
+  --backdrop-blur: blur(8px); /* @kind other */ /* fixed header glass */
+  --header-scrim:  rgba(9, 9, 11, 0.9);       /* zinc-950/90 */
+}

@@ -1,0 +1,126 @@
+<!-- @dsCard group="Corporate Site" viewport="1280x820" name="Corporate site — editorial (multi-page)" subtitle="New direction: light editorial grid · Home / Business / About / Contact" -->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>About the Engineer</title>
+<link rel="stylesheet" href="styles.css" />
+<style>
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--white); font-family: var(--font-body); color: var(--text-on-light); }
+  ::-webkit-scrollbar { width: 10px; }
+  ::-webkit-scrollbar-thumb { background: var(--neutral-300); }
+  button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 2px solid var(--zinc-950); outline-offset: 2px; }
+  input:focus, select:focus, textarea:focus { border-color: var(--zinc-950) !important; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/lucide@0.487.0/dist/umd/lucide.min.js"></script>
+<script>window.__resources = { imageSlotsState: './.image-slots.state.json' };</script>
+<script src="image-slot.js"></script>
+<script src="_ds_bundle.js"></script>
+
+<script type="text/babel" src="shared.jsx"></script>
+<script src="products-data.js"></script>
+<script type="text/babel" src="Chrome.jsx"></script>
+<script type="text/babel" src="HomePage.jsx"></script>
+<script type="text/babel" src="ConsultingPage.jsx"></script>
+<script type="text/babel" src="BusinessPage.jsx"></script>
+<script type="text/babel" src="ProductPage.jsx"></script>
+<script type="text/babel" src="ContactPage.jsx"></script>
+
+<script type="text/babel" data-presets="react">
+  const PAGES = ['home', 'consulting', 'business', 'contact', ...window.PRODUCTS.map(p => 'product-' + p.slug)];
+
+  function App() {
+    const initial = (window.location.hash || '').replace('#', '');
+    const [page, setPage] = React.useState(PAGES.includes(initial) ? initial : 'home');
+    const [section, setSection] = React.useState(initial === 'about' || initial === 'consulting-scroll' ? initial : null);
+
+    React.useEffect(() => {
+      if ('scrollRestoration' in window.history) window.history.scrollRestoration = 'manual';
+    }, []);
+
+    const scrollToId = (elId) => {
+      const el = document.getElementById(elId);
+      if (!el) return;
+      const headerH = 72;
+      const y = el.getBoundingClientRect().top + window.scrollY - headerH;
+      window.scrollTo({ top: y, behavior: 'smooth' });
+    };
+    const scrollToAbout = () => scrollToId('about-section');
+    const scrollToConsulting = () => scrollToId('consulting-section');
+
+    const go = (id) => {
+      if (id === 'about' || id === 'consulting-scroll') {
+        const hash = id === 'about' ? 'about' : 'consulting-scroll';
+        const scrollFn = id === 'about' ? scrollToAbout : scrollToConsulting;
+        window.location.hash = hash;
+        setSection(id);
+        if (page === 'home') {
+          scrollFn();
+        } else {
+          setPage('home');
+        }
+        return;
+      }
+      setSection(null);
+      setPage(id);
+      window.location.hash = id;
+      if (id === 'home' && page === 'home') window.scrollTo(0, 0);
+    };
+
+    React.useLayoutEffect(() => {
+      const h = window.location.hash;
+      if (!(page === 'home' && (h === '#about' || h === '#consulting-scroll'))) {
+        window.scrollTo(0, 0);
+      }
+    }, [page]);
+
+    React.useEffect(() => {
+      const h = window.location.hash;
+      if (page === 'home' && (h === '#about' || h === '#consulting-scroll')) {
+        const fn = h === '#about' ? scrollToAbout : scrollToConsulting;
+        const t = setTimeout(fn, 120);
+        return () => clearTimeout(t);
+      }
+    }, [page]);
+
+    React.useEffect(() => {
+      const onHash = () => {
+        const h = (window.location.hash || '').replace('#', '');
+        if (PAGES.includes(h)) { setPage(h); setSection(null); }
+        else if (h === 'about' || h === 'consulting-scroll') { setSection(h); }
+      };
+      window.addEventListener('hashchange', onHash);
+      return () => window.removeEventListener('hashchange', onHash);
+    }, []);
+
+    React.useEffect(() => {
+      const t = setTimeout(() => window.lucide && window.lucide.createIcons(), 60);
+      return () => clearTimeout(t);
+    }, [page]);
+
+    const isProduct = page.startsWith('product-');
+    const Page = isProduct ? ProductDetailPage : { home: HomePage, consulting: ConsultingPage, business: BusinessPage, contact: ContactPage }[page];
+
+    return (
+      <>
+        <SiteHeader page={page} section={section} go={go} />
+        <Page go={go} {...(isProduct ? { slug: page.replace('product-', '') } : {})} />
+        <SiteFooter go={go} />
+      </>
+    );
+  }
+
+  ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

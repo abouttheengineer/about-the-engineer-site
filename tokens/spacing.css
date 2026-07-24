@@ -1,0 +1,50 @@
+/* ============================================================
+   About the Engineer — Spacing & layout tokens
+   ------------------------------------------------------------
+   Generous, architectural whitespace. Sections breathe with large
+   vertical padding (80–128px). Content is centred in a max-width
+   column. The 4px base unit matches the source (Tailwind) scale.
+   ============================================================ */
+
+:root {
+  /* ---- Base spacing scale (4px unit) ---- */
+  --space-1:  0.25rem;  /* 4  */
+  --space-2:  0.5rem;   /* 8  */
+  --space-3:  0.75rem;  /* 12 */
+  --space-4:  1rem;     /* 16 */
+  --space-6:  1.5rem;   /* 24 */
+  --space-8:  2rem;     /* 32 */
+  --space-12: 3rem;     /* 48 */
+  --space-16: 4rem;     /* 64 */
+  --space-20: 5rem;     /* 80  — section padding (mobile) */
+  --space-24: 6rem;     /* 96 */
+  --space-32: 8rem;     /* 128 — CTA section padding */
+
+  /* ---- Layout ---- */
+  --container-max:  80rem;   /* 1280px — page max width (max-w-7xl) */
+  --container-wide: 72rem;   /* 1152px — content (max-w-6xl) */
+  --container-prose:56rem;   /* 896px  — reading column (max-w-4xl) */
+
+  --page-gutter:   1.5rem;   /* mobile side padding */
+  --page-gutter-lg:3rem;     /* desktop side padding (px-12) */
+
+  --section-py:    5rem;     /* default section vertical rhythm */
+  --section-py-lg: 6rem;
+  --section-py-cta:8rem;     /* CTA blocks */
+
+  /* ---- Grid gaps ---- */
+  --gap-card: 2rem;   /* service-card grid gap */
+  --gap-stat: 1.5rem; /* stat block gap */
+
+  /* ============================================================
+     RADII — the brand is overwhelmingly SHARP (square) on marketing
+     surfaces. Rounding appears only on product-app UI (Spods) and on
+     small form controls inherited from the base component kit.
+     ============================================================ */
+  --radius-none: 0;       /* DEFAULT for cards, sections, CTAs, buttons */
+  --radius-sm:   0.375rem; /* 6px  — inputs, small controls */
+  --radius-md:   0.625rem; /* 10px — base kit default */
+  --radius-lg:   0.75rem;  /* 12px — product-app cards */
+  --radius-xl:   1rem;     /* 16px — product-app sheets */
+  --radius-pill: 9999px;   /* product-app chips / avatars */
+}

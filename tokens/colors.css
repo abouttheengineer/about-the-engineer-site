@@ -1,0 +1,82 @@
+/* ============================================================
+   About the Engineer — Color tokens
+   ------------------------------------------------------------
+   The corporate brand is resolutely MONOCHROME: near-black, white,
+   and a full zinc grey ramp. High contrast, editorial, no decorative
+   colour. A single product accent (Spods green) and the system red are
+   the only chromatic tokens — use them sparingly and only in product UI.
+   ============================================================ */
+
+:root {
+  /* ---- Pure ends ---- */
+  --black: #000000;
+  --white: #ffffff;
+
+  /* ---- Zinc ramp (primary neutral) ---- */
+  --zinc-50:  #fafafa;
+  --zinc-100: #f4f4f5;
+  --zinc-200: #e4e4e7;
+  --zinc-300: #d4d4d8;
+  --zinc-400: #a1a1aa;
+  --zinc-500: #71717a;
+  --zinc-600: #52525b;
+  --zinc-700: #3f3f46;
+  --zinc-800: #27272a;
+  --zinc-900: #18181b;
+  --zinc-950: #09090b;
+
+  /* ---- Neutral ramp (warm-free greys used on light surfaces) ---- */
+  --neutral-50:  #fafafa;
+  --neutral-100: #f5f5f5;
+  --neutral-200: #e5e5e5;
+  --neutral-300: #d4d4d4;
+  --neutral-600: #525252;
+  --neutral-700: #404040;
+  --neutral-950: #0a0a0a;
+
+  /* ---- Product accent — Spods (soccer fan club) green ---- */
+  /* The only brand-sanctioned colour accent. Restrict to product UI. */
+  --spods-green-500: #4f9d77;
+  --spods-green-600: #3f7a5c;
+  --spods-green-700: #2f5e47;
+  --spods-green-gradient: linear-gradient(150deg, #5aa882 0%, #3a755a 100%); /* @kind color */
+
+  /* ---- System ---- */
+  --red-600: #d4183d;   /* destructive / live indicator */
+  --amber-100: #fef9c3; /* soft notice fill */
+  --amber-400: #facc15; /* notice accent border */
+
+  /* ============================================================
+     SEMANTIC ALIASES — reference these in components, not raw ramps
+     ============================================================ */
+
+  /* Surfaces */
+  --surface-base:      var(--zinc-950);   /* default dark canvas */
+  --surface-raised:    var(--zinc-900);   /* dark section / panel */
+  --surface-inverse:   var(--white);      /* light section canvas */
+  --surface-card:      var(--white);      /* card on light surfaces */
+  --surface-card-dark: var(--zinc-800);   /* card / stat block on dark */
+  --surface-muted:     var(--neutral-100);/* subtle light fill */
+
+  /* Text — on dark surfaces */
+  --text-on-dark:        var(--white);
+  --text-on-dark-muted:  var(--zinc-400);
+  --text-on-dark-subtle: var(--zinc-500);
+
+  /* Text — on light surfaces */
+  --text-on-light:        var(--zinc-950);
+  --text-on-light-muted:  var(--neutral-700);
+  --text-on-light-subtle: var(--zinc-400);
+
+  /* Borders */
+  --border-on-dark:     var(--zinc-800);
+  --border-on-light:    var(--neutral-200);
+  --border-strong:      var(--zinc-950);
+  --border-hover-light: var(--neutral-400, #a1a1aa);
+
+  /* Interactive */
+  --accent:           var(--zinc-950);   /* primary action on light */
+  --accent-inverse:   var(--white);      /* primary action on dark */
+  --focus-ring:       var(--zinc-400);
+  --destructive:      var(--red-600);
+}
