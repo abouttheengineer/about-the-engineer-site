@@ -54,6 +54,7 @@ function HomePage({ go }) {
         placeholder="画像をドロップ（プロダクト）"
         action={<button onClick={() => go('business')} style={btnSolid}>プロダクトを見る&nbsp;→</button>} />
 
+      {/* Temporarily hidden — restore by uncommenting.
       <SplitSection
         reverse
         kicker="Global Media Studio"
@@ -74,6 +75,7 @@ function HomePage({ go }) {
         slotId="home-intro-retail"
         placeholder="画像をドロップ（物販）"
         action={<button onClick={() => go('contact')} style={btnSolid}>お問い合わせ&nbsp;→</button>} />
+      */}
 
       <SplitSection
         reverse
