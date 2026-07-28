@@ -104,7 +104,7 @@ function RuledRow({ number, title, sub, meta, onClick, dark = false }) {
 }
 
 /* Alternating company-intro split: text one side, fillable image the other */
-function SplitSection({ kicker, title, body, slotId, placeholder, src, reverse = false, action, kickerCase, titleSize, kickerStyle, id }) {
+function SplitSection({ kicker, title, body, slotId, placeholder, src, reverse = false, action, kickerCase, titleSize, kickerStyle, id, fit }) {
   const text = (
     <div>
       <Eyebrow style={{ display: 'block', marginBottom: 16, ...(kickerCase ? { textTransform: kickerCase } : {}), ...kickerStyle }}>{kicker}</Eyebrow>
@@ -124,6 +124,7 @@ function SplitSection({ kicker, title, body, slotId, placeholder, src, reverse =
       id={slotId}
       src={src}
       shape="rect"
+      fit={fit}
       placeholder={placeholder}
       style={{ width: '100%', height: 'auto', aspectRatio: '4 / 3', display: 'block', background: 'var(--neutral-100)', border: '1px solid var(--neutral-200)' }}
     ></image-slot>

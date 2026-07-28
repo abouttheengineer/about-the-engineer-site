@@ -32,6 +32,7 @@ function ProductDetailPage({ slug, go }) {
         title={product.jp}
         body={product.desc}
         slotId={'product-' + product.slug}
+        fit={product.slug === 'actimo' ? 'contain' : undefined}
         placeholder={'画像をドロップ（' + product.name + '）'}
         action={(
           <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
