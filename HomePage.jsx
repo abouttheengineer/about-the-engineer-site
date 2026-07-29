@@ -102,7 +102,7 @@ function HomePage({ go }) {
           </div>
           <div style={{ maxWidth: 720, margin: '0 auto' }}>
             {[
-              ['会社名', 'About the Engineer 株式会社'],
+              ['会社名', '合同会社About the Engineer'],
               ['所在地', '東京都'],
               ['事業内容', 'システム開発／コンサルティング／メディア事業'],
             ].map(([k, v], i, arr) => (

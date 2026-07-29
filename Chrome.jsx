@@ -69,7 +69,7 @@ function SiteFooter({ go }) {
         <div style={{ borderTop: '1px solid var(--zinc-800)', paddingTop: 28 }}>
           <div style={{ fontFamily: 'var(--font-display)', textTransform: 'uppercase', letterSpacing: 'var(--tracking-tight)', lineHeight: 0.86, fontSize: 'clamp(48px, 12vw, 168px)', color: 'var(--white)' }}>About the Engineer</div>
         </div>
-        <div style={{ marginTop: 24, fontFamily: 'var(--font-ui)', fontSize: 12, letterSpacing: '0.04em', color: 'var(--zinc-600)' }}>© 2026 About the Engineer K.K. — All rights reserved.</div>
+        <div style={{ marginTop: 24, fontFamily: 'var(--font-ui)', fontSize: 12, letterSpacing: '0.04em', color: 'var(--zinc-600)' }}>© 2026 About the Engineer GK — All rights reserved.</div>
       </div>
     </footer>
   );
