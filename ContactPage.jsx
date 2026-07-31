@@ -57,7 +57,7 @@ function ContactPage({ go }) {
               <div>
                 <span style={label}>ご相談内容</span>
                 <select style={field} value={form.topic} onChange={set('topic')}>
-                  {['コンサルティング','タレントマネジメント','イベント企画','プロダクト開発','その他'].map(o => <option key={o}>{o}</option>)}
+                  {['コンサルティング','アプリ開発','在日外国人サポート','その他'].map(o => <option key={o}>{o}</option>)}
                 </select>
               </div>
               <div><span style={label}>メッセージ *</span><textarea style={{ ...field, minHeight: 130, resize: 'vertical' }} required value={form.message} onChange={set('message')} placeholder="ご相談の概要をお書きください。" /></div>
