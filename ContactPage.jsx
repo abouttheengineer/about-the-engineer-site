@@ -41,7 +41,7 @@ function ContactPage({ go }) {
 
       <Container style={{ paddingTop: 24, paddingBottom: 100 }}>
         <Rule strong />
-        <div style={{ display: 'grid', gridTemplateColumns: '0.5fr 1fr', gap: 56, paddingTop: 48 }}>
+        <div className="rgrid" style={{ display: 'grid', gridTemplateColumns: '0.5fr 1fr', gap: 56, paddingTop: 48 }}>
           {/* Info column */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
             {[
@@ -68,7 +68,7 @@ function ContactPage({ go }) {
             </div>
           ) : (
             <form onSubmit={submit} style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
+              <div className="rgrid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
                 <div><span style={label}>会社名 / 屋号</span><input style={field} value={form.company} onChange={set('company')} placeholder="株式会社〇〇" /></div>
                 <div><span style={label}>お名前 *</span><input style={field} required value={form.name} onChange={set('name')} placeholder="山田 太郎" /></div>
               </div>

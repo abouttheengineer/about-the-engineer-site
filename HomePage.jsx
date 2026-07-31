@@ -20,7 +20,7 @@ function HomePage({ go }) {
       {/* What we do — three pillars */}
       <Container style={{ paddingTop: 8, paddingBottom: 80 }}>
         <SectionHead kicker="What we do" title="事業内容" />
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 40, maxWidth: 920, margin: '0 auto' }}>
+        <div className="rgrid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 40, maxWidth: 920, margin: '0 auto' }}>
           {[
             ['System', 'システム開発', '企画から開発・運用まで、一気通貫でプロダクトをつくります。', null],
             ['Consulting', 'コンサルティング', '事業戦略とグロースを、実践知をもとに伴走支援します。', 'consulting'],
@@ -116,7 +116,7 @@ function HomePage({ go }) {
               ['所在地', '東京都'],
               ['事業内容', 'システム開発／コンサルティング／外国人サポート'],
             ].map(([k, v], i, arr) => (
-              <div key={k} style={{
+              <div key={k} className="rgrid" style={{
                 display: 'grid', gridTemplateColumns: '200px 1fr', gap: 24,
                 alignItems: 'baseline', padding: '20px 0',
                 borderTop: '1px solid var(--zinc-800)',
@@ -136,7 +136,7 @@ function HomePage({ go }) {
       {/* Message — CEO / representative message */}
       <Container style={{ paddingTop: 96, paddingBottom: 96 }}>
         <SectionHead kicker="Message" title="代表メッセージ" />
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center', maxWidth: 1080, margin: '0 auto' }}>
+        <div className="rgrid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center', maxWidth: 1080, margin: '0 auto' }}>
           <image-slot
             id="home-about-message"
             shape="rect"

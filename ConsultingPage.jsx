@@ -46,7 +46,7 @@ function ConsultingPage({ go }) {
         <SectionHead kicker="Services" title="支援領域" />
         <Rule strong />
         {services.map((s, i) => (
-          <div key={s.n} style={{ display: 'grid', gridTemplateColumns: '64px 1fr 260px', gap: 24, alignItems: 'start', padding: '36px 0', borderTop: i === 0 ? 'none' : '1px solid var(--neutral-200)' }}>
+          <div key={s.n} className="rgrid" style={{ display: 'grid', gridTemplateColumns: '64px 1fr 260px', gap: 24, alignItems: 'start', padding: '36px 0', borderTop: i === 0 ? 'none' : '1px solid var(--neutral-200)' }}>
             <span style={{ fontFamily: 'var(--font-display)', fontSize: 22, color: 'var(--neutral-300)' }}>({s.n})</span>
             <div>
               <div style={{ fontFamily: 'var(--font-display)', textTransform: 'uppercase', fontSize: 'clamp(26px,3.4vw,40px)', letterSpacing: '0.01em', lineHeight: 1, color: 'var(--zinc-950)' }}>{s.title}</div>
@@ -66,7 +66,7 @@ function ConsultingPage({ go }) {
       {/* Process */}
       <Container style={{ paddingBottom: 96 }}>
         <SectionHead kicker="Process" title="進め方" />
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 1, background: 'var(--neutral-200)', border: '1px solid var(--neutral-200)' }}>
+        <div className="rgrid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 1, background: 'var(--neutral-200)', border: '1px solid var(--neutral-200)' }}>
           {steps.map(([en, jp, d], i) => (
             <div key={en} style={{ background: 'var(--white)', padding: '28px 22px' }}>
               <div style={{ fontFamily: 'var(--font-display)', fontSize: 20, color: 'var(--neutral-300)' }}>0{i + 1}</div>

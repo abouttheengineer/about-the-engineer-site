@@ -42,7 +42,7 @@ function SupportPage({ go }) {
       {/* Features */}
       <Container style={{ paddingBottom: 96 }}>
         <SectionHead kicker="Features" title="生活サポートの特徴" />
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24 }}>
+        <div className="rgrid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24 }}>
           {features.map(f => (
             <div key={f.title} style={{ background: '#F3EEE4', border: '1px solid var(--neutral-200)', padding: '36px 28px', textAlign: 'center' }}>
               <div style={{
@@ -63,7 +63,7 @@ function SupportPage({ go }) {
       <Container style={{ paddingBottom: 96 }}>
         <SectionHead kicker="Plan" title="ご利用プラン" />
         <Rule strong />
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 48, alignItems: 'center', padding: '48px 0' }}>
+        <div className="rgrid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 48, alignItems: 'center', padding: '48px 0' }}>
           <div>
             <div style={{ fontFamily: 'var(--font-ui)', fontSize: 12, fontWeight: 600, letterSpacing: 'var(--tracking-wide)', textTransform: 'uppercase', color: 'var(--neutral-600)' }}>生活サポートプラン</div>
             <div style={{ marginTop: 12, display: 'flex', alignItems: 'baseline', gap: 12 }}>

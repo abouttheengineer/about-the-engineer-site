@@ -29,6 +29,7 @@ function BusinessPage({ go }) {
               {products.map((p, i) => (
                 <div key={p.slug}
                   onClick={() => go('product-' + p.slug)}
+                  className="rgrid"
                   style={{ display: 'grid', gridTemplateColumns: '0.32fr 1fr auto', gap: 40, alignItems: 'start', padding: '40px 0', borderTop: i === 0 ? 'none' : '1px solid var(--neutral-200)', cursor: 'pointer' }}>
                   <div>
                     <div style={isAscii(p.name)

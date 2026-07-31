@@ -3,6 +3,7 @@
  * right with an active underline. Solid white with a hairline bottom rule.
  */
 function SiteHeader({ page, section, go }) {
+  const [open, setOpen] = React.useState(false);
   const nav = [
     { id: 'home', label: 'Home' },
     { id: 'about', label: 'About' },
@@ -11,6 +12,7 @@ function SiteHeader({ page, section, go }) {
     { id: 'business', label: 'Products' },
     { id: 'contact', label: 'Contact' },
   ];
+  const goAndClose = (id) => { setOpen(false); go(id); };
   return (
     <header style={{
       position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100,
@@ -18,18 +20,18 @@ function SiteHeader({ page, section, go }) {
       WebkitBackdropFilter: 'var(--backdrop-blur)', borderBottom: '1px solid var(--zinc-800)',
     }}>
       <div style={{ maxWidth: 1240, margin: '0 auto', padding: '0 var(--page-gutter-lg)', height: 72, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <button onClick={() => go('home')} style={{
+        <button onClick={() => goAndClose('home')} style={{
           background: 'none', border: 'none', padding: 0, cursor: 'pointer',
           fontFamily: 'var(--font-display)', textTransform: 'uppercase',
           letterSpacing: '0.14em', fontSize: 19, color: 'var(--white)',
         }}>About&nbsp;the&nbsp;Engineer</button>
-        <nav style={{ display: 'flex', gap: 32 }}>
+        <nav className={'site-nav' + (open ? ' site-nav-open' : '')} style={{ display: 'flex', gap: 32 }}>
           {nav.map(n => {
             const on = n.id === 'about' ? section === 'about'
               : n.id === 'consulting-scroll' ? (section === 'consulting-scroll' || (page === 'consulting' && !section))
               : (page === n.id && !section);
             return (
-              <button key={n.id} onClick={() => go(n.id)} style={{
+              <button key={n.id} onClick={() => goAndClose(n.id)} style={{
                 background: 'none', border: 'none', padding: '4px 0', cursor: 'pointer',
                 fontFamily: 'var(--font-ui)', textTransform: 'uppercase', fontSize: 12,
                 fontWeight: 600, letterSpacing: 'var(--tracking-wide)',
@@ -40,6 +42,16 @@ function SiteHeader({ page, section, go }) {
             );
           })}
         </nav>
+        <button
+          className="nav-toggle"
+          aria-label={open ? '閉じる' : 'メニュー'}
+          onClick={() => setOpen(o => !o)}
+          style={{ flexDirection: 'column', justifyContent: 'center', gap: 5, width: 28, height: 28, background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}
+        >
+          <span style={{ display: 'block', width: '100%', height: 2, background: 'var(--white)', transition: 'transform .2s', transform: open ? 'translateY(7px) rotate(45deg)' : 'none' }} />
+          <span style={{ display: 'block', width: '100%', height: 2, background: 'var(--white)', opacity: open ? 0 : 1, transition: 'opacity .2s' }} />
+          <span style={{ display: 'block', width: '100%', height: 2, background: 'var(--white)', transition: 'transform .2s', transform: open ? 'translateY(-7px) rotate(-45deg)' : 'none' }} />
+        </button>
       </div>
     </header>
   );

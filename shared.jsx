@@ -6,7 +6,7 @@
 
 function Container({ children, style = {}, id }) {
   return (
-    <div id={id} style={{ maxWidth: 1240, margin: '0 auto', padding: '0 var(--page-gutter-lg)', ...style }}>
+    <div id={id} className="abte-gutter" style={{ maxWidth: 1240, margin: '0 auto', padding: '0 var(--page-gutter-lg)', ...style }}>
       {children}
     </div>
   );
@@ -44,7 +44,7 @@ function PageHero({ kicker, title, lead, big = false }) {
   return (
     <Container style={{ paddingTop: big ? 220 : 150, paddingBottom: big ? 100 : 60, textAlign: 'center' }}>
       {kicker && <Eyebrow style={{ display: 'block', marginBottom: 24, fontSize: 27 }}>{kicker}</Eyebrow>}
-      {title && <h1 style={{
+      {title && <h1 className={big ? 'ph-title-big' : ''} style={{
         margin: 0, fontFamily: 'var(--font-body)', fontWeight: 700,
         fontSize: big ? 'clamp(32px, 5vw, 76px)' : 'clamp(38px, 6vw, 76px)',
         lineHeight: big ? 1.04 : 1.14, letterSpacing: '-0.01em', color: 'var(--zinc-950)',
@@ -131,7 +131,7 @@ function SplitSection({ kicker, title, body, slotId, placeholder, src, reverse =
   );
   return (
     <Container id={id} style={{ paddingTop: 56, paddingBottom: 56 }}>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center' }}>
+      <div className="rgrid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 64, alignItems: 'center' }}>
         {reverse ? <>{media}{text}</> : <>{text}{media}</>}
       </div>
     </Container>
