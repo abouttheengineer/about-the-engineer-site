@@ -24,7 +24,7 @@ function HomePage({ go }) {
           {[
             ['System', 'システム開発', '企画から開発・運用まで、一気通貫でプロダクトをつくります。', null],
             ['Consulting', 'コンサルティング', '事業戦略とグロースを、実践知をもとに伴走支援します。', 'consulting'],
-            ['Media', 'メディア事業', 'エンジニアと技術の発信を通じて、学びと出会いを届けます。', null],
+            ['Support', '外国人サポート', '日本での生活の「困った」を、多言語でサポートします。', 'support'],
           ].map(([en, jp, desc, dest]) => (
             <div key={en} onClick={dest ? () => go(dest) : undefined}
               style={{ textAlign: 'center', cursor: dest ? 'pointer' : 'default' }}>
@@ -114,7 +114,7 @@ function HomePage({ go }) {
             {[
               ['会社名', '合同会社About the Engineer'],
               ['所在地', '東京都'],
-              ['事業内容', 'システム開発／コンサルティング／メディア事業'],
+              ['事業内容', 'システム開発／コンサルティング／外国人サポート'],
             ].map(([k, v], i, arr) => (
               <div key={k} style={{
                 display: 'grid', gridTemplateColumns: '200px 1fr', gap: 24,
