@@ -4,9 +4,28 @@
  */
 function ContactPage({ go }) {
   const [sent, setSent] = React.useState(false);
+  const [sending, setSending] = React.useState(false);
+  const [error, setError] = React.useState(false);
   const [form, setForm] = React.useState({ company: '', name: '', email: '', topic: 'コンサルティング', message: '' });
   const set = (k) => (e) => setForm(s => ({ ...s, [k]: e.target.value }));
-  const submit = (e) => { e.preventDefault(); setSent(true); };
+  const submit = async (e) => {
+    e.preventDefault();
+    setSending(true);
+    setError(false);
+    try {
+      const res = await fetch('https://formspree.io/f/xdaqvjpd', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(form),
+      });
+      if (res.ok) setSent(true);
+      else setError(true);
+    } catch (err) {
+      setError(true);
+    } finally {
+      setSending(false);
+    }
+  };
 
   const field = {
     width: '100%', boxSizing: 'border-box', fontFamily: 'var(--font-body)', fontSize: 15,
@@ -61,7 +80,15 @@ function ContactPage({ go }) {
                 </select>
               </div>
               <div><span style={label}>メッセージ *</span><textarea style={{ ...field, minHeight: 130, resize: 'vertical' }} required value={form.message} onChange={set('message')} placeholder="ご相談の概要をお書きください。" /></div>
-              <button type="submit" style={{ ...window.btnSolid, alignSelf: 'flex-start', fontSize: 18, padding: '14px 36px' }}>送信する →</button>
+              {error && (
+                <p style={{ margin: 0, fontFamily: 'var(--font-body)', fontSize: 14, color: 'var(--red-600)' }}>
+                  送信に失敗しました。時間をおいて再度お試しいただくか、{' '}
+                  <a href="mailto:hello@abouttheengineer.jp" style={{ color: 'inherit' }}>hello@abouttheengineer.jp</a> まで直接ご連絡ください。
+                </p>
+              )}
+              <button type="submit" disabled={sending} style={{ ...window.btnSolid, alignSelf: 'flex-start', fontSize: 18, padding: '14px 36px', opacity: sending ? 0.6 : 1, cursor: sending ? 'default' : 'pointer' }}>
+                {sending ? '送信中…' : <>送信する&nbsp;→</>}
+              </button>
             </form>
           )}
         </div>
