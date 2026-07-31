@@ -44,10 +44,10 @@ function SupportPage({ go }) {
         <SectionHead kicker="Features" title="生活サポートの特徴" />
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24 }}>
           {features.map(f => (
-            <div key={f.title} style={{ border: '1px solid var(--neutral-200)', padding: '36px 28px', textAlign: 'center' }}>
+            <div key={f.title} style={{ background: '#F3EEE4', border: '1px solid var(--neutral-200)', padding: '36px 28px', textAlign: 'center' }}>
               <div style={{
                 width: 56, height: 56, margin: '0 auto', borderRadius: '50%',
-                border: '1px solid var(--neutral-300)', display: 'flex',
+                background: 'var(--white)', border: '1px solid var(--neutral-300)', display: 'flex',
                 alignItems: 'center', justifyContent: 'center',
               }}>
                 <i data-lucide={f.icon} style={{ width: 24, height: 24, color: 'var(--zinc-950)' }}></i>
