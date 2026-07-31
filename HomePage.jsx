@@ -89,7 +89,6 @@ function HomePage({ go }) {
       */}
 
       <SplitSection
-        reverse
         id="consulting-section"
         kicker="Consulting"
         kickerCase="none"
