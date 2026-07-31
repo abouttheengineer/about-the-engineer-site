@@ -47,7 +47,7 @@ function ContactPage({ go }) {
             {[
               ['Email', 'hello@abouttheengineer.jp'],
               ['Office', '東京都渋谷区神南１丁目１１−４ ＦＰＧリンクス神南 5階'],
-              ['Hours', '平日 10:00 – 19:00 JST'],
+              ['Hours', '10:00 – 19:00 JST（水曜定休）'],
               ['Social', 'X · Instagram · note'],
             ].map(([h, v]) => (
               <div key={h}>

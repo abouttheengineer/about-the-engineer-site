@@ -116,6 +116,7 @@ function HomePage({ go }) {
               ['代表者', 'LEKAM TANIO'],
               ['所在地', '東京都渋谷区神南１丁目１１−４ ＦＰＧリンクス神南 5階'],
               ['事業内容', 'システム開発／コンサルティング／外国人サポート'],
+              ['定休日', '毎週水曜日'],
             ].map(([k, v], i, arr) => (
               <div key={k} className="rgrid" style={{
                 display: 'grid', gridTemplateColumns: '200px 1fr', gap: 24,
