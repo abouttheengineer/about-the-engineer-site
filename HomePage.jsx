@@ -154,14 +154,7 @@ function HomePage({ go }) {
               margin: '28px 0 0', fontFamily: 'var(--font-body)', fontSize: 16,
               lineHeight: 1.9, color: 'var(--text-on-light-muted)',
             }}>
-              ともにつくる、をもっとーに、全ての人にテクノロジーでよりよいサービスを提供していきます。
-            </p>
-            <p style={{
-              margin: '20px 0 0', fontFamily: 'var(--font-body)', fontSize: 16,
-              lineHeight: 1.9, color: 'var(--text-on-light-muted)',
-            }}>
-              テクノロジーは、専門家だけのものではありません。すべての人がその恩恵を受けられる体験をつくることを、
-              これからも事業の軸に据えていきます。
+              世界中の人にとって、よりよいサービスをともにつくっていきたいと考えています。すべての人にテクノロジーを。
             </p>
           </div>
         </div>
