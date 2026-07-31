@@ -113,7 +113,8 @@ function HomePage({ go }) {
           <div style={{ maxWidth: 720, margin: '0 auto' }}>
             {[
               ['会社名', '合同会社About the Engineer'],
-              ['所在地', '東京都'],
+              ['代表者', 'LEKAM TANIO'],
+              ['所在地', '東京都渋谷区神南１丁目１１−４ ＦＰＧリンクス神南 5階'],
               ['事業内容', 'システム開発／コンサルティング／外国人サポート'],
             ].map(([k, v], i, arr) => (
               <div key={k} className="rgrid" style={{

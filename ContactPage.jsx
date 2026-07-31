@@ -46,7 +46,7 @@ function ContactPage({ go }) {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
             {[
               ['Email', 'hello@abouttheengineer.jp'],
-              ['Office', '東京都渋谷区 — 完全リモート対応'],
+              ['Office', '東京都渋谷区神南１丁目１１−４ ＦＰＧリンクス神南 5階'],
               ['Hours', '平日 10:00 – 19:00 JST'],
               ['Social', 'X · Instagram · note'],
             ].map(([h, v]) => (
