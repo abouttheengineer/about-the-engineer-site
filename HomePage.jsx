@@ -54,6 +54,17 @@ function HomePage({ go }) {
         placeholder="画像をドロップ（プロダクト）"
         action={<button onClick={() => go('business')} style={btnSolid}>プロダクトを見る&nbsp;→</button>} />
 
+      <SplitSection
+        reverse
+        kicker="Global Life Support"
+        kickerCase="none"
+        kickerStyle={{ fontSize: 20 }}
+        title="外国人向け生活サポート"
+        body="日本での「困った」を多言語でサポート。アプリのチャット・電話相談、オフィスでの対面相談、どちらも可能です。市役所の手続きや携帯電話の契約など、日々の生活に関する相談に、安心の母国語で対応します。1回500円から利用できます。"
+        slotId="home-life-support"
+        placeholder="画像をドロップ（生活サポート）"
+        action={<button onClick={() => go('support')} style={btnSolid}>詳しく見る&nbsp;→</button>} />
+
       {/* Temporarily hidden — restore by uncommenting.
       <SplitSection
         reverse

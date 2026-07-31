@@ -7,6 +7,7 @@ function SiteHeader({ page, section, go }) {
     { id: 'home', label: 'Home' },
     { id: 'about', label: 'About' },
     { id: 'consulting-scroll', label: 'Consulting' },
+    { id: 'support', label: 'Support' },
     { id: 'business', label: 'Products' },
     { id: 'contact', label: 'Contact' },
   ];
@@ -49,7 +50,7 @@ function SiteHeader({ page, section, go }) {
  */
 function SiteFooter({ go }) {
   const cols = [
-    { h: 'Sitemap', items: [['Home','home'],['About','about'],['Consulting','consulting'],['Products','business'],['Contact','contact']] },
+    { h: 'Sitemap', items: [['Home','home'],['About','about'],['Consulting','consulting'],['Support','support'],['Products','business'],['Contact','contact']] },
   ];
   return (
     <footer style={{ background: 'var(--zinc-950)', color: 'var(--white)' }}>
