@@ -7,9 +7,7 @@ function SiteHeader({ page, section, go }) {
   const nav = [
     { id: 'home', label: 'Home' },
     { id: 'about', label: 'About' },
-    { id: 'consulting-scroll', label: 'Consulting' },
-    { id: 'support', label: 'Support' },
-    { id: 'business', label: 'Products' },
+    { id: 'services', label: 'Business' },
     { id: 'contact', label: 'Contact' },
   ];
   const goAndClose = (id) => { setOpen(false); go(id); };
@@ -28,7 +26,7 @@ function SiteHeader({ page, section, go }) {
         <nav className={'site-nav' + (open ? ' site-nav-open' : '')} style={{ display: 'flex', gap: 32 }}>
           {nav.map(n => {
             const on = n.id === 'about' ? section === 'about'
-              : n.id === 'consulting-scroll' ? (section === 'consulting-scroll' || (page === 'consulting' && !section))
+              : n.id === 'services' ? (page === 'services' || page === 'consulting' || page === 'support' || page === 'business' || page.startsWith('product-'))
               : (page === n.id && !section);
             return (
               <button key={n.id} onClick={() => goAndClose(n.id)} style={{
@@ -62,7 +60,7 @@ function SiteHeader({ page, section, go }) {
  */
 function SiteFooter({ go }) {
   const cols = [
-    { h: 'Sitemap', items: [['Home','home'],['About','about'],['Consulting','consulting'],['Support','support'],['Products','business'],['Contact','contact']] },
+    { h: 'Sitemap', items: [['Home','home'],['About','about'],['Business','services'],['Contact','contact']] },
   ];
   return (
     <footer style={{ background: 'var(--zinc-950)', color: 'var(--white)' }}>
