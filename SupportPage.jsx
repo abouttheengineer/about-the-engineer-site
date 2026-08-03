@@ -99,8 +99,7 @@ function SupportPage({ go }) {
       <Container style={{ paddingBottom: 110 }}>
         <Rule strong />
         <div style={{ textAlign: 'center', paddingTop: 56 }}>
-          <h2 style={{ margin: 0, fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 'clamp(26px,3.2vw,42px)', lineHeight: 1.3, color: 'var(--zinc-950)' }}>日本での生活を、一緒に。</h2>
-          <div style={{ display: 'flex', justifyContent: 'center', marginTop: 32 }}>
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
             <button onClick={() => go('contact')} style={window.btnSolid}>相談する&nbsp;→</button>
           </div>
         </div>
