@@ -8,6 +8,7 @@ function SiteHeader({ page, section, go }) {
     { id: 'home', label: 'Home' },
     { id: 'about', label: 'About' },
     { id: 'services', label: 'Business' },
+    { id: 'sponsorship', label: 'Sponsorship' },
     { id: 'contact', label: 'Contact' },
   ];
   const goAndClose = (id) => { setOpen(false); go(id); };
@@ -60,15 +61,15 @@ function SiteHeader({ page, section, go }) {
  */
 function SiteFooter({ go }) {
   const cols = [
-    { h: 'Sitemap', items: [['Home','home'],['About','about'],['Business','services'],['Contact','contact']] },
+    { h: 'Sitemap', items: [['Home','home'],['About','about'],['Business','services'],['Sponsorship','sponsorship'],['Contact','contact']] },
   ];
   return (
     <footer style={{ background: 'var(--zinc-950)', color: 'var(--white)' }}>
       <div style={{ maxWidth: 1240, margin: '0 auto', padding: '72px var(--page-gutter-lg) 36px' }}>
         <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'flex-start', gap: 40, paddingBottom: 48 }}>
-          <div style={{ maxWidth: 420, fontFamily: 'var(--font-body)', fontSize: 14, lineHeight: 1.8, color: 'var(--zinc-300)' }}>
+          <button onClick={() => go('sponsorship')} style={{ maxWidth: 420, background: 'none', border: 'none', padding: 0, cursor: 'pointer', textAlign: 'left', fontFamily: 'var(--font-body)', fontSize: 14, lineHeight: 1.8, color: 'var(--zinc-300)' }}>
             合同会社About the EngineerはSAGAMIFORCEを応援しています。
-          </div>
+          </button>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 220px))', gap: 40, justifyContent: 'end' }}>
             {cols.map(c => (
               <div key={c.h}>
