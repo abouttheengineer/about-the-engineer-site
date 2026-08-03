@@ -66,22 +66,17 @@ function SiteFooter({ go }) {
   return (
     <footer style={{ background: 'var(--zinc-950)', color: 'var(--white)' }}>
       <div style={{ maxWidth: 1240, margin: '0 auto', padding: '72px var(--page-gutter-lg) 36px' }}>
-        <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'flex-start', gap: 40, paddingBottom: 48 }}>
-          <button onClick={() => go('sponsorship')} style={{ maxWidth: 420, background: 'none', border: 'none', padding: 0, cursor: 'pointer', textAlign: 'left', fontFamily: 'var(--font-body)', fontSize: 14, lineHeight: 1.8, color: 'var(--zinc-300)' }}>
-            合同会社About the EngineerはSAGAMIFORCEを応援しています。
-          </button>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 220px))', gap: 40, justifyContent: 'end' }}>
-            {cols.map(c => (
-              <div key={c.h}>
-                <Eyebrow dark>{c.h}</Eyebrow>
-                <ul style={{ listStyle: 'none', margin: '16px 0 0', padding: 0, display: 'flex', flexDirection: 'column', gap: 11 }}>
-                  {c.items.map(([label, dest]) => (
-                    <li key={label}><button onClick={() => go(dest)} style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', fontFamily: 'var(--font-body)', fontSize: 14, color: 'var(--zinc-300)' }}>{label}</button></li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 220px))', gap: 40, paddingBottom: 48, justifyContent: 'end' }}>
+          {cols.map(c => (
+            <div key={c.h}>
+              <Eyebrow dark>{c.h}</Eyebrow>
+              <ul style={{ listStyle: 'none', margin: '16px 0 0', padding: 0, display: 'flex', flexDirection: 'column', gap: 11 }}>
+                {c.items.map(([label, dest]) => (
+                  <li key={label}><button onClick={() => go(dest)} style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', fontFamily: 'var(--font-body)', fontSize: 14, color: 'var(--zinc-300)' }}>{label}</button></li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
         <div style={{ borderTop: '1px solid var(--zinc-800)', paddingTop: 28 }}>
           <div style={{ fontFamily: 'var(--font-display)', textTransform: 'uppercase', letterSpacing: 'var(--tracking-tight)', lineHeight: 0.86, fontSize: 'clamp(48px, 12vw, 168px)', color: 'var(--white)' }}>About the Engineer</div>
