@@ -13,7 +13,7 @@ function SponsorshipPage() {
       name: 'SAGAMIFORCE',
       logo: 'sponsor-sagamiforce-logo.jpg',
       color: '#C8102E',
-      desc: '合同会社About the EngineerはSAGAMIFORCEを応援しています。',
+      desc: '当社はスポンサーとしてSAGAMIFORCEを応援しています。',
       url: 'https://sagamiforce.com',
     },
   ];
