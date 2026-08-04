@@ -13,7 +13,7 @@ function SponsorshipPage() {
       name: 'SAGAMIFORCE',
       logo: 'sponsor-sagamiforce-logo.jpg',
       color: '#C8102E',
-      desc: '当社はスポンサーとしてSAGAMIFORCEを応援しています。',
+      desc: '当社はスポンサーとして、車いすバスケットボールチームSAGAMIFORCEを応援しています。',
       url: 'https://sagamiforce.com',
     },
   ];
