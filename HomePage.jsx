@@ -100,6 +100,12 @@ function HomePage({ go }) {
         placeholder="画像をドロップ（コンサルティング）"
         action={<button onClick={() => go('consulting')} style={btnSolid}>コンサルティングについて&nbsp;→</button>} />
 
+      {/* News — recent updates */}
+      <Container style={{ paddingTop: 8, paddingBottom: 80 }}>
+        <SectionHead kicker="News" />
+        <NewsList items={window.NEWS} onItemClick={() => go('news')} />
+      </Container>
+
       {/* About — company story + profile, moved to the bottom of Home */}
       <div id="about-section" style={{ background: 'var(--zinc-950)' }}>
         <Container style={{ paddingTop: 96, paddingBottom: 96 }}>

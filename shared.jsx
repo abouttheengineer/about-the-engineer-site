@@ -138,4 +138,42 @@ function SplitSection({ kicker, title, body, slotId, placeholder, src, reverse =
   );
 }
 
-Object.assign(window, { Container, Eyebrow, Rule, Display, PageHero, SectionHead, RuledRow, SplitSection });
+/* A news list: date + title + optional desc, optional image on the right.
+   Pass onItemClick to make rows clickable (e.g. through to the News page). */
+function NewsList({ items, onItemClick, style = {} }) {
+  return (
+    <div style={{ maxWidth: 900, margin: '0 auto', ...style }}>
+      {items.map((n, i, arr) => (
+        <div
+          key={n.date + n.title}
+          className="rgrid"
+          onClick={onItemClick ? () => onItemClick(n) : undefined}
+          style={{
+            display: 'grid', gridTemplateColumns: n.image ? '1fr 240px' : '1fr', gap: n.image ? 40 : 0,
+            alignItems: 'center', padding: '32px 0',
+            borderTop: '1px solid var(--neutral-200)',
+            borderBottom: i === arr.length - 1 ? '1px solid var(--neutral-200)' : 'none',
+            cursor: onItemClick ? 'pointer' : 'default',
+          }}>
+          <div>
+            <Eyebrow style={{ display: 'block', marginBottom: 10 }}>{n.date}</Eyebrow>
+            <div style={{ fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 19, lineHeight: 1.5, color: 'var(--zinc-950)' }}>{n.title}</div>
+            {n.desc && <p style={{ margin: '10px 0 0', fontFamily: 'var(--font-body)', fontSize: 14, lineHeight: 1.75, color: 'var(--text-on-light-muted)' }}>{n.desc}</p>}
+          </div>
+          {n.image && (
+            <image-slot
+              id={`news-item-${i}`}
+              src={n.image}
+              fit={n.fit || 'cover'}
+              shape="rect"
+              placeholder="画像をドロップ"
+              style={{ width: '100%', height: 'auto', aspectRatio: '4 / 3', display: 'block', background: 'var(--neutral-100)', border: '1px solid var(--neutral-200)' }}
+            ></image-slot>
+          )}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+Object.assign(window, { Container, Eyebrow, Rule, Display, PageHero, SectionHead, RuledRow, SplitSection, NewsList });

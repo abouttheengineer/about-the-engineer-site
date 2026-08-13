@@ -9,6 +9,7 @@ function SiteHeader({ page, section, go }) {
     { id: 'about', label: 'About' },
     { id: 'services', label: 'Business' },
     { id: 'sponsorship', label: 'Sponsorship' },
+    { id: 'news', label: 'News' },
     { id: 'contact', label: 'Contact' },
   ];
   const goAndClose = (id) => { setOpen(false); go(id); };
@@ -61,7 +62,7 @@ function SiteHeader({ page, section, go }) {
  */
 function SiteFooter({ go }) {
   const cols = [
-    { h: 'Sitemap', items: [['Home','home'],['About','about'],['Business','services'],['Sponsorship','sponsorship'],['Contact','contact']] },
+    { h: 'Sitemap', items: [['Home','home'],['About','about'],['Business','services'],['Sponsorship','sponsorship'],['News','news'],['Contact','contact']] },
   ];
   return (
     <footer style={{ background: 'var(--zinc-950)', color: 'var(--white)' }}>
