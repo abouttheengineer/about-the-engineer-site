@@ -64,9 +64,10 @@
 <script type="text/babel" src="BusinessPage.jsx"></script>
 <script type="text/babel" src="ProductPage.jsx"></script>
 <script type="text/babel" src="ContactPage.jsx"></script>
+<script type="text/babel" src="PrivacyPolicyPage.jsx"></script>
 
 <script type="text/babel" data-presets="react">
-  const PAGES = ['home', 'consulting', 'support', 'business', 'services', 'sponsorship', 'news', 'contact', ...window.PRODUCTS.map(p => 'product-' + p.slug)];
+  const PAGES = ['home', 'consulting', 'support', 'business', 'services', 'sponsorship', 'news', 'contact', 'privacy', ...window.PRODUCTS.map(p => 'product-' + p.slug)];
 
   function App() {
     const initial = (window.location.hash || '').replace('#', '');
@@ -138,7 +139,7 @@
     }, [page]);
 
     const isProduct = page.startsWith('product-');
-    const Page = isProduct ? ProductDetailPage : { home: HomePage, consulting: ConsultingPage, support: SupportPage, business: BusinessPage, services: ServicesPage, sponsorship: SponsorshipPage, news: NewsPage, contact: ContactPage }[page];
+    const Page = isProduct ? ProductDetailPage : { home: HomePage, consulting: ConsultingPage, support: SupportPage, business: BusinessPage, services: ServicesPage, sponsorship: SponsorshipPage, news: NewsPage, contact: ContactPage, privacy: PrivacyPolicyPage }[page];
 
     return (
       <>

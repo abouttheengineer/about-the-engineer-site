@@ -82,7 +82,13 @@ function SiteFooter({ go }) {
         <div style={{ borderTop: '1px solid var(--zinc-800)', paddingTop: 28 }}>
           <div style={{ fontFamily: 'var(--font-display)', textTransform: 'uppercase', letterSpacing: 'var(--tracking-tight)', lineHeight: 0.86, fontSize: 'clamp(48px, 12vw, 168px)', color: 'var(--white)' }}>About the Engineer</div>
         </div>
-        <div style={{ marginTop: 24, fontFamily: 'var(--font-ui)', fontSize: 12, letterSpacing: '0.04em', color: 'var(--zinc-600)' }}>© 2026 About the Engineer GK — All rights reserved.</div>
+        <div style={{
+          marginTop: 24, display: 'flex', flexWrap: 'wrap', gap: '8px 20px', justifyContent: 'space-between',
+          fontFamily: 'var(--font-ui)', fontSize: 12, letterSpacing: '0.04em', color: 'var(--zinc-600)',
+        }}>
+          <span>© 2026 About the Engineer GK — All rights reserved.</span>
+          <button onClick={() => go('privacy')} style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', font: 'inherit', letterSpacing: 'inherit', color: 'inherit' }}>プライバシーポリシー</button>
+        </div>
       </div>
     </footer>
   );
