@@ -10,6 +10,13 @@
 function SponsorshipPage() {
   const sponsors = [
     {
+      name: 'Vue Fes Japan 2026',
+      logo: 'sponsor-vuefesjapan2026-logo.png',
+      color: '#7714BF',
+      desc: '当社はブロンズスポンサーとして、2026年10月24日（土）開催の「Vue Fes Japan 2026」を応援しています。',
+      url: 'https://vuefes.jp/2026/',
+    },
+    {
       name: 'SAGAMIFORCE',
       logo: 'sponsor-sagamiforce-logo.jpg',
       color: '#C8102E',
