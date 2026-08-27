@@ -19,10 +19,22 @@ window.PRODUCTS = [
     tags: ['カジュアルゲーム', 'リバーシ'],
     category: 'entertainment',
   },
+  {
+    slug: 'miomio',
+    name: 'miomio',
+    jp: 'パーソナルヘルスケアアプリ',
+    desc: '管理栄養士がアプリを通じて健康をサポートする、女性専用のパーソナルヘルスケアサービスです。',
+    tags: ['パーソナルヘルスケア', '管理栄養士監修', '女性専用'],
+    category: 'healthcare',
+    image: 'product-miomio-logo.png',
+    imageFit: 'contain',
+    url: 'http://miomio-life.com/',
+  },
 ];
 
 window.PRODUCT_CATEGORIES = [
   { key: 'sports', label: 'Sports', jp: 'スポーツ領域' },
   { key: 'entertainment', label: 'Entertainment', jp: 'エンタメ領域' },
   { key: 'education', label: 'Education', jp: '教育領域' },
+  { key: 'healthcare', label: 'Healthcare', jp: 'ヘルスケア領域' },
 ];

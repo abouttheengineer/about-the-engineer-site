@@ -32,13 +32,21 @@ function ProductDetailPage({ slug, go }) {
         title={product.jp}
         body={product.desc}
         slotId={'product-' + product.slug}
-        fit={product.slug === 'actimo' ? 'contain' : undefined}
+        src={product.image}
+        fit={product.imageFit || (product.slug === 'actimo' ? 'contain' : undefined)}
         placeholder={'画像をドロップ（' + product.name + '）'}
         action={(
-          <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-            {product.tags.map(t => (
-              <Badge key={t} tone="outline" style={{ color: 'var(--zinc-950)' }}>{t}</Badge>
-            ))}
+          <div>
+            <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+              {product.tags.map(t => (
+                <Badge key={t} tone="outline" style={{ color: 'var(--zinc-950)' }}>{t}</Badge>
+              ))}
+            </div>
+            {product.url && (
+              <div style={{ marginTop: 24 }}>
+                <a href={product.url} target="_blank" rel="noopener noreferrer" style={{ ...window.btnSolid, textDecoration: 'none' }}>公式サイトへ&nbsp;→</a>
+              </div>
+            )}
           </div>
         )} />
 
