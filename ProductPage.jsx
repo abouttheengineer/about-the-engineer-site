@@ -21,9 +21,13 @@ function ProductDetailPage({ slug, go }) {
 
       <Container style={{ paddingTop: 24, paddingBottom: 60 }}>
         <Eyebrow style={{ display: 'block', marginBottom: 20 }}>Products — {product.jp}</Eyebrow>
-        <div style={isAscii(product.name)
-          ? { fontFamily: 'var(--font-product)', textTransform: 'uppercase', fontSize: 'clamp(48px, 8vw, 104px)', letterSpacing: '0.02em', lineHeight: 0.92, color: 'var(--zinc-950)' }
-          : { fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 'clamp(36px, 6vw, 72px)', letterSpacing: '0.01em', lineHeight: 1.1, color: 'var(--zinc-950)' }}>{product.name}</div>
+        {product.logo ? (
+          <img src={product.logo} alt={product.name} style={{ display: 'block', height: 'clamp(48px, 8vw, 104px)', width: 'auto', maxWidth: '100%' }} />
+        ) : (
+          <div style={isAscii(product.name)
+            ? { fontFamily: 'var(--font-product)', textTransform: 'uppercase', fontSize: 'clamp(48px, 8vw, 104px)', letterSpacing: '0.02em', lineHeight: 0.92, color: 'var(--zinc-950)' }
+            : { fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 'clamp(36px, 6vw, 72px)', letterSpacing: '0.01em', lineHeight: 1.1, color: 'var(--zinc-950)' }}>{product.name}</div>
+        )}
       </Container>
 
       <SplitSection
