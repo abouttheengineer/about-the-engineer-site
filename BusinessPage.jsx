@@ -32,9 +32,13 @@ function BusinessPage({ go }) {
                   className="rgrid"
                   style={{ display: 'grid', gridTemplateColumns: '0.32fr 1fr auto', gap: 40, alignItems: 'start', padding: '40px 0', borderTop: i === 0 ? 'none' : '1px solid var(--neutral-200)', cursor: 'pointer' }}>
                   <div>
-                    <div style={isAscii(p.name)
-                      ? { fontFamily: 'var(--font-product)', textTransform: 'uppercase', fontSize: 'clamp(34px,4vw,52px)', letterSpacing: '0.02em', lineHeight: 0.95, color: 'var(--zinc-950)' }
-                      : { fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 'clamp(26px,3vw,38px)', letterSpacing: '0.01em', lineHeight: 1.15, color: 'var(--zinc-950)' }}>{p.name}</div>
+                    {p.logo ? (
+                      <img src={p.logo} alt={p.name} style={{ display: 'block', height: 40, width: 'auto', maxWidth: '100%' }} />
+                    ) : (
+                      <div style={isAscii(p.name)
+                        ? { fontFamily: 'var(--font-product)', textTransform: 'uppercase', fontSize: 'clamp(34px,4vw,52px)', letterSpacing: '0.02em', lineHeight: 0.95, color: 'var(--zinc-950)' }
+                        : { fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 'clamp(26px,3vw,38px)', letterSpacing: '0.01em', lineHeight: 1.15, color: 'var(--zinc-950)' }}>{p.name}</div>
+                    )}
                     <div style={{ marginTop: 8, fontFamily: 'var(--font-ui)', fontSize: 12, fontWeight: 600, letterSpacing: 'var(--tracking-wide)', textTransform: 'uppercase', color: 'var(--neutral-600)' }}>{p.jp}</div>
                   </div>
                   <div>
