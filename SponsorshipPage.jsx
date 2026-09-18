@@ -10,6 +10,13 @@
 function SponsorshipPage() {
   const sponsors = [
     {
+      name: 'シント＝トロイデンVV（STVV）',
+      logo: 'sponsor-stvv-logo.png',
+      color: '#002060',
+      desc: '合同会社About The Engineerは「シント＝トロイデンVV（STVV）」の公式スポンサーとなりました。',
+      url: 'https://stvv.jp/',
+    },
+    {
       name: 'Vue Fes Japan 2026',
       logo: 'sponsor-vuefesjapan2026-logo.png',
       color: '#7714BF',
