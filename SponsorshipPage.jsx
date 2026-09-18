@@ -45,8 +45,8 @@ function SponsorshipPage() {
             <div style={{ fontFamily: 'var(--font-display)', textTransform: 'uppercase', fontSize: 'clamp(28px,3.4vw,44px)', letterSpacing: '0.01em', lineHeight: 1, color: 'var(--zinc-950)', marginBottom: 32 }}>{s.name}</div>
             <div className="rgrid" style={{ display: 'grid', gridTemplateColumns: '320px 1fr', gap: 48, alignItems: 'center' }}>
               {s.logo && (
-                <div style={{ border: '1px solid var(--neutral-200)', padding: 28, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <img src={s.logo} alt={s.name + ' ロゴ'} style={{ display: 'block', width: '100%', height: 'auto' }} />
+                <div style={{ border: '1px solid var(--neutral-200)', padding: 28, display: 'flex', alignItems: 'center', justifyContent: 'center', height: 220 }}>
+                  <img src={s.logo} alt={s.name + ' ロゴ'} style={{ display: 'block', maxWidth: '100%', maxHeight: '100%', width: 'auto', height: 'auto', objectFit: 'contain' }} />
                 </div>
               )}
               <div>
