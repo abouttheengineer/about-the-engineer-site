@@ -11,6 +11,9 @@ window.PRODUCTS = [
     tags: ['管理栄養士監修', 'チャット食事管理', 'コンディション管理'],
     category: 'sports',
     logo: 'product-actimo-logo.jpeg',
+    image: 'product-actimo-screenshot.png',
+    imageFit: 'contain',
+    url: 'https://actimo.jp',
   },
   {
     slug: 'chibimon-reversi',
