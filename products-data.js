@@ -10,6 +10,7 @@ window.PRODUCTS = [
     desc: '管理栄養士監修のもと、チャットでいつでも食事管理ができるアスリート向けサービス。食事記録・栄養アドバイス・コンディション管理をひとつにまとめ、パフォーマンス向上を食から支えます。',
     tags: ['管理栄養士監修', 'チャット食事管理', 'コンディション管理'],
     category: 'sports',
+    logo: 'product-actimo-logo.jpeg',
   },
   {
     slug: 'chibimon-reversi',
