@@ -36,18 +36,6 @@ function MusicPage({ go }) {
         kicker="Global Music Studio"
         lead="楽曲制作から配信、アーティストマネジメント、ライブ・イベントまで。音楽に関わるすべてを自社で一貫して手がけます。" />
 
-      {/* Lead statement */}
-      <Container style={{ paddingBottom: 96 }}>
-        <Rule strong />
-        <p style={{
-          margin: '56px auto 0', textAlign: 'center', maxWidth: 880,
-          fontFamily: 'var(--font-body)', fontSize: 'clamp(22px,2.6vw,34px)',
-          lineHeight: 1.6, color: 'var(--zinc-950)',
-        }}>
-          自社でつくり、自社で届ける。<br />アーティストとともに、音楽の可能性を広げる。
-        </p>
-      </Container>
-
       {/* Services */}
       <Container style={{ paddingBottom: 96 }}>
         <SectionHead kicker="Services" title="事業領域" />
