@@ -13,7 +13,7 @@ function BusinessPage({ go }) {
       <PageHero
         kicker="Products — 自社プロダクト" />
 
-      <Container style={{ paddingBottom: 96 }}>
+      <Container style={{ paddingBottom: 48 }}>
         {categories.map((cat, ci) => {
           const products = window.PRODUCTS.filter(p => p.category === cat.key);
           return (
@@ -56,6 +56,36 @@ function BusinessPage({ go }) {
             </div>
           );
         })}
+      </Container>
+
+      {/* Global Life Support — service entry linking to SupportPage */}
+      <Container style={{ paddingBottom: 96 }}>
+        <div style={{ display: 'flex', alignItems: 'baseline', gap: 16, marginBottom: 8 }}>
+          <span style={{ fontFamily: 'var(--font-ui)', fontSize: 13, fontWeight: 600, letterSpacing: 'var(--tracking-wide)', textTransform: 'uppercase', color: 'var(--neutral-600)' }}>Life Support</span>
+          <span style={{ fontFamily: 'var(--font-ui)', fontSize: 13, color: 'var(--neutral-600)' }}>生活サポート</span>
+        </div>
+        <Rule strong />
+        <div
+          onClick={() => go('support')}
+          className="rgrid"
+          style={{ display: 'grid', gridTemplateColumns: '0.32fr 1fr auto', gap: 40, alignItems: 'start', padding: '40px 0', cursor: 'pointer' }}>
+          <div>
+            <div style={{ fontFamily: 'var(--font-display)', textTransform: 'uppercase', fontSize: 'clamp(24px,3vw,38px)', letterSpacing: '0.02em', lineHeight: 0.95, color: 'var(--zinc-950)' }}>Global Life Support</div>
+            <div style={{ marginTop: 8, fontFamily: 'var(--font-ui)', fontSize: 12, fontWeight: 600, letterSpacing: 'var(--tracking-wide)', textTransform: 'uppercase', color: 'var(--neutral-600)' }}>外国人生活サポート</div>
+          </div>
+          <div>
+            <p style={{ margin: 0, fontFamily: 'var(--font-body)', fontSize: 16, lineHeight: 1.75, color: 'var(--text-on-light-muted)', maxWidth: 560 }}>
+              日本での「困った」を多言語でサポート。市役所の手続きや携帯電話の契約など、日々の生活に関する相談に安心の母国語で対応します。チャット・電話・対面、1回500円から。
+            </p>
+            <div style={{ display: 'flex', gap: 10, marginTop: 18, flexWrap: 'wrap' }}>
+              {['多言語対応', 'チャット相談', '電話相談', '対面相談'].map(t => (
+                <Badge key={t} tone="outline" style={{ color: 'var(--zinc-950)' }}>{t}</Badge>
+              ))}
+            </div>
+          </div>
+          <div style={{ alignSelf: 'center', fontFamily: 'var(--font-body)', fontSize: 22, color: 'var(--zinc-950)' }}>→</div>
+        </div>
+        <Rule />
       </Container>
     </main>
   );

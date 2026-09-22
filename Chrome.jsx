@@ -28,7 +28,7 @@ function SiteHeader({ page, section, go }) {
         <nav className={'site-nav' + (open ? ' site-nav-open' : '')} style={{ display: 'flex', gap: 32 }}>
           {nav.map(n => {
             const on = n.id === 'about' ? section === 'about'
-              : n.id === 'services' ? (page === 'services' || page === 'consulting' || page === 'support' || page === 'business' || page.startsWith('product-'))
+              : n.id === 'services' ? (page === 'services' || page === 'consulting' || page === 'support' || page === 'business' || page === 'music' || page.startsWith('product-'))
               : (page === n.id && !section);
             return (
               <button key={n.id} onClick={() => goAndClose(n.id)} style={{

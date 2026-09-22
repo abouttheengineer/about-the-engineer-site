@@ -8,7 +8,7 @@
 <link rel="icon" type="image/png" href="favicon-32.png" />
 <link rel="icon" type="image/png" sizes="256x256" href="icon-256.png" />
 <link rel="apple-touch-icon" href="apple-touch-icon.png" />
-<link rel="stylesheet" href="styles.css" />
+<link rel="stylesheet" href="../styles.css" />
 <style>
   * { box-sizing: border-box; }
   html { scroll-behavior: smooth; }
@@ -47,9 +47,8 @@
 <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/lucide@0.487.0/dist/umd/lucide.min.js"></script>
-<script>window.__resources = { imageSlotsState: './.image-slots.state.json' };</script>
 <script src="image-slot.js"></script>
-<script src="_ds_bundle.js"></script>
+<script src="../_ds_bundle.js"></script>
 
 <script type="text/babel" src="shared.jsx"></script>
 <script src="products-data.js"></script>
@@ -57,6 +56,7 @@
 <script type="text/babel" src="Chrome.jsx"></script>
 <script type="text/babel" src="HomePage.jsx"></script>
 <script type="text/babel" src="ConsultingPage.jsx"></script>
+<script type="text/babel" src="MusicPage.jsx"></script>
 <script type="text/babel" src="SupportPage.jsx"></script>
 <script type="text/babel" src="ServicesPage.jsx"></script>
 <script type="text/babel" src="SponsorshipPage.jsx"></script>
@@ -67,7 +67,7 @@
 <script type="text/babel" src="PrivacyPolicyPage.jsx"></script>
 
 <script type="text/babel" data-presets="react">
-  const PAGES = ['home', 'consulting', 'support', 'business', 'services', 'sponsorship', 'news', 'contact', 'privacy', ...window.PRODUCTS.map(p => 'product-' + p.slug)];
+  const PAGES = ['home', 'consulting', 'support', 'music', 'business', 'services', 'sponsorship', 'news', 'contact', 'privacy', ...window.PRODUCTS.map(p => 'product-' + p.slug)];
 
   function App() {
     const initial = (window.location.hash || '').replace('#', '');
@@ -139,7 +139,7 @@
     }, [page]);
 
     const isProduct = page.startsWith('product-');
-    const Page = isProduct ? ProductDetailPage : { home: HomePage, consulting: ConsultingPage, support: SupportPage, business: BusinessPage, services: ServicesPage, sponsorship: SponsorshipPage, news: NewsPage, contact: ContactPage, privacy: PrivacyPolicyPage }[page];
+    const Page = isProduct ? ProductDetailPage : { home: HomePage, consulting: ConsultingPage, support: SupportPage, music: MusicPage, business: BusinessPage, services: ServicesPage, sponsorship: SponsorshipPage, news: NewsPage, contact: ContactPage, privacy: PrivacyPolicyPage }[page];
 
     return (
       <>

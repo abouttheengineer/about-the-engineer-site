@@ -24,7 +24,7 @@ function HomePage({ go }) {
           {[
             ['System', 'システム開発', '企画から開発・運用まで、一気通貫でプロダクトをつくります。', null],
             ['Consulting', 'コンサルティング', '事業戦略とグロースを、実践知をもとに伴走支援します。', 'consulting'],
-            ['Support', '外国人サポート', '日本での生活の「困った」を、多言語でサポートします。', 'support'],
+            ['Music', '音楽プロダクション', '楽曲制作から配信、アーティストマネジメントまでを手がけます。', 'music'],
           ].map(([en, jp, desc, dest]) => (
             <div key={en} onClick={dest ? () => go(dest) : undefined}
               style={{ textAlign: 'center', cursor: dest ? 'pointer' : 'default' }}>
@@ -56,37 +56,14 @@ function HomePage({ go }) {
 
       <SplitSection
         reverse
-        kicker="Global Life Support"
+        kicker="Global Music Studio"
         kickerCase="none"
         kickerStyle={{ fontSize: 20 }}
-        title="外国人向け生活サポート"
-        body="日本での「困った」を多言語でサポート。アプリのチャット・電話相談、オフィスでの対面相談、どちらも可能です。市役所の手続きや携帯電話の契約など、日々の生活に関する相談に、安心の母国語で対応します。1回500円から利用できます。"
-        slotId="home-life-support"
-        placeholder="画像をドロップ（生活サポート）"
-        action={<button onClick={() => go('support')} style={btnSolid}>詳しく見る&nbsp;→</button>} />
-
-      {/* Temporarily hidden — restore by uncommenting.
-      <SplitSection
-        reverse
-        kicker="Global Media Studio"
-        kickerCase="none"
-        kickerStyle={{ fontSize: 20 }}
-        title="芸能・音楽プロダクト事業"
-        body="アーティストのマネジメントと音楽プロダクトの企画・制作を行う、芸能・音楽事業です。"
-        slotId="home-intro-media"
-        placeholder="画像をドロップ（芸能・音楽）"
-        action={<button onClick={() => go('contact')} style={btnSolid}>お問い合わせ&nbsp;→</button>} />
-
-      <SplitSection
-        kicker="Global Tech Studio"
-        kickerCase="none"
-        kickerStyle={{ fontSize: 20 }}
-        title="古着・食品・化粧品のオンライン販売"
-        body="古着、コーヒー豆、化粧品などをオンラインで販売する物販事業です。"
-        slotId="home-intro-retail"
-        placeholder="画像をドロップ（物販）"
-        action={<button onClick={() => go('contact')} style={btnSolid}>お問い合わせ&nbsp;→</button>} />
-      */}
+        title="音楽プロダクション事業"
+        body="楽曲の企画・制作から配信、所属アーティストのマネジメント、ライブ・イベントの企画運営まで、音楽に関わるすべてを自社で手がけます。"
+        slotId="home-intro-music"
+        placeholder="画像をドロップ（音楽）"
+        action={<button onClick={() => go('music')} style={btnSolid}>詳しく見る&nbsp;→</button>} />
 
       <SplitSection
         id="consulting-section"
@@ -121,7 +98,7 @@ function HomePage({ go }) {
               ['会社名', '合同会社About the Engineer'],
               ['代表者', 'DOAN LEKAM TANIO'],
               ['所在地', '東京都渋谷区神南１丁目１１−４ ＦＰＧリンクス神南 5階'],
-              ['事業内容', 'システム開発／コンサルティング／外国人サポート'],
+              ['事業内容', 'システム開発／コンサルティング／音楽プロダクション'],
               ['定休日', '毎週水曜日'],
             ].map(([k, v], i, arr) => (
               <div key={k} className="rgrid" style={{
