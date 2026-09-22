@@ -62,7 +62,7 @@ function HomePage({ go }) {
         title="音楽プロダクション事業"
         body="楽曲の企画・制作から配信、所属アーティストのマネジメント、ライブ・イベントの企画運営まで、音楽に関わるすべてを自社で手がけます。"
         slotId="home-intro-music"
-        src="gms_logo.png"
+        src="assets/gms_logo.png"
         fit="contain"
         mediaBg="var(--zinc-950)"
         placeholder="画像をドロップ（音楽）"
@@ -76,7 +76,7 @@ function HomePage({ go }) {
         title="事業戦略・グロース支援"
         body="プロダクト開発で培った知見をもとに、事業戦略の立案からグロース施策の実行までを支援します。データに基づき、検証可能な仮説から成長をつくります。"
         slotId="home-intro-consulting"
-        src="03.jpeg"
+        src="assets/01/03.jpeg"
         placeholder="画像をドロップ（コンサルティング）"
         action={<button onClick={() => go('consulting')} style={btnSolid}>コンサルティングについて&nbsp;→</button>} />
 

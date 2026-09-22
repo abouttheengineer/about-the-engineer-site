@@ -33,7 +33,7 @@ function MusicPage({ go }) {
   return (
     <main>
       <Container style={{ paddingTop: 120, paddingBottom: 0, textAlign: 'center' }}>
-        <img src="gms_logo.png" alt="Global Music Studio" style={{ height: 96, width: 'auto', display: 'inline-block' }} />
+        <img src="assets/gms_logo.png" alt="Global Music Studio" style={{ height: 96, width: 'auto', display: 'inline-block' }} />
       </Container>
       <PageHero
         lead="楽曲制作から配信、アーティストマネジメント、ライブ・イベントまで。音楽に関わるすべてを自社で一貫して手がけます。" />
@@ -77,7 +77,7 @@ function MusicPage({ go }) {
           <Eyebrow dark style={{ display: 'block', marginBottom: 48 }}>Artists</Eyebrow>
           <div style={{ display: 'flex', gap: 48, alignItems: 'flex-start' }}>
             <img
-              src="artist-01.png"
+              src="assets/artist/01.png"
               alt="YOZORA"
               onClick={() => go('artist-yozora')}
               style={{ width: 280, height: 280, objectFit: 'cover', display: 'block', flexShrink: 0, cursor: 'pointer' }}
