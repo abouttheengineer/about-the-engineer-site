@@ -69,6 +69,9 @@ function MusicPage({ go }) {
       </Container>
 
       {/* Artists */}
+      <Container style={{ paddingTop: 80, paddingBottom: 0 }}>
+        <SectionHead kicker="Artists" title="所属アーティスト" />
+      </Container>
       <div style={{ background: 'var(--zinc-950)' }}>
         <Container style={{ paddingTop: 96, paddingBottom: 96 }}>
           <Eyebrow dark style={{ display: 'block', marginBottom: 48 }}>Artists</Eyebrow>
