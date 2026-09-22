@@ -68,21 +68,23 @@ function MusicPage({ go }) {
         ))}
       </Container>
 
-      {/* Artists — coming soon */}
+      {/* Artists */}
       <div style={{ background: 'var(--zinc-950)' }}>
-        <Container style={{ paddingTop: 96, paddingBottom: 96, textAlign: 'center' }}>
-          <Eyebrow dark style={{ display: 'block', marginBottom: 16 }}>Artists</Eyebrow>
-          <h2 style={{
-            margin: '0 0 24px', fontFamily: 'var(--font-display)', textTransform: 'uppercase',
-            letterSpacing: 'var(--tracking-tight)', fontSize: 'clamp(48px, 8vw, 96px)',
-            lineHeight: 0.92, color: 'var(--white)',
-          }}>COMING SOON</h2>
-          <p style={{
-            margin: '0 auto', maxWidth: 520, fontFamily: 'var(--font-body)', fontSize: 16,
-            lineHeight: 1.8, color: 'var(--zinc-400)',
-          }}>所属アーティストは準備中です。最新情報はNewsをご確認ください。</p>
-          <div style={{ marginTop: 40 }}>
-            <button onClick={() => go('news')} style={btnSolidInverse}>News を見る&nbsp;→</button>
+        <Container style={{ paddingTop: 96, paddingBottom: 96 }}>
+          <Eyebrow dark style={{ display: 'block', marginBottom: 48 }}>Artists</Eyebrow>
+          <div style={{ display: 'flex', gap: 48, alignItems: 'flex-start' }}>
+            <img
+              src="artist-01.png"
+              alt="YOZORA"
+              style={{ width: 280, height: 280, objectFit: 'cover', display: 'block', flexShrink: 0 }}
+            />
+            <div style={{ paddingTop: 8 }}>
+              <div style={{
+                fontFamily: 'var(--font-display)', textTransform: 'uppercase',
+                letterSpacing: 'var(--tracking-tight)', fontSize: 'clamp(48px, 6vw, 80px)',
+                lineHeight: 0.92, color: 'var(--white)',
+              }}>YOZORA</div>
+            </div>
           </div>
         </Container>
       </div>
