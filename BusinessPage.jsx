@@ -33,7 +33,7 @@ function BusinessPage({ go }) {
                   style={{ display: 'grid', gridTemplateColumns: '0.32fr 1fr auto', gap: 40, alignItems: 'start', padding: '40px 0', borderTop: i === 0 ? 'none' : '1px solid var(--neutral-200)', cursor: 'pointer' }}>
                   <div>
                     {p.logo ? (
-                      <img src={p.logo} alt={p.name} style={{ display: 'block', height: 40, width: 'auto', maxWidth: '100%' }} />
+                      <img src={p.logo} alt={p.name} style={{ display: 'block', height: 'clamp(36px, 4vw, 52px)', width: 'auto', maxWidth: '100%' }} />
                     ) : (
                       <div style={isAscii(p.name)
                         ? { fontFamily: 'var(--font-product)', textTransform: 'uppercase', fontSize: 'clamp(34px,4vw,52px)', letterSpacing: '0.02em', lineHeight: 0.95, color: 'var(--zinc-950)' }
