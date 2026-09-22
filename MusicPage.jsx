@@ -32,8 +32,10 @@ function MusicPage({ go }) {
 
   return (
     <main>
+      <Container style={{ paddingTop: 120, paddingBottom: 0, textAlign: 'center' }}>
+        <img src="gms_logo.png" alt="Global Music Studio" style={{ height: 96, width: 'auto', display: 'inline-block' }} />
+      </Container>
       <PageHero
-        kicker="Global Music Studio"
         lead="楽曲制作から配信、アーティストマネジメント、ライブ・イベントまで。音楽に関わるすべてを自社で一貫して手がけます。" />
 
       {/* Services */}

@@ -62,6 +62,7 @@ function HomePage({ go }) {
         title="音楽プロダクション事業"
         body="楽曲の企画・制作から配信、所属アーティストのマネジメント、ライブ・イベントの企画運営まで、音楽に関わるすべてを自社で手がけます。"
         slotId="home-intro-music"
+        src="gms_logo.png"
         placeholder="画像をドロップ（音楽）"
         action={<button onClick={() => go('music')} style={btnSolid}>詳しく見る&nbsp;→</button>} />
 
