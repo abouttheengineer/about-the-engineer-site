@@ -76,7 +76,7 @@ function HomePage({ go }) {
         title="事業戦略・グロース支援"
         body="プロダクト開発で培った知見をもとに、事業戦略の立案からグロース施策の実行までを支援します。データに基づき、検証可能な仮説から成長をつくります。"
         slotId="home-intro-consulting"
-        src={(window.__resources && window.__resources.consultingImg) || "img-home-intro-consulting.png"}
+        src="03.jpeg"
         placeholder="画像をドロップ（コンサルティング）"
         action={<button onClick={() => go('consulting')} style={btnSolid}>コンサルティングについて&nbsp;→</button>} />
 
