@@ -79,14 +79,20 @@ function MusicPage({ go }) {
             <img
               src="artist-01.png"
               alt="YOZORA"
-              style={{ width: 280, height: 280, objectFit: 'cover', display: 'block', flexShrink: 0 }}
+              onClick={() => go('artist-yozora')}
+              style={{ width: 280, height: 280, objectFit: 'cover', display: 'block', flexShrink: 0, cursor: 'pointer' }}
             />
             <div style={{ paddingTop: 8 }}>
               <div style={{
                 fontFamily: 'var(--font-display)', textTransform: 'uppercase',
                 letterSpacing: 'var(--tracking-tight)', fontSize: 'clamp(48px, 6vw, 80px)',
-                lineHeight: 0.92, color: 'var(--white)',
+                lineHeight: 0.92, color: 'var(--white)', marginBottom: 20,
               }}>YOZORA</div>
+              <div style={{
+                fontFamily: 'var(--font-ui)', fontSize: 12, fontWeight: 600,
+                letterSpacing: 'var(--tracking-wide)', textTransform: 'uppercase',
+                color: 'var(--zinc-500)', marginBottom: 16,
+              }}>Dance &amp; Vocal</div>
             </div>
           </div>
         </Container>

@@ -53,10 +53,12 @@
 <script type="text/babel" src="shared.jsx"></script>
 <script src="products-data.js"></script>
 <script src="news-data.js"></script>
+<script src="artists-data.js"></script>
 <script type="text/babel" src="Chrome.jsx"></script>
 <script type="text/babel" src="HomePage.jsx"></script>
 <script type="text/babel" src="ConsultingPage.jsx"></script>
 <script type="text/babel" src="MusicPage.jsx"></script>
+<script type="text/babel" src="ArtistPage.jsx"></script>
 <script type="text/babel" src="SupportPage.jsx"></script>
 <script type="text/babel" src="ServicesPage.jsx"></script>
 <script type="text/babel" src="SponsorshipPage.jsx"></script>
@@ -67,7 +69,7 @@
 <script type="text/babel" src="PrivacyPolicyPage.jsx"></script>
 
 <script type="text/babel" data-presets="react">
-  const PAGES = ['home', 'consulting', 'support', 'music', 'business', 'services', 'sponsorship', 'news', 'contact', 'privacy', ...window.PRODUCTS.map(p => 'product-' + p.slug)];
+  const PAGES = ['home', 'consulting', 'support', 'music', 'business', 'services', 'sponsorship', 'news', 'contact', 'privacy', ...window.PRODUCTS.map(p => 'product-' + p.slug), ...window.ARTISTS.map(a => 'artist-' + a.slug)];
 
   function App() {
     const initial = (window.location.hash || '').replace('#', '');
@@ -139,12 +141,15 @@
     }, [page]);
 
     const isProduct = page.startsWith('product-');
-    const Page = isProduct ? ProductDetailPage : { home: HomePage, consulting: ConsultingPage, support: SupportPage, music: MusicPage, business: BusinessPage, services: ServicesPage, sponsorship: SponsorshipPage, news: NewsPage, contact: ContactPage, privacy: PrivacyPolicyPage }[page];
+    const isArtist = page.startsWith('artist-');
+    const Page = isProduct ? ProductDetailPage
+      : isArtist ? ArtistPage
+      : { home: HomePage, consulting: ConsultingPage, support: SupportPage, music: MusicPage, business: BusinessPage, services: ServicesPage, sponsorship: SponsorshipPage, news: NewsPage, contact: ContactPage, privacy: PrivacyPolicyPage }[page];
 
     return (
       <>
         <SiteHeader page={page} section={section} go={go} />
-        <Page go={go} {...(isProduct ? { slug: page.replace('product-', '') } : {})} />
+        <Page go={go} {...(isProduct ? { slug: page.replace('product-', '') } : isArtist ? { slug: page.replace('artist-', '') } : {})} />
         <SiteFooter go={go} />
       </>
     );
