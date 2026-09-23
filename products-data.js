@@ -13,7 +13,7 @@ window.PRODUCTS = [
     logo: 'product-actimo-logo.jpeg',
     image: 'product-actimo-screenshot.png',
     imageFit: 'contain',
-    url: 'https://actimo.jp',
+    url: 'https://actimo.net',
   },
   {
     slug: 'chibimon-reversi',
