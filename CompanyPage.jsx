@@ -56,19 +56,22 @@ function CompanyPage({ go }) {
       <div id="message" style={{ background: 'var(--neutral-50)' }}>
         <Container style={{ paddingTop: 96, paddingBottom: 96 }}>
           <Heading en="Message" jp="採用メッセージ" />
-          <div style={{ ...card, padding: 'clamp(32px, 6vw, 72px)' }}>
-            <p style={{ margin: 0, fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 'clamp(24px, 3vw, 38px)', lineHeight: 1.5, color: 'var(--zinc-950)' }}>
-              ともにつくる。
-            </p>
-            <p style={{ margin: '28px 0 0', fontFamily: 'var(--font-body)', fontSize: 16, lineHeight: 2.1, color: 'var(--text-on-light-muted)', maxWidth: 620 }}>
-              私たちは、世界中の人にとってよりよいサービスを、<br />
-              ともにつくる仲間を探しています。<br />
-              <br />
-              開発、ビジネスサポート、投資。役割は違っても、<br />
-              「すべての人にテクノロジーを」という想いは同じです。<br />
-              <br />
-              あなたの力を、私たちと一緒に活かしてください。
-            </p>
+          <div className="rgrid" style={{ ...card, padding: 'clamp(32px, 6vw, 72px)', display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: 'clamp(32px, 5vw, 64px)', alignItems: 'center' }}>
+            <div>
+              <p style={{ margin: 0, fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 'clamp(24px, 3vw, 38px)', lineHeight: 1.5, color: 'var(--zinc-950)' }}>
+                ともにつくる。
+              </p>
+              <p style={{ margin: '28px 0 0', fontFamily: 'var(--font-body)', fontSize: 16, lineHeight: 2.1, color: 'var(--text-on-light-muted)', maxWidth: 620 }}>
+                私たちは、世界中の人にとってよりよいサービスを、<br />
+                ともにつくる仲間を探しています。<br />
+                <br />
+                開発、ビジネスサポート、投資。役割は違っても、<br />
+                「すべての人にテクノロジーを」という想いは同じです。<br />
+                <br />
+                あなたの力を、私たちと一緒に活かしてください。
+              </p>
+            </div>
+            <img src="assets/5083746_s.jpg" alt="" style={{ display: 'block', width: '100%', aspectRatio: '4 / 3', objectFit: 'cover', borderRadius: 12 }} />
           </div>
         </Container>
       </div>
