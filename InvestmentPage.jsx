@@ -43,14 +43,17 @@ function InvestmentPage({ go }) {
       <div style={{ background: 'var(--neutral-50)' }}>
         <Container style={{ paddingTop: 96, paddingBottom: 96 }}>
           <Heading en="Overview" jp="事業概要" />
-          <div style={{ ...card, padding: 'clamp(32px, 6vw, 72px)' }}>
-            <p style={{ margin: 0, fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 'clamp(22px, 2.8vw, 34px)', lineHeight: 1.5, color: 'var(--zinc-950)' }}>
-              新しい価値づくりに、ともに挑む。
-            </p>
-            <p style={{ margin: '28px 0 0', fontFamily: 'var(--font-body)', fontSize: 16, lineHeight: 2.1, color: 'var(--text-on-light-muted)', maxWidth: 640 }}>
-              投資事業部は、将来性のある事業やプロダクトへの投資を通じて、新しい価値づくりに取り組む部署です。
-              自社でプロダクトを開発・運営してきた経験を活かし、事業の立ち上げから成長までを見据えた関わり方を大切にしています。
-            </p>
+          <div className="rgrid" style={{ ...card, padding: 'clamp(32px, 6vw, 72px)', display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: 'clamp(32px, 5vw, 64px)', alignItems: 'center' }}>
+            <div>
+              <p style={{ margin: 0, fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 'clamp(22px, 2.8vw, 34px)', lineHeight: 1.5, color: 'var(--zinc-950)' }}>
+                新しい価値づくりに、ともに挑む。
+              </p>
+              <p style={{ margin: '28px 0 0', fontFamily: 'var(--font-body)', fontSize: 16, lineHeight: 2.1, color: 'var(--text-on-light-muted)' }}>
+                投資事業部は、将来性のある事業やプロダクトへの投資を通じて、新しい価値づくりに取り組む部署です。
+                自社でプロダクトを開発・運営してきた経験を活かし、事業の立ち上げから成長までを見据えた関わり方を大切にしています。
+              </p>
+            </div>
+            <img src="assets/006.jpeg" alt="" style={{ display: 'block', width: '100%', aspectRatio: '4 / 3', objectFit: 'cover', borderRadius: 12 }} />
           </div>
         </Container>
       </div>
