@@ -62,6 +62,7 @@
 <script type="text/babel" src="SupportPage.jsx"></script>
 <script type="text/babel" src="ServicesPage.jsx"></script>
 <script type="text/babel" src="CompanyPage.jsx"></script>
+<script type="text/babel" src="InvestmentPage.jsx"></script>
 <script type="text/babel" src="SponsorshipPage.jsx"></script>
 <script type="text/babel" src="NewsPage.jsx"></script>
 <script type="text/babel" src="BusinessPage.jsx"></script>
@@ -70,7 +71,7 @@
 <script type="text/babel" src="PrivacyPolicyPage.jsx"></script>
 
 <script type="text/babel" data-presets="react">
-  const PAGES = ['home', 'consulting', 'support', 'music', 'business', 'services', 'company', 'sponsorship', 'news', 'contact', 'privacy', ...window.PRODUCTS.map(p => 'product-' + p.slug), ...window.ARTISTS.map(a => 'artist-' + a.slug)];
+  const PAGES = ['home', 'consulting', 'support', 'music', 'business', 'services', 'company', 'investment', 'sponsorship', 'news', 'contact', 'privacy', ...window.PRODUCTS.map(p => 'product-' + p.slug), ...window.ARTISTS.map(a => 'artist-' + a.slug)];
 
   function App() {
     const initial = (window.location.hash || '').replace('#', '');
@@ -145,7 +146,7 @@
     const isArtist = page.startsWith('artist-');
     const Page = isProduct ? ProductDetailPage
       : isArtist ? ArtistPage
-      : { home: HomePage, consulting: ConsultingPage, support: SupportPage, music: MusicPage, business: BusinessPage, services: ServicesPage, company: CompanyPage, sponsorship: SponsorshipPage, news: NewsPage, contact: ContactPage, privacy: PrivacyPolicyPage }[page];
+      : { home: HomePage, consulting: ConsultingPage, support: SupportPage, music: MusicPage, business: BusinessPage, services: ServicesPage, company: CompanyPage, investment: InvestmentPage, sponsorship: SponsorshipPage, news: NewsPage, contact: ContactPage, privacy: PrivacyPolicyPage }[page];
 
     return (
       <>

@@ -18,6 +18,7 @@ function CompanyPage({ go }) {
     },
     {
       name: 'Investment', jp: '投資事業部',
+      dest: 'investment',
       desc: '将来性のある事業やプロダクトへの投資を通じて、新しい価値づくりに取り組みます。',
     },
   ];
