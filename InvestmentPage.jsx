@@ -56,9 +56,9 @@ function InvestmentPage({ go }) {
       </div>
 
       {/* Policy */}
-      <div style={{ background: 'var(--zinc-950)' }}>
+      <div style={{ background: 'var(--neutral-100)' }}>
         <Container style={{ paddingTop: 96, paddingBottom: 96 }}>
-          <Heading en="Investment Policy" jp="投資方針" dark />
+          <Heading en="Investment Policy" jp="投資方針" />
           <div style={{ ...card, padding: '8px clamp(24px, 5vw, 56px)' }}>
             {policy.map((it, i) => (
               <div key={it.en} className="rgrid" style={{ display: 'grid', gridTemplateColumns: '0.3fr 1fr', gap: 32, alignItems: 'center', padding: '32px 0', borderTop: i === 0 ? 'none' : '1px solid var(--neutral-200)' }}>
