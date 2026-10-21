@@ -13,8 +13,9 @@
 
 :root {
   /* ---- Families ---- */
-  --font-display: 'Bebas Neue', 'Oswald', 'Arial Narrow', sans-serif;
-  --font-product: 'Bayon', 'Bebas Neue', sans-serif;
+  --font-display: 'Archivo', 'Noto Sans JP', system-ui, sans-serif;
+  --font-logo:    'Bebas Neue', 'Oswald', 'Arial Narrow', sans-serif;
+  --font-product: 'Archivo', 'Noto Sans JP', system-ui, sans-serif;
   --font-body:    'Noto Sans JP', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', system-ui, sans-serif;
   --font-ui:      'Archivo', 'Noto Sans JP', system-ui, sans-serif;
 
@@ -59,10 +60,11 @@
   line-height: var(--leading-display);
   letter-spacing: var(--tracking-tight);
   text-transform: uppercase;
-  font-weight: var(--weight-normal);
+  font-weight: 700;
 }
 .ate-product {
   font-family: var(--font-product);
+  font-weight: 700;
   letter-spacing: var(--tracking-wide);
 }
 .ate-body {

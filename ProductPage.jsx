@@ -25,7 +25,7 @@ function ProductDetailPage({ slug, go }) {
           <img src={product.logo} alt={product.name} style={{ display: 'block', height: 'clamp(48px, 8vw, 104px)', width: 'auto', maxWidth: '100%' }} />
         ) : (
           <div style={isAscii(product.name)
-            ? { fontFamily: 'var(--font-product)', textTransform: 'uppercase', fontSize: 'clamp(48px, 8vw, 104px)', letterSpacing: '0.02em', lineHeight: 0.92, color: 'var(--zinc-950)' }
+            ? { fontFamily: 'var(--font-product)', fontWeight: 700, textTransform: 'uppercase', fontSize: 'clamp(48px, 8vw, 104px)', letterSpacing: '0.02em', lineHeight: 0.92, color: 'var(--zinc-950)' }
             : { fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 'clamp(36px, 6vw, 72px)', letterSpacing: '0.01em', lineHeight: 1.1, color: 'var(--zinc-950)' }}>{product.name}</div>
         )}
       </Container>

@@ -34,7 +34,7 @@ function HomePage({ go }) {
                 flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
                 gap: 10, padding: 24, boxSizing: 'border-box',
               }}>
-                <span style={{ fontFamily: 'var(--font-display)', textTransform: 'uppercase', letterSpacing: '0.08em', fontSize: 13, color: 'var(--neutral-600)' }}>{en}</span>
+                <span style={{ fontFamily: 'var(--font-display)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', fontSize: 13, color: 'var(--neutral-600)' }}>{en}</span>
                 <span style={{ fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 22, color: 'var(--zinc-950)' }}>{jp}</span>
               </div>
               <p style={{ margin: '20px auto 0', maxWidth: 240, fontFamily: 'var(--font-body)', fontSize: 14, lineHeight: 1.7, color: 'var(--text-on-light-muted)' }}>{desc}</p>
@@ -153,7 +153,7 @@ function HomePage({ go }) {
 
 const btnBase = {
   display: 'inline-flex', alignItems: 'center', gap: '0.5em', cursor: 'pointer',
-  fontFamily: 'var(--font-display)', textTransform: 'uppercase',
+  fontFamily: 'var(--font-display)', fontWeight: 700, textTransform: 'uppercase',
   letterSpacing: 'var(--tracking-wider)', fontSize: 18, padding: '13px 30px',
   whiteSpace: 'nowrap', transition: 'var(--transition-all)',
 };

@@ -22,7 +22,7 @@ function SiteHeader({ page, section, go }) {
       <div style={{ maxWidth: 1240, margin: '0 auto', padding: '0 var(--page-gutter-lg)', height: 72, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <button onClick={() => goAndClose('home')} style={{
           background: 'none', border: 'none', padding: 0, cursor: 'pointer',
-          fontFamily: 'var(--font-display)', textTransform: 'uppercase',
+          fontFamily: 'var(--font-logo)', textTransform: 'uppercase',
           letterSpacing: '0.14em', fontSize: 19, color: 'var(--white)',
         }}>About&nbsp;the&nbsp;Engineer</button>
         <nav className={'site-nav' + (open ? ' site-nav-open' : '')} style={{ display: 'flex', gap: 32 }}>
@@ -80,7 +80,7 @@ function SiteFooter({ go }) {
           ))}
         </div>
         <div style={{ borderTop: '1px solid var(--zinc-800)', paddingTop: 28 }}>
-          <div style={{ fontFamily: 'var(--font-display)', textTransform: 'uppercase', letterSpacing: 'var(--tracking-tight)', lineHeight: 0.86, fontSize: 'clamp(48px, 12vw, 168px)', color: 'var(--white)' }}>About the Engineer</div>
+          <div style={{ fontFamily: 'var(--font-logo)', textTransform: 'uppercase', letterSpacing: 'var(--tracking-tight)', lineHeight: 0.86, fontSize: 'clamp(48px, 12vw, 168px)', color: 'var(--white)' }}>About the Engineer</div>
         </div>
         <div style={{
           marginTop: 24, display: 'flex', flexWrap: 'wrap', gap: '8px 20px', justifyContent: 'space-between',

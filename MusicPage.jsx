@@ -48,7 +48,7 @@ function MusicPage({ go }) {
             alignItems: 'start', padding: '36px 0',
             borderTop: i === 0 ? 'none' : '1px solid var(--neutral-200)',
           }}>
-            <span style={{ fontFamily: 'var(--font-display)', fontSize: 22, color: 'var(--neutral-300)' }}>({s.n})</span>
+            <span style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 22, color: 'var(--neutral-300)' }}>({s.n})</span>
             <div>
               <h3 style={{ margin: '0 0 12px', fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 20, color: 'var(--zinc-950)' }}>{s.title}</h3>
               <p style={{ margin: 0, fontFamily: 'var(--font-body)', fontSize: 15, lineHeight: 1.8, color: 'var(--text-on-light-muted)' }}>{s.desc}</p>
@@ -84,7 +84,7 @@ function MusicPage({ go }) {
             />
             <div style={{ paddingTop: 8 }}>
               <div style={{
-                fontFamily: 'var(--font-display)', textTransform: 'uppercase',
+                fontFamily: 'var(--font-display)', fontWeight: 700, textTransform: 'uppercase',
                 letterSpacing: 'var(--tracking-tight)', fontSize: 'clamp(48px, 6vw, 80px)',
                 lineHeight: 0.92, color: 'var(--white)', marginBottom: 20,
               }}>YOZORA</div>
@@ -115,7 +115,7 @@ function MusicPage({ go }) {
 
 const btnBase = {
   display: 'inline-flex', alignItems: 'center', gap: '0.5em', cursor: 'pointer',
-  fontFamily: 'var(--font-display)', textTransform: 'uppercase',
+  fontFamily: 'var(--font-display)', fontWeight: 700, textTransform: 'uppercase',
   letterSpacing: 'var(--tracking-wider)', fontSize: 18, padding: '13px 30px',
   whiteSpace: 'nowrap', transition: 'var(--transition-all)',
 };

@@ -67,7 +67,7 @@ function SupportPage({ go }) {
           <div>
             <div style={{ fontFamily: 'var(--font-ui)', fontSize: 12, fontWeight: 600, letterSpacing: 'var(--tracking-wide)', textTransform: 'uppercase', color: 'var(--neutral-600)' }}>生活サポートプラン</div>
             <div style={{ marginTop: 12, display: 'flex', alignItems: 'baseline', gap: 12 }}>
-              <span style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(40px,5vw,64px)', color: 'var(--zinc-950)', lineHeight: 1 }}>月額2,500円</span>
+              <span style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 'clamp(40px,5vw,64px)', color: 'var(--zinc-950)', lineHeight: 1 }}>月額2,500円</span>
             </div>
           </div>
           <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 14 }}>

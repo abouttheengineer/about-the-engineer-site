@@ -36,7 +36,7 @@ function ServicesPage({ go }) {
             className="rgrid"
             style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: 24, alignItems: 'center', padding: '40px 0', borderTop: i === 0 ? 'none' : '1px solid var(--neutral-200)', cursor: 'pointer' }}>
             <div>
-              <div style={{ fontFamily: 'var(--font-display)', textTransform: 'uppercase', fontSize: 'clamp(28px,3.4vw,44px)', letterSpacing: '0.01em', lineHeight: 1, color: 'var(--zinc-950)' }}>{it.name}</div>
+              <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, textTransform: 'uppercase', fontSize: 'clamp(28px,3.4vw,44px)', letterSpacing: '0.01em', lineHeight: 1, color: 'var(--zinc-950)' }}>{it.name}</div>
               <div style={{ marginTop: 8, fontFamily: 'var(--font-ui)', fontSize: 12, fontWeight: 600, letterSpacing: 'var(--tracking-wide)', textTransform: 'uppercase', color: 'var(--neutral-600)' }}>{it.jp}</div>
               <p style={{ margin: '14px 0 0', fontFamily: 'var(--font-body)', fontSize: 15, lineHeight: 1.75, color: 'var(--text-on-light-muted)', maxWidth: 560 }}>{it.desc}</p>
             </div>

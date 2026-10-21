@@ -20,7 +20,7 @@ function ArtistPage({ slug, go }) {
                 color: 'var(--zinc-500)', marginBottom: 16,
               }}>{artist.genre}</div>
               <div style={{
-                fontFamily: 'var(--font-display)', textTransform: 'uppercase',
+                fontFamily: 'var(--font-display)', fontWeight: 700, textTransform: 'uppercase',
                 letterSpacing: 'var(--tracking-tight)', fontSize: 'clamp(56px, 8vw, 112px)',
                 lineHeight: 0.88, color: 'var(--white)',
               }}>{artist.name}</div>
@@ -35,7 +35,7 @@ function ArtistPage({ slug, go }) {
         <Rule strong />
         <div style={{
           padding: '80px 0', textAlign: 'center',
-          fontFamily: 'var(--font-display)', textTransform: 'uppercase',
+          fontFamily: 'var(--font-display)', fontWeight: 700, textTransform: 'uppercase',
           letterSpacing: 'var(--tracking-tight)', fontSize: 'clamp(32px, 5vw, 64px)',
           color: 'var(--neutral-300)',
         }}>Coming Soon</div>
@@ -51,7 +51,7 @@ function ArtistPage({ slug, go }) {
 
 const btnBase = {
   display: 'inline-flex', alignItems: 'center', gap: '0.5em', cursor: 'pointer',
-  fontFamily: 'var(--font-display)', textTransform: 'uppercase',
+  fontFamily: 'var(--font-display)', fontWeight: 700, textTransform: 'uppercase',
   letterSpacing: 'var(--tracking-wider)', fontSize: 18, padding: '13px 30px',
   whiteSpace: 'nowrap', transition: 'var(--transition-all)',
 };

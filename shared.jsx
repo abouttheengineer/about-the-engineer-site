@@ -31,7 +31,7 @@ function Rule({ dark = false, strong = false, style = {} }) {
 function Display({ children, size = 'clamp(48px, 8vw, 128px)', dark = false, style = {} }) {
   return (
     <h1 style={{
-      margin: 0, fontFamily: 'var(--font-display)', textTransform: 'uppercase',
+      margin: 0, fontFamily: 'var(--font-display)', fontWeight: 700, textTransform: 'uppercase',
       letterSpacing: 'var(--tracking-tight)', lineHeight: 0.9,
       fontSize: size, color: dark ? 'var(--white)' : 'var(--zinc-950)', ...style,
     }}>{children}</h1>
@@ -90,9 +90,9 @@ function RuledRow({ number, title, sub, meta, onClick, dark = false }) {
         paddingLeft: hover && onClick ? 12 : 0,
         transition: 'padding 300ms cubic-bezier(0.4,0,0.2,1)',
       }}>
-      <span style={{ fontFamily: 'var(--font-display)', fontSize: 22, color: dark ? 'var(--zinc-600)' : 'var(--neutral-300)' }}>{number}</span>
+      <span style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 22, color: dark ? 'var(--zinc-600)' : 'var(--neutral-300)' }}>{number}</span>
       <div>
-        <div style={{ fontFamily: 'var(--font-display)', textTransform: 'uppercase', fontSize: 'clamp(26px,3.4vw,40px)', letterSpacing: '0.01em', lineHeight: 1, color: dark ? 'var(--white)' : 'var(--zinc-950)' }}>{title}</div>
+        <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, textTransform: 'uppercase', fontSize: 'clamp(26px,3.4vw,40px)', letterSpacing: '0.01em', lineHeight: 1, color: dark ? 'var(--white)' : 'var(--zinc-950)' }}>{title}</div>
         {sub && <div style={{ marginTop: 10, fontFamily: 'var(--font-body)', fontSize: 15, lineHeight: 1.7, color: dark ? 'var(--zinc-400)' : 'var(--text-on-light-muted)', maxWidth: 560 }}>{sub}</div>}
       </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 18 }}>

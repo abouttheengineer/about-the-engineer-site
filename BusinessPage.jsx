@@ -36,7 +36,7 @@ function BusinessPage({ go }) {
                       <img src={p.logo} alt={p.name} style={{ display: 'block', height: 'clamp(52px, 6vw, 80px)', width: 'auto', maxWidth: '100%' }} />
                     ) : (
                       <div style={isAscii(p.name)
-                        ? { fontFamily: 'var(--font-product)', textTransform: 'uppercase', fontSize: 'clamp(34px,4vw,52px)', letterSpacing: '0.02em', lineHeight: 0.95, color: 'var(--zinc-950)' }
+                        ? { fontFamily: 'var(--font-product)', fontWeight: 700, textTransform: 'uppercase', fontSize: 'clamp(34px,4vw,52px)', letterSpacing: '0.02em', lineHeight: 0.95, color: 'var(--zinc-950)' }
                         : { fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 'clamp(26px,3vw,38px)', letterSpacing: '0.01em', lineHeight: 1.15, color: 'var(--zinc-950)' }}>{p.name}</div>
                     )}
                     <div style={{ marginTop: 8, fontFamily: 'var(--font-ui)', fontSize: 12, fontWeight: 600, letterSpacing: 'var(--tracking-wide)', textTransform: 'uppercase', color: 'var(--neutral-600)' }}>{p.jp}</div>
@@ -70,7 +70,7 @@ function BusinessPage({ go }) {
           className="rgrid"
           style={{ display: 'grid', gridTemplateColumns: '0.32fr 1fr auto', gap: 40, alignItems: 'start', padding: '40px 0', cursor: 'pointer' }}>
           <div>
-            <div style={{ fontFamily: 'var(--font-display)', textTransform: 'uppercase', fontSize: 'clamp(24px,3vw,38px)', letterSpacing: '0.02em', lineHeight: 0.95, color: 'var(--zinc-950)' }}>Global Life Support</div>
+            <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, textTransform: 'uppercase', fontSize: 'clamp(24px,3vw,38px)', letterSpacing: '0.02em', lineHeight: 0.95, color: 'var(--zinc-950)' }}>Global Life Support</div>
             <div style={{ marginTop: 8, fontFamily: 'var(--font-ui)', fontSize: 12, fontWeight: 600, letterSpacing: 'var(--tracking-wide)', textTransform: 'uppercase', color: 'var(--neutral-600)' }}>外国人生活サポート</div>
           </div>
           <div>

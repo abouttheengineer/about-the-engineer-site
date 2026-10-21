@@ -42,7 +42,7 @@ function SponsorshipPage() {
         <Rule strong />
         {sponsors.map((s, i) => (
           <div key={s.name} style={{ padding: '48px 0', borderTop: i === 0 ? 'none' : '1px solid var(--neutral-200)' }}>
-            <div style={{ fontFamily: 'var(--font-display)', textTransform: 'uppercase', fontSize: 'clamp(28px,3.4vw,44px)', letterSpacing: '0.01em', lineHeight: 1, color: 'var(--zinc-950)', marginBottom: 32 }}>{s.name}</div>
+            <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, textTransform: 'uppercase', fontSize: 'clamp(28px,3.4vw,44px)', letterSpacing: '0.01em', lineHeight: 1, color: 'var(--zinc-950)', marginBottom: 32 }}>{s.name}</div>
             <div className="rgrid" style={{ display: 'grid', gridTemplateColumns: '320px 1fr', gap: 48, alignItems: 'center' }}>
               {s.logo && (
                 <div style={{ border: '1px solid var(--neutral-200)', padding: 28, display: 'flex', alignItems: 'center', justifyContent: 'center', height: 220 }}>

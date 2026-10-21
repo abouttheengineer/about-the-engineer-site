@@ -47,9 +47,9 @@ function ConsultingPage({ go }) {
         <Rule strong />
         {services.map((s, i) => (
           <div key={s.n} className="rgrid" style={{ display: 'grid', gridTemplateColumns: '64px 1fr 260px', gap: 24, alignItems: 'start', padding: '36px 0', borderTop: i === 0 ? 'none' : '1px solid var(--neutral-200)' }}>
-            <span style={{ fontFamily: 'var(--font-display)', fontSize: 22, color: 'var(--neutral-300)' }}>({s.n})</span>
+            <span style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 22, color: 'var(--neutral-300)' }}>({s.n})</span>
             <div>
-              <div style={{ fontFamily: 'var(--font-display)', textTransform: 'uppercase', fontSize: 'clamp(26px,3.4vw,40px)', letterSpacing: '0.01em', lineHeight: 1, color: 'var(--zinc-950)' }}>{s.title}</div>
+              <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, textTransform: 'uppercase', fontSize: 'clamp(26px,3.4vw,40px)', letterSpacing: '0.01em', lineHeight: 1, color: 'var(--zinc-950)' }}>{s.title}</div>
               <p style={{ margin: '10px 0 0', fontFamily: 'var(--font-body)', fontSize: 15, lineHeight: 1.7, color: 'var(--text-on-light-muted)', maxWidth: 560 }}>{s.desc}</p>
               <ul style={{ margin: '16px 0 0', padding: 0, listStyle: 'none', display: 'flex', flexWrap: 'wrap', gap: 10 }}>
                 {s.deliverables.map(d => (
@@ -69,8 +69,8 @@ function ConsultingPage({ go }) {
         <div className="rgrid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 1, background: 'var(--neutral-200)', border: '1px solid var(--neutral-200)' }}>
           {steps.map(([en, jp, d], i) => (
             <div key={en} style={{ background: 'var(--white)', padding: '28px 22px' }}>
-              <div style={{ fontFamily: 'var(--font-display)', fontSize: 20, color: 'var(--neutral-300)' }}>0{i + 1}</div>
-              <div style={{ marginTop: 14, fontFamily: 'var(--font-display)', textTransform: 'uppercase', fontSize: 26, letterSpacing: '0.02em', lineHeight: 1, color: 'var(--zinc-950)' }}>{en}</div>
+              <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 20, color: 'var(--neutral-300)' }}>0{i + 1}</div>
+              <div style={{ marginTop: 14, fontFamily: 'var(--font-display)', fontWeight: 700, textTransform: 'uppercase', fontSize: 26, letterSpacing: '0.02em', lineHeight: 1, color: 'var(--zinc-950)' }}>{en}</div>
               <div style={{ marginTop: 8, fontFamily: 'var(--font-ui)', fontSize: 12, fontWeight: 600, letterSpacing: 'var(--tracking-wide)', textTransform: 'uppercase', color: 'var(--neutral-600)' }}>{jp}</div>
               <p style={{ margin: '14px 0 0', fontFamily: 'var(--font-body)', fontSize: 14, lineHeight: 1.7, color: 'var(--text-on-light-muted)' }}>{d}</p>
             </div>
