@@ -108,7 +108,7 @@ function PrivacyPolicyPage({ go }) {
           <p style={{ ...p, marginBottom: 20 }}>
             合同会社About The Engineer<br />
             個人情報問合せ窓口<br />
-            メールアドレス：<a href="mailto:hello@abouttheengineer.jp" style={{ color: 'inherit' }}>hello@abouttheengineer.jp</a>
+            メールアドレス：<a href="mailto:info@abouttheengineer.com" style={{ color: 'inherit' }}>info@abouttheengineer.com</a>
           </p>
           <button onClick={() => go('contact')} style={window.btnSolid}>お問い合わせフォームへ&nbsp;→</button>
         </div>

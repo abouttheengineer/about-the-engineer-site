@@ -45,7 +45,7 @@ function ContactPage({ go }) {
           {/* Info column */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
             {[
-              ['Email', 'hello@abouttheengineer.jp'],
+              ['Email', 'info@abouttheengineer.com'],
               ['Office', '東京都渋谷区神南１丁目１１−４ ＦＰＧリンクス神南 5階'],
               ['Hours', '10:00 – 19:00 JST（水曜定休）'],
               ['Social', 'X · Instagram · note'],
@@ -76,14 +76,14 @@ function ContactPage({ go }) {
               <div>
                 <span style={label}>ご相談内容</span>
                 <select style={field} value={form.topic} onChange={set('topic')}>
-                  {['コンサルティング','アプリ開発','在日外国人サポート','その他'].map(o => <option key={o}>{o}</option>)}
+                  {['コンサルティング','アプリ開発','投資','在日外国人サポート','その他'].map(o => <option key={o}>{o}</option>)}
                 </select>
               </div>
               <div><span style={label}>メッセージ *</span><textarea style={{ ...field, minHeight: 130, resize: 'vertical' }} required value={form.message} onChange={set('message')} placeholder="ご相談の概要をお書きください。" /></div>
               {error && (
                 <p style={{ margin: 0, fontFamily: 'var(--font-body)', fontSize: 14, color: 'var(--red-600)' }}>
                   送信に失敗しました。時間をおいて再度お試しいただくか、{' '}
-                  <a href="mailto:hello@abouttheengineer.jp" style={{ color: 'inherit' }}>hello@abouttheengineer.jp</a> まで直接ご連絡ください。
+                  <a href="mailto:info@abouttheengineer.com" style={{ color: 'inherit' }}>info@abouttheengineer.com</a> まで直接ご連絡ください。
                 </p>
               )}
               <button type="submit" disabled={sending} style={{ ...window.btnSolid, alignSelf: 'flex-start', fontSize: 18, padding: '14px 36px', opacity: sending ? 0.6 : 1, cursor: sending ? 'default' : 'pointer' }}>
