@@ -121,31 +121,6 @@ function HomePage({ go }) {
         </Container>
       </div>
 
-      {/* Divisions — organization overview */}
-      <Container style={{ paddingTop: 96, paddingBottom: 24 }}>
-        <SectionHead kicker="Divisions" title="事業部" />
-        <div style={{ maxWidth: 880, margin: '0 auto' }}>
-          <Rule strong />
-          {[
-            { name: 'Business Support', jp: 'ビジネスサポート部', desc: '事業の立ち上げから運営まで、お客様のビジネスを支えるサポートを行います。' },
-            { name: 'Investment', jp: '投資事業部', desc: '将来性のある事業やプロダクトへの投資を通じて、新しい価値づくりに取り組みます。' },
-            { name: 'Product Development', jp: 'プロダクト開発部', desc: 'Actimoをはじめ、自社サービスを企画から開発・運営まで一貫して手がけています。' },
-          ].map((d, i) => (
-            <div key={d.name} className="rgrid" style={{
-              display: 'grid', gridTemplateColumns: '0.42fr 1fr', gap: 40, alignItems: 'start',
-              padding: '36px 0', borderTop: i === 0 ? 'none' : '1px solid var(--neutral-200)',
-            }}>
-              <div>
-                <div style={{ fontFamily: 'var(--font-display)', textTransform: 'uppercase', fontSize: 'clamp(24px,2.8vw,36px)', letterSpacing: '0.01em', lineHeight: 1, color: 'var(--zinc-950)' }}>{d.name}</div>
-                <div style={{ marginTop: 8, fontFamily: 'var(--font-body)', fontSize: 14, fontWeight: 700, color: 'var(--neutral-600)' }}>{d.jp}</div>
-              </div>
-              <p style={{ margin: 0, fontFamily: 'var(--font-body)', fontSize: 15, lineHeight: 1.8, color: 'var(--text-on-light-muted)', maxWidth: 520 }}>{d.desc}</p>
-            </div>
-          ))}
-          <Rule />
-        </div>
-      </Container>
-
       {/* Message — CEO / representative message */}
       <Container style={{ paddingTop: 96, paddingBottom: 96 }}>
         <SectionHead kicker="Message" title="代表メッセージ" />
