@@ -13,6 +13,15 @@ function InvestmentPage({ go }) {
       title: 'シード・学生起業家への直接出資（J-KISS型）',
       amount: '1口 10万〜30万円',
       desc: '大学発ベンチャーや、創業直後の若い起業家に「応援金」として少額出資するアプローチです。',
+      example: {
+        amount: '30万円',
+        uses: ['法人設立・登記費用', 'サービスの試作・開発費', 'サーバー・ツール利用料'],
+        flow: [
+          { t: '出資', d: 'J-KISS（新株予約権）の契約を結び、出資を行います。' },
+          { t: '事業を進める', d: '起業家は、いただいた資金で事業の立ち上げに取り組みます。' },
+          { t: '次の資金調達', d: '次の資金調達などのタイミングで、契約の条件に沿って株式へ転換されます。' },
+        ],
+      },
     },
   ];
 
@@ -90,6 +99,38 @@ function InvestmentPage({ go }) {
               <div style={{ marginTop: 10, fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 'clamp(20px, 2.4vw, 28px)', lineHeight: 1.5, color: 'var(--zinc-950)' }}>{pg.title}</div>
               <div style={{ display: 'inline-block', marginTop: 16, fontFamily: 'var(--font-body)', fontSize: 15, fontWeight: 700, color: 'var(--white)', background: 'var(--zinc-950)', borderRadius: 999, padding: '6px 18px' }}>{pg.amount}</div>
               <p style={{ margin: '24px 0 0', fontFamily: 'var(--font-body)', fontSize: 16, lineHeight: 2, color: 'var(--text-on-light-muted)', maxWidth: 640 }}>{pg.desc}</p>
+              {pg.example && (
+                <div style={{ marginTop: 40, paddingTop: 32, borderTop: '1px solid var(--neutral-200)' }}>
+                  <div style={{ display: 'flex', alignItems: 'baseline', flexWrap: 'wrap', gap: '4px 12px' }}>
+                    <span style={{ fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 18, color: 'var(--zinc-950)' }}>出資のイメージ</span>
+                    <span style={{ fontFamily: 'var(--font-ui)', fontSize: 12, fontWeight: 600, color: 'var(--neutral-600)' }}>Example</span>
+                  </div>
+                  <div className="rgrid" style={{ display: 'grid', gridTemplateColumns: '0.5fr 1fr', gap: 32, marginTop: 24, alignItems: 'start' }}>
+                    <div style={{ background: 'var(--neutral-50)', border: '1px solid var(--neutral-200)', borderRadius: 12, padding: '24px 28px' }}>
+                      <div style={{ fontFamily: 'var(--font-body)', fontSize: 13, fontWeight: 700, color: 'var(--neutral-600)' }}>出資額（例）</div>
+                      <div style={{ marginTop: 6, fontFamily: 'var(--font-ui)', fontWeight: 700, fontSize: 'clamp(32px, 4vw, 44px)', lineHeight: 1.1, color: 'var(--zinc-950)' }}>{pg.example.amount}</div>
+                      <div style={{ marginTop: 20, fontFamily: 'var(--font-body)', fontSize: 13, fontWeight: 700, color: 'var(--neutral-600)' }}>使い道の例</div>
+                      <ul style={{ margin: '8px 0 0', padding: 0, listStyle: 'none' }}>
+                        {pg.example.uses.map(u => (
+                          <li key={u} style={{ fontFamily: 'var(--font-body)', fontSize: 15, lineHeight: 1.9, color: 'var(--zinc-950)' }}>・{u}</li>
+                        ))}
+                      </ul>
+                    </div>
+                    <ol style={{ margin: 0, padding: 0, listStyle: 'none' }}>
+                      {pg.example.flow.map((f, fi) => (
+                        <li key={f.t} style={{ display: 'grid', gridTemplateColumns: '40px 1fr', gap: 16, padding: fi === 0 ? '0 0 20px' : '20px 0', borderTop: fi === 0 ? 'none' : '1px solid var(--neutral-200)' }}>
+                          <span style={{ width: 32, height: 32, borderRadius: 999, background: 'var(--zinc-950)', color: 'var(--white)', fontFamily: 'var(--font-ui)', fontSize: 14, fontWeight: 700, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>{fi + 1}</span>
+                          <div>
+                            <div style={{ fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 16, color: 'var(--zinc-950)' }}>{f.t}</div>
+                            <div style={{ marginTop: 4, fontFamily: 'var(--font-body)', fontSize: 15, lineHeight: 1.8, color: 'var(--text-on-light-muted)' }}>{f.d}</div>
+                          </div>
+                        </li>
+                      ))}
+                    </ol>
+                  </div>
+                  <p style={{ margin: '24px 0 0', fontFamily: 'var(--font-body)', fontSize: 13, lineHeight: 1.8, color: 'var(--neutral-600)' }}>※ あくまで一例です。実際の条件は、案件ごとにご相談のうえ決定します。</p>
+                </div>
+              )}
             </div>
           ))}
         </Container>
