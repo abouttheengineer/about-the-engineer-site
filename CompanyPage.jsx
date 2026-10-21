@@ -2,22 +2,22 @@
  * CompanyPage — company detail page, reached from the Home "会社概要"
  * section. Layout follows a recruit-site pattern: banner hero, then
  * alternating background bands, each with a left-aligned
- * "ENGLISH 日本語" heading — Message / Story / Divisions (Product Development / Consulting / Investment).
+ * "ENGLISH 日本語" heading — Message / Story / Divisions (Product Development / Business Support / Investment).
  */
 function CompanyPage({ go }) {
   const divisions = [
     {
-      name: 'Product Development', jp: 'プロダクト開発',
+      name: 'Product Development', jp: 'プロダクト開発部',
       desc: 'Actimoをはじめ、自社サービスを企画から開発・運営まで一貫して手がけています。',
       dest: 'business',
     },
     {
-      name: 'Consulting', jp: 'コンサルティング',
+      name: 'Business Support', jp: 'ビジネスサポート部',
       desc: 'プロダクト開発で培った知見をもとに、事業戦略の立案からグロース施策の実行までを支援します。',
       dest: 'consulting',
     },
     {
-      name: 'Investment', jp: '投資',
+      name: 'Investment', jp: '投資事業部',
       desc: '将来性のある事業やプロダクトへの投資を通じて、新しい価値づくりに取り組みます。',
     },
   ];
@@ -63,7 +63,7 @@ function CompanyPage({ go }) {
               私たちは、世界中の人にとってよりよいサービスを、<br />
               ともにつくる仲間を探しています。<br />
               <br />
-              開発、コンサルティング、投資。役割は違っても、<br />
+              開発、ビジネスサポート、投資。役割は違っても、<br />
               「すべての人にテクノロジーを」という想いは同じです。<br />
               <br />
               あなたの力を、私たちと一緒に活かしてください。
@@ -104,8 +104,8 @@ function CompanyPage({ go }) {
                 className="rgrid"
                 style={{ display: 'grid', gridTemplateColumns: '0.36fr 1fr auto', gap: 32, alignItems: 'center', padding: '32px 0', borderTop: i === 0 ? 'none' : '1px solid var(--neutral-200)', cursor: d.dest ? 'pointer' : 'default' }}>
                 <div>
-                  <div style={{ fontFamily: 'var(--font-ui)', fontWeight: 700, fontSize: 'clamp(22px,2.4vw,30px)', letterSpacing: '-0.01em', lineHeight: 1.05, color: 'var(--zinc-950)' }}>{d.name}</div>
-                  <div style={{ marginTop: 6, fontFamily: 'var(--font-body)', fontSize: 13, fontWeight: 700, color: 'var(--neutral-600)' }}>{d.jp}</div>
+                  <div style={{ fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 'clamp(19px,2vw,24px)', lineHeight: 1.3, color: 'var(--zinc-950)' }}>{d.jp}</div>
+                  <div style={{ marginTop: 6, fontFamily: 'var(--font-ui)', fontSize: 12, fontWeight: 600, color: 'var(--neutral-600)' }}>{d.name}</div>
                 </div>
                 <p style={{ margin: 0, fontFamily: 'var(--font-body)', fontSize: 15, lineHeight: 1.8, color: 'var(--text-on-light-muted)' }}>{d.desc}</p>
                 <div style={{ width: 36, textAlign: 'right', fontFamily: 'var(--font-body)', fontSize: 20, color: 'var(--zinc-950)' }}>{d.dest ? '→' : ''}</div>
