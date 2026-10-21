@@ -74,10 +74,10 @@ function CompanyPage({ go }) {
       </div>
 
       {/* Story */}
-      <div id="story" style={{ background: 'var(--zinc-950)' }}>
+      <div id="story" style={{ background: '#EAF1F7' }}>
         <Container style={{ paddingTop: 96, paddingBottom: 96 }}>
-          <Heading en="Story" jp="私たちはこんな会社です" dark />
-          <p style={{ margin: '0 0 48px', maxWidth: 680, fontFamily: 'var(--font-body)', fontSize: 16, lineHeight: 2, color: 'var(--zinc-300)' }}>
+          <Heading en="Story" jp="私たちはこんな会社です" />
+          <p style={{ margin: '0 0 48px', maxWidth: 680, fontFamily: 'var(--font-body)', fontSize: 16, lineHeight: 2, color: 'var(--text-on-light-muted)' }}>
             About the Engineerは、東京・渋谷のテクノロジーカンパニーです。
             エンジニアリングを軸に、自社サービスの開発から、事業の支援、スポーツや音楽の応援まで、
             「すべての人にテクノロジーを」届ける活動をしています。
@@ -109,7 +109,7 @@ function CompanyPage({ go }) {
                   <div style={{ marginTop: 6, fontFamily: 'var(--font-ui)', fontSize: 12, fontWeight: 600, color: 'var(--neutral-600)' }}>{d.name}</div>
                 </div>
                 <p style={{ margin: 0, fontFamily: 'var(--font-body)', fontSize: 15, lineHeight: 1.8, color: 'var(--text-on-light-muted)' }}>{d.desc}</p>
-                <div style={{ width: 36, textAlign: 'right', fontFamily: 'var(--font-body)', fontSize: 20, color: 'var(--zinc-950)' }}>{d.dest ? '→' : ''}</div>
+                <div style={{ width: 36, textAlign: 'right', fontFamily: 'var(--font-body)', fontSize: 20, color: '#1E3A5F' }}>{d.dest ? '→' : ''}</div>
               </div>
             ))}
           </div>

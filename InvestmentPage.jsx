@@ -68,7 +68,7 @@ function InvestmentPage({ go }) {
       </div>
 
       {/* Policy */}
-      <div style={{ background: 'var(--neutral-100)' }}>
+      <div style={{ background: '#EAF1F7' }}>
         <Container style={{ paddingTop: 96, paddingBottom: 96 }}>
           <Heading en="Investment Policy" jp="投資方針" />
           <div style={{ ...card, padding: '8px clamp(24px, 5vw, 56px)' }}>
@@ -97,7 +97,7 @@ function InvestmentPage({ go }) {
             <div key={pg.title} style={{ ...card, padding: 'clamp(28px, 5vw, 56px)', marginTop: i === 0 ? 0 : 24 }}>
               <div style={{ fontFamily: 'var(--font-ui)', fontSize: 13, fontWeight: 700, color: 'var(--neutral-600)' }}>{String(i + 1).padStart(2, '0')}</div>
               <div style={{ marginTop: 10, fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 'clamp(20px, 2.4vw, 28px)', lineHeight: 1.5, color: 'var(--zinc-950)' }}>{pg.title}</div>
-              <div style={{ display: 'inline-block', marginTop: 16, fontFamily: 'var(--font-body)', fontSize: 15, fontWeight: 700, color: 'var(--white)', background: 'var(--zinc-950)', borderRadius: 999, padding: '6px 18px' }}>{pg.amount}</div>
+              <div style={{ display: 'inline-block', marginTop: 16, fontFamily: 'var(--font-body)', fontSize: 15, fontWeight: 700, color: 'var(--white)', background: '#1E3A5F', borderRadius: 999, padding: '6px 18px' }}>{pg.amount}</div>
               <p style={{ margin: '24px 0 0', fontFamily: 'var(--font-body)', fontSize: 16, lineHeight: 2, color: 'var(--text-on-light-muted)', maxWidth: 640 }}>{pg.desc}</p>
               {pg.example && (
                 <div style={{ marginTop: 40, paddingTop: 32, borderTop: '1px solid var(--neutral-200)' }}>
@@ -119,7 +119,7 @@ function InvestmentPage({ go }) {
                     <ol style={{ margin: 0, padding: 0, listStyle: 'none' }}>
                       {pg.example.flow.map((f, fi) => (
                         <li key={f.t} style={{ display: 'grid', gridTemplateColumns: '40px 1fr', gap: 16, padding: fi === 0 ? '0 0 20px' : '20px 0', borderTop: fi === 0 ? 'none' : '1px solid var(--neutral-200)' }}>
-                          <span style={{ width: 32, height: 32, borderRadius: 999, background: 'var(--zinc-950)', color: 'var(--white)', fontFamily: 'var(--font-ui)', fontSize: 14, fontWeight: 700, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>{fi + 1}</span>
+                          <span style={{ width: 32, height: 32, borderRadius: 999, background: '#1E3A5F', color: 'var(--white)', fontFamily: 'var(--font-ui)', fontSize: 14, fontWeight: 700, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>{fi + 1}</span>
                           <div>
                             <div style={{ fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 16, color: 'var(--zinc-950)' }}>{f.t}</div>
                             <div style={{ marginTop: 4, fontFamily: 'var(--font-body)', fontSize: 15, lineHeight: 1.8, color: 'var(--text-on-light-muted)' }}>{f.d}</div>
@@ -146,7 +146,7 @@ function InvestmentPage({ go }) {
           <button onClick={() => go('contact')} style={{
             display: 'inline-flex', alignItems: 'center', gap: '0.5em', cursor: 'pointer',
             fontFamily: 'var(--font-ui)', fontWeight: 700, fontSize: 15, padding: '14px 32px',
-            background: 'var(--zinc-950)', color: 'var(--white)', border: '2px solid var(--zinc-950)', borderRadius: 999,
+            background: '#1E3A5F', color: 'var(--white)', border: '2px solid #1E3A5F', borderRadius: 999,
           }}>お問い合わせ&nbsp;→</button>
         </Container>
       </div>
