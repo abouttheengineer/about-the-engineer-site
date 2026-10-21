@@ -15,14 +15,15 @@ window.PRODUCTS = [
     imageFit: 'contain',
     url: 'https://actimo.net',
   },
-  {
-    slug: 'chibimon-reversi',
-    name: 'ちびモンリバーシ',
-    jp: 'カジュアルゲーム',
-    desc: 'かわいいモンスターたちで遊ぶ、リバーシ（オセロ）ゲーム。',
-    tags: ['カジュアルゲーム', 'リバーシ'],
-    category: 'entertainment',
-  },
+  // Hidden for now — restore by uncommenting.
+  // {
+  //   slug: 'chibimon-reversi',
+  //   name: 'ちびモンリバーシ',
+  //   jp: 'カジュアルゲーム',
+  //   desc: 'かわいいモンスターたちで遊ぶ、リバーシ（オセロ）ゲーム。',
+  //   tags: ['カジュアルゲーム', 'リバーシ'],
+  //   category: 'entertainment',
+  // },
   {
     slug: 'miomio',
     name: 'miomio',
