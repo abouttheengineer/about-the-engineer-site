@@ -116,7 +116,7 @@ function HomePage({ go }) {
             ))}
           </div>
           <div style={{ display: 'flex', justifyContent: 'center', marginTop: 48 }}>
-            <button onClick={() => go('contact')} style={btnSolidInverse}>お問い合わせ&nbsp;→</button>
+            <button onClick={() => go('company')} style={btnSolidInverse}>会社について詳しく見る&nbsp;→</button>
           </div>
         </Container>
       </div>
