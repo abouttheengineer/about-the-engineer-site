@@ -12,7 +12,7 @@ function ServicesPage({ go }) {
     },
     {
       name: 'Consulting', jp: 'コンサルティング',
-      desc: 'プロダクト開発で培った知見をもとに、事業戦略の立案からグロース施策の実行までを支援します。',
+      desc: 'スマホアプリやWEBシステムの開発から、新しいサービスづくりまで、ITの力でお客様のビジネスを支援します。',
       dest: 'consulting',
     },
     {

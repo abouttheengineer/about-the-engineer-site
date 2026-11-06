@@ -24,8 +24,8 @@ function HomePage({ go }) {
         <SectionHead kicker="What we do" title="事業内容" />
         <div className="rgrid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 40, maxWidth: 920, margin: '0 auto' }}>
           {[
-            ['System', 'システム開発', '企画から開発・運用まで、一気通貫でプロダクトをつくります。', null],
-            ['Consulting', 'コンサルティング', '事業戦略とグロースを、実践知をもとに伴走支援します。', 'consulting'],
+            ['Product Development', 'プロダクト開発', '自社サービスを、企画から開発・運営まで一貫して手がけます。', 'business'],
+            ['Consulting', 'コンサルティング', 'スマホアプリやWEBシステムの開発から、新しいサービスづくりまで、ITの力でお客様のビジネスを支援します。', 'consulting'],
             ['Music', '音楽プロダクション', '楽曲制作から配信、アーティストマネジメントまでを手がけます。', 'music'],
           ].map(([en, jp, desc, dest]) => (
             <div key={en} onClick={dest ? () => go(dest) : undefined}
@@ -34,10 +34,10 @@ function HomePage({ go }) {
                 width: 200, height: 200, margin: '0 auto', borderRadius: '50%',
                 border: '1px solid var(--neutral-300)', display: 'flex',
                 flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-                gap: 10, padding: 24, boxSizing: 'border-box',
+                gap: 10, padding: 12, boxSizing: 'border-box',
               }}>
                 <span style={{ fontFamily: 'var(--font-display)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', fontSize: 13, color: 'var(--neutral-600)' }}>{en}</span>
-                <span style={{ fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 22, color: 'var(--zinc-950)' }}>{jp}</span>
+                <span style={{ fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 18, color: 'var(--zinc-950)', textAlign: 'center', wordBreak: 'keep-all' }}>{jp}</span>
               </div>
               <p style={{ margin: '20px auto 0', maxWidth: 240, fontFamily: 'var(--font-body)', fontSize: 14, lineHeight: 1.7, color: 'var(--text-on-light-muted)' }}>{desc}</p>
             </div>
@@ -75,8 +75,8 @@ function HomePage({ go }) {
         kicker="Consulting"
         kickerCase="none"
         kickerStyle={{ fontSize: 20 }}
-        title="事業戦略・グロース支援"
-        body="プロダクト開発で培った知見をもとに、事業戦略の立案からグロース施策の実行までを支援します。データに基づき、検証可能な仮説から成長をつくります。"
+        title="アプリ・システム開発支援"
+        body="スマホアプリ（iOS）やWEBアプリ（業務用システム等）の開発から、新しいサービスづくりまで、ITの力でお客様のビジネスを支援します。"
         slotId="home-intro-consulting"
         src="assets/01/03.jpeg"
         placeholder="画像をドロップ（コンサルティング）"
@@ -103,7 +103,7 @@ function HomePage({ go }) {
               ['会社名', '合同会社About the Engineer'],
               ['代表者', 'DOAN LEKAM TANIO'],
               ['所在地', '東京都渋谷区神南１丁目１１−４ ＦＰＧリンクス神南 5階'],
-              ['事業内容', 'システム開発／コンサルティング／音楽プロダクション'],
+              ['事業内容', 'プロダクト開発／コンサルティング／音楽プロダクション'],
               ['定休日', '毎週水曜日'],
             ].map(([k, v], i, arr) => (
               <div key={k} className="rgrid" style={{
