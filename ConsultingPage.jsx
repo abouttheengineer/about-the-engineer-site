@@ -35,6 +35,7 @@ function ConsultingPage({ go }) {
       desc: '生徒と講師が、アプリから直接ビデオ通話でレッスンを受けられます。予約からレッスンまでを、1つのアプリで完結できます。',
       rows: [['対象', '英会話教室の生徒・講師'], ['対応端末', 'iPhone'], ['開発内容', '画面設計、通話機能、レッスン予約、通知']],
       tags: ['ビデオ通話', 'レッスン予約', 'プッシュ通知'],
+      demo: true,
     },
     {
       title: '予約・顧客管理システム', kind: 'WEBアプリ',
@@ -107,6 +108,9 @@ function ConsultingPage({ go }) {
                   </div>
                 ))}
               </dl>
+              {ex.demo && (
+                <button onClick={() => { const e = document.getElementById('demo'); if (e) e.scrollIntoView({ behavior: 'smooth' }); }} style={{ ...window.btnOutline, marginTop: 16, fontSize: 13, padding: '8px 18px' }}>画面を触ってみる&nbsp;↓</button>
+              )}
               <ul style={{ margin: '12px 0 0', padding: 0, listStyle: 'none', display: 'flex', flexWrap: 'wrap', gap: 8 }}>
                 {ex.tags.map(t => (
                   <li key={t} style={{ fontFamily: 'var(--font-body)', fontSize: 12, fontWeight: 700, color: 'var(--zinc-950)', border: '1px solid var(--neutral-300)', borderRadius: 999, padding: '4px 12px' }}>{t}</li>
@@ -117,6 +121,30 @@ function ConsultingPage({ go }) {
         </div>
         <p style={{ margin: '24px 0 0', textAlign: 'center', fontFamily: 'var(--font-body)', fontSize: 13, color: 'var(--neutral-600)' }}>※ 上記は一般的な例です。実際の内容は、ご要望に合わせてご提案します。</p>
       </Container>
+
+      {/* Interactive demo */}
+      <div id="demo" style={{ background: '#EAF1F7', marginBottom: 96 }}>
+        <Container style={{ paddingTop: 96, paddingBottom: 96 }}>
+          <div className="rgrid" style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: 'clamp(32px, 6vw, 80px)', alignItems: 'center' }}>
+            <div>
+              <div style={{ fontFamily: 'var(--font-ui)', fontSize: 13, fontWeight: 700, color: 'var(--neutral-600)' }}>Demo</div>
+              <h2 style={{ margin: '10px 0 0', fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 'clamp(26px, 3.4vw, 40px)', lineHeight: 1.3, color: 'var(--zinc-950)' }}>画面を触って、<br />イメージを確かめる</h2>
+              <p style={{ margin: '20px 0 0', maxWidth: 460, fontFamily: 'var(--font-body)', fontSize: 16, lineHeight: 2, color: 'var(--text-on-light-muted)' }}>
+                英会話教室向けの通話アプリの、サンプル画面です。実際のアプリのように、タップして操作できます。
+              </p>
+              <ol style={{ margin: '24px 0 0', padding: 0, listStyle: 'none', maxWidth: 460 }}>
+                {['「レッスンに入る」を押して、通話画面を見る', '通話中に、ミュートやカメラを切り替える', '「予約」タブで、次のレッスンを予約する'].map((t, i) => (
+                  <li key={t} style={{ display: 'grid', gridTemplateColumns: '32px 1fr', gap: 12, alignItems: 'center', padding: '10px 0', fontFamily: 'var(--font-body)', fontSize: 15, color: 'var(--zinc-950)' }}>
+                    <span style={{ width: 28, height: 28, borderRadius: 999, background: '#1E3A5F', color: '#fff', fontSize: 13, fontWeight: 700, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>{i + 1}</span>{t}
+                  </li>
+                ))}
+              </ol>
+              <p style={{ margin: '20px 0 0', fontFamily: 'var(--font-body)', fontSize: 13, lineHeight: 1.8, color: 'var(--neutral-600)' }}>※ サンプル画面です。実際のデザインや機能は、ご要望に合わせて設計します。</p>
+            </div>
+            <LessonAppMock />
+          </div>
+        </Container>
+      </div>
 
       {/* Process */}
       <Container style={{ paddingBottom: 96 }}>
