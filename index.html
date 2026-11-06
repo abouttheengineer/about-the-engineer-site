@@ -19,6 +19,15 @@
   input:focus, select:focus, textarea:focus { border-color: var(--zinc-950) !important; }
   body { overflow-x: hidden; }
 
+  /* Header, footer and the Home tagline keep the earlier sharp type; everything else uses the rounded tokens */
+  .font-classic {
+    --font-display: 'Archivo', 'Noto Sans JP', system-ui, sans-serif;
+    --font-product: 'Archivo', 'Noto Sans JP', system-ui, sans-serif;
+    --font-ui:      'Archivo', 'Noto Sans JP', system-ui, sans-serif;
+    --font-body:    'Noto Sans JP', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', system-ui, sans-serif;
+    font-family: var(--font-body);
+  }
+
   .nav-toggle { display: none; }
   @media (max-width: 640px) {
     .nav-toggle { display: flex !important; }

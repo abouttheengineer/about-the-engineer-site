@@ -13,11 +13,11 @@
 
 :root {
   /* ---- Families ---- */
-  --font-display: 'Archivo', 'Noto Sans JP', system-ui, sans-serif;
+  --font-display: 'Zen Maru Gothic', 'Hiragino Maru Gothic ProN', 'Noto Sans JP', system-ui, sans-serif;
   --font-logo:    'Bebas Neue', 'Oswald', 'Arial Narrow', sans-serif;
-  --font-product: 'Archivo', 'Noto Sans JP', system-ui, sans-serif;
-  --font-body:    'Noto Sans JP', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', system-ui, sans-serif;
-  --font-ui:      'Archivo', 'Noto Sans JP', system-ui, sans-serif;
+  --font-product: 'Zen Maru Gothic', 'Hiragino Maru Gothic ProN', 'Noto Sans JP', system-ui, sans-serif;
+  --font-body:    'Zen Maru Gothic', 'Hiragino Maru Gothic ProN', 'Noto Sans JP', system-ui, sans-serif;
+  --font-ui:      'Zen Maru Gothic', 'Hiragino Maru Gothic ProN', 'Noto Sans JP', system-ui, sans-serif;
 
   /* ---- Display scale (Bebas Neue, line-height ~0.95) ---- */
   --display-2xl: 9rem;     /* 144px — full-bleed hero */

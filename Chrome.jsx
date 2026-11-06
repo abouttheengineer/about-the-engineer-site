@@ -14,7 +14,7 @@ function SiteHeader({ page, section, go }) {
   ];
   const goAndClose = (id) => { setOpen(false); go(id); };
   return (
-    <header style={{
+    <header className="font-classic" style={{
       position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100,
       background: 'rgba(9,9,11,0.88)', backdropFilter: 'var(--backdrop-blur)',
       WebkitBackdropFilter: 'var(--backdrop-blur)', borderBottom: '1px solid var(--zinc-800)',
@@ -65,7 +65,7 @@ function SiteFooter({ go }) {
     { h: 'Sitemap', items: [['Home','home'],['About','about'],['Business','services'],['Sponsorship','sponsorship'],['News','news'],['Contact','contact']] },
   ];
   return (
-    <footer style={{ background: 'var(--zinc-950)', color: 'var(--white)' }}>
+    <footer className="font-classic" style={{ background: 'var(--zinc-950)', color: 'var(--white)' }}>
       <div style={{ maxWidth: 1240, margin: '0 auto', padding: '72px var(--page-gutter-lg) 36px' }}>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 220px))', gap: 40, paddingBottom: 48, justifyContent: 'end' }}>
           {cols.map(c => (

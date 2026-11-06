@@ -6,9 +6,11 @@ function HomePage({ go }) {
   return (
     <main>
       {/* Masthead */}
-      <PageHero
-        big
-        title="すべての人にテクノロジー" />
+      <div className="font-classic">
+        <PageHero
+          big
+          title="すべての人にテクノロジー" />
+      </div>
 
       <Container style={{ paddingBottom: 72, textAlign: 'center' }}>
         <div style={{ display: 'flex', gap: 14, justifyContent: 'center', flexWrap: 'wrap' }}>
