@@ -29,13 +29,14 @@ function ConsultingPage({ go }) {
       desc: '売上やアクセスなどのデータを、グラフでひと目で確認できるWEBアプリです。毎月の集計作業を、画面を開くだけで済ませられます。',
       rows: [['対象', '社内の営業・マーケティング担当'], ['対応端末', 'パソコン・タブレット'], ['開発内容', '画面設計、データ連携、グラフ表示、管理画面']],
       tags: ['売上の見える化', 'グラフ表示', 'データ自動集計'],
+      demo: 'demo-dashboard',
     },
     {
       title: '英会話教室向けの通話アプリ', kind: 'スマホアプリ（iOS）',
       desc: '生徒と講師が、アプリから直接ビデオ通話でレッスンを受けられます。予約からレッスンまでを、1つのアプリで完結できます。',
       rows: [['対象', '英会話教室の生徒・講師'], ['対応端末', 'iPhone'], ['開発内容', '画面設計、通話機能、レッスン予約、通知']],
       tags: ['ビデオ通話', 'レッスン予約', 'プッシュ通知'],
-      demo: true,
+      demo: 'demo',
     },
     {
       title: '予約・顧客管理システム', kind: 'WEBアプリ',
@@ -109,7 +110,7 @@ function ConsultingPage({ go }) {
                 ))}
               </dl>
               {ex.demo && (
-                <button onClick={() => { const e = document.getElementById('demo'); if (e) e.scrollIntoView({ behavior: 'smooth' }); }} style={{ ...window.btnOutline, marginTop: 16, fontSize: 13, padding: '8px 18px' }}>画面を触ってみる&nbsp;↓</button>
+                <button onClick={() => { const e = document.getElementById(ex.demo); if (e) e.scrollIntoView({ behavior: 'smooth' }); }} style={{ ...window.btnOutline, marginTop: 16, fontSize: 13, padding: '8px 18px' }}>画面を触ってみる&nbsp;↓</button>
               )}
               <ul style={{ margin: '12px 0 0', padding: 0, listStyle: 'none', display: 'flex', flexWrap: 'wrap', gap: 8 }}>
                 {ex.tags.map(t => (
@@ -145,6 +146,28 @@ function ConsultingPage({ go }) {
           </div>
         </Container>
       </div>
+
+      {/* Interactive demo: dashboard */}
+      <Container id="demo-dashboard" style={{ paddingBottom: 96 }}>
+        <div className="rgrid" style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: 'clamp(32px, 5vw, 64px)', alignItems: 'center' }}>
+          <DashboardMock />
+          <div>
+            <div style={{ fontFamily: 'var(--font-ui)', fontSize: 13, fontWeight: 700, color: 'var(--neutral-600)' }}>Demo</div>
+            <h2 style={{ margin: '10px 0 0', fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 'clamp(26px, 3.4vw, 40px)', lineHeight: 1.3, color: 'var(--zinc-950)' }}>数字が、ひと目で<br />わかる画面に</h2>
+            <p style={{ margin: '20px 0 0', maxWidth: 420, fontFamily: 'var(--font-body)', fontSize: 16, lineHeight: 2, color: 'var(--text-on-light-muted)' }}>
+              分析用ダッシュボードの、サンプル画面です。期間や指標を切り替えて、グラフの変化を確かめられます。
+            </p>
+            <ol style={{ margin: '24px 0 0', padding: 0, listStyle: 'none', maxWidth: 420 }}>
+              {['「今週・今月・今年」で期間を切り替える', '「売上・アクセス・申込」で指標を切り替える', '棒にカーソルを合わせて、数字を見る'].map((t, i) => (
+                <li key={t} style={{ display: 'grid', gridTemplateColumns: '32px 1fr', gap: 12, alignItems: 'center', padding: '10px 0', fontFamily: 'var(--font-body)', fontSize: 15, color: 'var(--zinc-950)' }}>
+                  <span style={{ width: 28, height: 28, borderRadius: 999, background: '#1E3A5F', color: '#fff', fontSize: 13, fontWeight: 700, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>{i + 1}</span>{t}
+                </li>
+              ))}
+            </ol>
+            <p style={{ margin: '20px 0 0', fontFamily: 'var(--font-body)', fontSize: 13, lineHeight: 1.8, color: 'var(--neutral-600)' }}>※ サンプルの数字です。実際の内容は、ご要望に合わせて設計します。</p>
+          </div>
+        </div>
+      </Container>
 
       {/* Process */}
       <Container style={{ paddingBottom: 96 }}>
