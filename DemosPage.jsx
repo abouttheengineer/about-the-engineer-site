@@ -38,7 +38,7 @@ function DemosPage({ go }) {
               <div style={{ fontFamily: 'var(--font-ui)', fontSize: 13, fontWeight: 700, color: 'var(--neutral-600)' }}>Demo</div>
               <h2 style={{ margin: '10px 0 0', fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 'clamp(26px, 3.4vw, 40px)', lineHeight: 1.3, color: 'var(--zinc-950)' }}>オンライン英会話教室様<br />向けアプリ</h2>
               <p style={{ margin: '20px 0 0', maxWidth: 460, fontFamily: 'var(--font-body)', fontSize: 16, lineHeight: 2, color: 'var(--text-on-light-muted)' }}>
-                英会話教室向けの通話アプリの、サンプル画面です。実際のアプリのように、タップして操作できます。生徒と講師、2つの立場で試せます。
+                実際のアプリのようにタップして操作できます。生徒と講師、2つの立場で試せます。
               </p>
               <ol style={{ margin: '24px 0 0', padding: 0, listStyle: 'none', maxWidth: 460 }}>
                 {['「通話ルームに入室」を押して、通話画面を見る', '「講師を探す」から、レッスンの予約を申請する', '右上を「講師」に切り替えて、申請を承認する'].map((t, i) => (
