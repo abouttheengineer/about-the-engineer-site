@@ -4,15 +4,63 @@
  * light security check. Layout follows a landing-page pattern in the site's
  * white / navy style: hero → what we handle → typical trouble → flow → price →
  * notes (polite disclaimer) → CTA.
- * Inquiries go to the Contact page with the topic pre-selected.
+ * It has its own application form (not the shared Contact page), modelled on a
+ * 「無料・緊急トラブル診断申し込み」 form: pick the trouble type, the target date, details.
  */
 function TechAssistantPage({ go }) {
   const NAVY = '#1E3A5F';
 
-  const consult = () => {
-    try { sessionStorage.setItem('contactTopic', 'Global Tech Assistant（技術トラブル相談）'); } catch (e) { /* ignore */ }
-    go('contact');
+  // 申し込みフォーム（このページ専用。共通のお問い合わせページとは別）
+  const CATS = [
+    { v: 'コードの修復', icon: 'code' },
+    { v: 'GASの修復・新規作成', icon: 'gas' },
+    { v: 'Firebaseの設定・障害', icon: 'fire' },
+    { v: 'ドメイン・DNS・SSL', icon: 'globe' },
+    { v: 'PC・ブラウザ・アカウントの設定', icon: 'laptop' },
+    { v: 'セキュリティ診断', icon: 'shield' },
+    { v: 'その他・よくわからない', icon: 'cube' },
+  ];
+  const DEADLINES = ['【至急】即日〜3日以内', '1週間以内', 'まずは状況を相談したい'];
+  const EMPTY = { category: CATS[0].v, deadline: DEADLINES[0], company: '', name: '', email: '', github: '', message: '' };
+  const [form, setForm] = React.useState(EMPTY);
+  const [agree, setAgree] = React.useState(false);
+  const [sending, setSending] = React.useState(false);
+  const [sent, setSent] = React.useState(false);
+  const [error, setError] = React.useState(false);
+  const set = k => e => setForm(s => ({ ...s, [k]: e.target.value }));
+  const submit = async e => {
+    e.preventDefault();
+    if (!agree) return;
+    setSending(true);
+    setError(false);
+    try {
+      const res = await fetch('https://formspree.io/f/xdaqvjpd', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({
+          _subject: '【Global Tech Assistant】無料・緊急トラブル診断のお申し込み',
+          service: 'Global Tech Assistant',
+          category: form.category, deadline: form.deadline,
+          company: form.company, name: form.name, email: form.email,
+          github: form.github, message: form.message,
+          terms_agreed: 'ご利用規約に同意',
+        }),
+      });
+      if (res.ok) setSent(true); else setError(true);
+    } catch (err) {
+      setError(true);
+    } finally {
+      setSending(false);
+    }
   };
+  const consult = () => jump('ta-apply');
+  const field = {
+    width: '100%', boxSizing: 'border-box', fontFamily: 'var(--font-body)', fontSize: 15,
+    color: 'var(--zinc-950)', background: 'var(--white)', border: '1px solid var(--neutral-300)',
+    borderRadius: 'var(--radius-sm)', padding: '12px 14px', outline: 'none',
+  };
+  const lab = { display: 'block', marginBottom: 6, fontFamily: 'var(--font-body)', fontSize: 13, fontWeight: 700, color: 'var(--zinc-950)' };
+  const req = <span style={{ marginLeft: 6, color: '#C2410C', fontWeight: 700 }}>*</span>;
   const jump = id => { const e = document.getElementById(id); if (e) window.scrollTo({ top: e.getBoundingClientRect().top + window.scrollY - 72, behavior: 'smooth' }); };
 
   const icons = {
@@ -22,6 +70,7 @@ function TechAssistantPage({ go }) {
     globe: <g><circle cx="12" cy="12" r="9" /><path d="M3 12h18" /><path d="M12 3c2.5 2.5 3.8 5.5 3.8 9s-1.3 6.5-3.8 9c-2.5-2.5-3.8-5.5-3.8-9S9.5 5.5 12 3Z" /></g>,
     laptop: <g><rect x="4" y="5" width="16" height="11" rx="1.5" /><path d="M2 20h20" /></g>,
     shield: <g><path d="M12 3 4.5 6v5.5c0 4.6 3.1 8.1 7.5 9.5 4.4-1.4 7.5-4.9 7.5-9.5V6L12 3Z" /><path d="m9 12 2.2 2.2L15.5 10" /></g>,
+    cube: <g><path d="M12 3 4 7.5v9L12 21l8-4.5v-9L12 3Z" /><path d="m4 7.5 8 4.5 8-4.5M12 12v9" /></g>,
   };
 
   const areas = [
@@ -50,6 +99,7 @@ function TechAssistantPage({ go }) {
     'セキュリティ診断は、推奨される設定や、ありがちなミスを確認してご案内する、簡易的なチェックです。「診断」という名前ですが、本格的な脆弱性診断ではありません。',
     '確認した範囲についても、弱点がないこと、安全であること、被害が生じないことを保証するものではありません。',
     'ご案内や作業をもとにした設定の変更や、その結果については、お客様ご自身のご判断でお願いいたします。当社は、故意または重大な過失がある場合を除き、法的な責任を負いかねます。',
+    '当社が損害賠償の責任を負う場合でも、賠償の額は、当該のご相談について、お支払いいただいた料金の額を上限とします（当社に故意または重大な過失がある場合を除きます）。',
     '対象は、お客様ご自身が管理している（または、管理者の許可を得ている）コード、アカウント、サービスです。',
     'コードや設定、アクセス権などを共有いただくときは、共有する範囲を、あらかじめご確認ください。',
   ];
@@ -184,14 +234,105 @@ function TechAssistantPage({ go }) {
         </div>
       </Container>
 
-      {/* CTA */}
+      {/* Application form (own form for this service) */}
+      <Container id="ta-apply" style={{ paddingBottom: 96 }}>
+        <div style={{ textAlign: 'center', marginBottom: 40 }}>
+          <span style={{ display: 'inline-block', fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 12, color: NAVY, background: '#EAF1F7', borderRadius: 999, padding: '5px 14px' }}>初回30分 無料</span>
+          <h2 style={{ margin: '16px 0 0', fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 'clamp(26px, 3.2vw, 40px)', lineHeight: 1.3, color: 'var(--zinc-950)' }}>無料・緊急トラブル診断のお申し込み</h2>
+          <p style={{ margin: '14px auto 0', maxWidth: 560, fontFamily: 'var(--font-body)', fontSize: 15, lineHeight: 1.9, color: 'var(--text-on-light-muted)' }}>
+            専門の知識は、必要ありません。該当する項目を選んで、いまのお困りごとをお知らせください。
+          </p>
+        </div>
+
+        <div style={{ maxWidth: 820, margin: '0 auto', border: '1px solid var(--neutral-200)', borderRadius: 20, padding: 'clamp(22px, 4vw, 44px)', background: 'var(--white)', boxShadow: '0 20px 40px rgba(9,9,11,0.06)' }}>
+          {sent ? (
+            <div style={{ textAlign: 'center', padding: '24px 0' }}>
+              <div style={{ width: 56, height: 56, borderRadius: '50%', background: '#EAF1F7', color: NAVY, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5" /></svg>
+              </div>
+              <div style={{ marginTop: 18, fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 22, color: 'var(--zinc-950)' }}>お申し込みを受け付けました</div>
+              <p style={{ margin: '12px auto 0', maxWidth: 460, fontFamily: 'var(--font-body)', fontSize: 15, lineHeight: 1.9, color: 'var(--text-on-light-muted)' }}>
+                内容を確認のうえ、担当者より、ご連絡いたします。
+              </p>
+              <button onClick={() => { setSent(false); setForm(EMPTY); setAgree(false); }} style={{ ...window.btnOutline, marginTop: 22 }}>もう一度、申し込む</button>
+            </div>
+          ) : (
+            <form onSubmit={submit} style={{ display: 'flex', flexDirection: 'column', gap: 28 }}>
+              <div>
+                <span style={lab}>1. 相談したい内容{req}<span style={{ marginLeft: 8, fontWeight: 400, fontSize: 12, color: 'var(--neutral-600)' }}>※ タップして選択</span></span>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: 10 }}>
+                  {CATS.map(c => {
+                    const on = form.category === c.v;
+                    return (
+                      <button key={c.v} type="button" onClick={() => setForm(s => ({ ...s, category: c.v }))} aria-pressed={on}
+                        style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, padding: '16px 10px', borderRadius: 12, cursor: 'pointer', fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 13, lineHeight: 1.4, textAlign: 'center', border: '1.5px solid ' + (on ? NAVY : 'var(--neutral-300)'), background: on ? '#EAF1F7' : '#fff', color: on ? NAVY : 'var(--zinc-950)' }}>
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{icons[c.icon]}</svg>
+                        <span>{c.v}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div>
+                <span style={lab}>2. 希望する時期{req}</span>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: 10 }}>
+                  {DEADLINES.map(d => {
+                    const on = form.deadline === d;
+                    return (
+                      <label key={d} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '14px 10px', borderRadius: 12, cursor: 'pointer', fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 13, textAlign: 'center', border: '1.5px solid ' + (on ? NAVY : 'var(--neutral-300)'), background: on ? '#EAF1F7' : '#fff', color: on ? NAVY : 'var(--zinc-950)' }}>
+                        <input type="radio" name="ta-deadline" value={d} checked={on} onChange={set('deadline')} style={{ position: 'absolute', opacity: 0, pointerEvents: 'none' }} />
+                        {d}
+                      </label>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div className="rgrid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
+                <div><label style={lab} htmlFor="ta-company">会社名 / 屋号</label><input id="ta-company" style={field} value={form.company} onChange={set('company')} placeholder="株式会社〇〇" /></div>
+                <div><label style={lab} htmlFor="ta-name">ご担当者名{req}</label><input id="ta-name" style={field} required value={form.name} onChange={set('name')} placeholder="山田 太郎" /></div>
+              </div>
+              <div className="rgrid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
+                <div><label style={lab} htmlFor="ta-email">メールアドレス{req}</label><input id="ta-email" type="email" style={field} required value={form.email} onChange={set('email')} placeholder="name@company.com" /></div>
+                <div><label style={lab} htmlFor="ta-github">GitHubリポジトリのURL・関連の情報<span style={{ marginLeft: 6, fontWeight: 400, fontSize: 12, color: 'var(--neutral-600)' }}>（任意）</span></label><input id="ta-github" style={field} value={form.github} onChange={set('github')} placeholder="https://github.com/org/repo または 不明" /></div>
+              </div>
+              <div>
+                <label style={lab} htmlFor="ta-message">お困りごとの症状・出ているエラー{req}</label>
+                <textarea id="ta-message" style={{ ...field, minHeight: 130, resize: 'vertical' }} required value={form.message} onChange={set('message')} placeholder="例：GASのスプレッドシート連携が急に止まった／Firebaseのカスタムドメインの設定後にSSLエラーが出る／仕様書のないコードの不具合を直したい" />
+              </div>
+
+              <label style={{ display: 'flex', gap: 10, alignItems: 'flex-start', fontFamily: 'var(--font-body)', fontSize: 14, lineHeight: 1.8, color: 'var(--zinc-950)', cursor: 'pointer' }}>
+                <input type="checkbox" required checked={agree} onChange={e => setAgree(e.target.checked)} style={{ marginTop: 6, width: 16, height: 16, accentColor: NAVY, flexShrink: 0 }} />
+                <span>
+                  <a href="#tech-assistant-terms" target="_blank" rel="noopener" style={{ color: NAVY, fontWeight: 700 }}>ご利用規約</a>
+                  に同意します。セキュリティ診断は簡易的なチェックであり、安全を保証するものではないことを確認しました。
+                </span>
+              </label>
+
+              {error && (
+                <p style={{ margin: 0, fontFamily: 'var(--font-body)', fontSize: 14, color: 'var(--red-600)' }}>
+                  送信に失敗しました。時間をおいて再度お試しいただくか、{' '}
+                  <a href="mailto:info@abouttheengineer.com" style={{ color: 'inherit' }}>info@abouttheengineer.com</a> まで直接ご連絡ください。
+                </p>
+              )}
+              <div style={{ textAlign: 'center' }}>
+                <button type="submit" disabled={sending || !agree} style={{ ...window.btnSolid, fontSize: 18, padding: '14px 44px', opacity: (sending || !agree) ? 0.6 : 1, cursor: (sending || !agree) ? 'default' : 'pointer' }}>
+                  {sending ? '送信中…' : <>無料で診断を申し込む&nbsp;→</>}
+                </button>
+                <p style={{ margin: '14px 0 0', fontFamily: 'var(--font-body)', fontSize: 12, lineHeight: 1.8, color: 'var(--neutral-600)' }}>
+                  送信いただいた内容は、ご相談への対応のためにのみ使用します。くわしくは、<a href="#privacy" target="_blank" rel="noopener" style={{ color: 'inherit' }}>プライバシーポリシー</a>をご覧ください。
+                </p>
+              </div>
+            </form>
+          )}
+        </div>
+      </Container>
+
       <Container style={{ paddingBottom: 110 }}>
         <Rule strong />
-        <div style={{ textAlign: 'center', paddingTop: 56 }}>
-          <div style={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: 16 }}>
-            <button onClick={() => go('business')} style={window.btnOutline}>←&nbsp;ビジネスのページへ戻る</button>
-            <button onClick={consult} style={window.btnSolid}>相談してみる&nbsp;→</button>
-          </div>
+        <div style={{ display: 'flex', justifyContent: 'center', paddingTop: 48 }}>
+          <button onClick={() => go('business')} style={window.btnOutline}>←&nbsp;ビジネスのページへ戻る</button>
         </div>
       </Container>
     </main>
