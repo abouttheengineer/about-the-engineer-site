@@ -150,22 +150,24 @@ function ConsultingPage({ go }) {
 
       {/* Interactive demo: dashboard */}
       <Container id="demo-dashboard" style={{ paddingBottom: 96 }}>
-        <div style={{ maxWidth: 720 }}>
-          <div style={{ fontFamily: 'var(--font-ui)', fontSize: 13, fontWeight: 700, color: 'var(--neutral-600)' }}>Demo</div>
-          <h2 style={{ margin: '10px 0 0', fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 'clamp(26px, 3.4vw, 40px)', lineHeight: 1.3, color: 'var(--zinc-950)' }}>数字が、ひと目で<br />わかる画面に</h2>
-          <p style={{ margin: '20px 0 0', fontFamily: 'var(--font-body)', fontSize: 16, lineHeight: 2, color: 'var(--text-on-light-muted)' }}>
-            分析用ダッシュボードの、サンプル画面です。期間を切り替えたり、データを再集計したりして、実際の使い心地を確かめられます。
-          </p>
+        <div className="rgrid" style={{ display: 'grid', gridTemplateColumns: '1fr 1.25fr', gap: 'clamp(32px, 5vw, 64px)', alignItems: 'center' }}>
+          <div>
+            <div style={{ fontFamily: 'var(--font-ui)', fontSize: 13, fontWeight: 700, color: 'var(--neutral-600)' }}>Demo</div>
+            <h2 style={{ margin: '10px 0 0', fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 'clamp(26px, 3.4vw, 40px)', lineHeight: 1.3, color: 'var(--zinc-950)' }}>数字が、ひと目で<br />わかる画面に</h2>
+            <p style={{ margin: '20px 0 0', maxWidth: 440, fontFamily: 'var(--font-body)', fontSize: 16, lineHeight: 2, color: 'var(--text-on-light-muted)' }}>
+              分析用ダッシュボードの、サンプル画面です。期間を切り替えたり、データを再集計したりして、実際の使い心地を確かめられます。
+            </p>
+            <ol style={{ margin: '24px 0 0', padding: 0, listStyle: 'none', maxWidth: 440 }}>
+              {['「今月・先月・過去3ヶ月」で、表示する期間を切り替える', '「データを自動再集計」を押して、グラフの更新を見る', '「CSVエクスポート」で、出力の画面を開く'].map((t, i) => (
+                <li key={t} style={{ display: 'grid', gridTemplateColumns: '32px 1fr', gap: 12, alignItems: 'center', padding: '10px 0', fontFamily: 'var(--font-body)', fontSize: 15, color: 'var(--zinc-950)' }}>
+                  <span style={{ width: 28, height: 28, borderRadius: 999, background: '#1E3A5F', color: '#fff', fontSize: 13, fontWeight: 700, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>{i + 1}</span>{t}
+                </li>
+              ))}
+            </ol>
+            <p style={{ margin: '20px 0 0', fontFamily: 'var(--font-body)', fontSize: 13, lineHeight: 1.8, color: 'var(--neutral-600)' }}>※ サンプルの数字・社名です。実際の内容は、ご要望に合わせて設計します。</p>
+          </div>
+          <DemoFrame variant="browser" designWidth={800} scale={0.75} height={640} label="分析用ダッシュボード（サンプル）" src="demos/dashboard.html?v=20261107" title="分析用ダッシュボードのサンプル" />
         </div>
-        <ol className="rgrid" style={{ margin: '24px 0 32px', padding: 0, listStyle: 'none', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0 32px' }}>
-          {['「今月・先月・過去3ヶ月」で、表示する期間を切り替える', '「データを自動再集計」を押して、グラフの更新を見る', '「CSVエクスポート」で、出力の画面を開く'].map((t, i) => (
-            <li key={t} style={{ display: 'grid', gridTemplateColumns: '32px 1fr', gap: 12, alignItems: 'center', padding: '10px 0', fontFamily: 'var(--font-body)', fontSize: 15, color: 'var(--zinc-950)' }}>
-              <span style={{ width: 28, height: 28, borderRadius: 999, background: '#1E3A5F', color: '#fff', fontSize: 13, fontWeight: 700, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>{i + 1}</span>{t}
-            </li>
-          ))}
-        </ol>
-        <DemoFrame variant="browser" height={640} label="分析用ダッシュボード（サンプル）" src="demos/dashboard.html?v=20261107" title="分析用ダッシュボードのサンプル" />
-        <p style={{ margin: '20px 0 0', fontFamily: 'var(--font-body)', fontSize: 13, lineHeight: 1.8, color: 'var(--neutral-600)' }}>※ サンプルの数字・社名です。実際の内容は、ご要望に合わせて設計します。</p>
       </Container>
 
       {/* Interactive demo: reservation system */}
