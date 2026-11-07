@@ -87,7 +87,7 @@ function DemosPage({ go }) {
             <div style={{ fontFamily: 'var(--font-ui)', fontSize: 13, fontWeight: 700, color: 'var(--neutral-600)' }}>Demo</div>
             <h2 style={{ margin: '10px 0 0', fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 'clamp(26px, 3.4vw, 40px)', lineHeight: 1.3, color: 'var(--zinc-950)' }}>SNS分析<br />ダッシュボード</h2>
             <p style={{ margin: '20px 0 0', maxWidth: 440, fontFamily: 'var(--font-body)', fontSize: 16, lineHeight: 2, color: 'var(--text-on-light-muted)' }}>
-              Instagram などの分析データを、毎月のCSVで取り込んでためていくと、数年分を分析できます。ここでは小さく表示しています。見づらいときは、大きな画面で操作できます。
+              Instagram の画面だけでは、分析しきれません。毎月のCSVで長期間データを保持して、数年分の変化まで分析できます。
             </p>
             <ol style={{ margin: '24px 0 0', padding: 0, listStyle: 'none', maxWidth: 440 }}>
               {['「前の月のCSVを取り込む」を押して、グラフが過去へ伸びるのを見る', '「まとめて取り込む」で、3年分のデータを見る', '「前年と重ねて見る」で、去年との違いを比べる'].map((t, i) => (
