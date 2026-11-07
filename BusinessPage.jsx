@@ -89,14 +89,14 @@ function BusinessPage({ go }) {
       </Container>
 
       {/* Security diagnosis — service entry linking to Contact */}
-      <Container id="security" style={{ paddingBottom: 96 }}>
+      <Container id="security-section" style={{ paddingBottom: 96 }}>
         <div style={{ display: 'flex', alignItems: 'baseline', gap: 16, marginBottom: 8 }}>
           <span style={{ fontFamily: 'var(--font-ui)', fontSize: 13, fontWeight: 600, letterSpacing: 'var(--tracking-wide)', textTransform: 'uppercase', color: 'var(--neutral-600)' }}>Security</span>
           <span style={{ fontFamily: 'var(--font-ui)', fontSize: 13, color: 'var(--neutral-600)' }}>セキュリティ診断</span>
         </div>
         <Rule strong />
         <div
-          onClick={() => go('contact')}
+          onClick={() => go('security')}
           className="rgrid"
           style={{ display: 'grid', gridTemplateColumns: '0.32fr 1fr auto', gap: 40, alignItems: 'start', padding: '40px 0', cursor: 'pointer' }}>
           <div>
@@ -108,11 +108,7 @@ function BusinessPage({ go }) {
               Webサイトやアプリに、攻撃を受けやすい弱点がないかを調べます。診断の結果は、報告書にまとめてお渡しします。見つかった問題への対応も、ご相談ください。
             </p>
             <div style={{ marginTop: 22, maxWidth: 560 }}>
-              {[
-                { name: '簡易診断', sub: 'ツールによる自動診断', price: '3万円〜' },
-                { name: 'Webサイト・Webアプリ診断', sub: '手動の確認を含む診断', price: '10万円〜' },
-                { name: 'AI・LLMを使ったアプリの診断', sub: 'AIを使った機能の弱点の確認', price: '20万円〜' },
-              ].map((p, i, arr) => (
+              {(window.SECURITY_PLANS || []).map((p, i, arr) => (
                 <div key={p.name} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 16, padding: '14px 0', borderTop: '1px solid var(--neutral-200)', borderBottom: i === arr.length - 1 ? '1px solid var(--neutral-200)' : 'none' }}>
                   <div>
                     <div style={{ fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 15, color: 'var(--zinc-950)' }}>{p.name}</div>

@@ -6,7 +6,12 @@ function ContactPage({ go }) {
   const [sent, setSent] = React.useState(false);
   const [sending, setSending] = React.useState(false);
   const [error, setError] = React.useState(false);
-  const [form, setForm] = React.useState({ company: '', name: '', email: '', topic: 'コンサルティング', message: '' });
+  const [form, setForm] = React.useState(() => {
+    // 他のページから「この相談で」と指定されたときは、その内容を最初から選んでおく
+    let topic = 'コンサルティング';
+    try { const t = sessionStorage.getItem('contactTopic'); if (t) { topic = t; sessionStorage.removeItem('contactTopic'); } } catch (e) { /* ignore */ }
+    return { company: '', name: '', email: '', topic, message: '' };
+  });
   const set = (k) => (e) => setForm(s => ({ ...s, [k]: e.target.value }));
   const submit = async (e) => {
     e.preventDefault();
