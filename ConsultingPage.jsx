@@ -6,7 +6,7 @@ function ConsultingPage({ go }) {
   // 支援領域は3つ: プロダクト開発支援 / AI支援 / Webサイト制作
   const areas = [
     {
-      n: '01', icon: 'product', title: 'プロダクト開発|支援', en: 'Product Development',
+      n: '01', icon: 'product', image: 'assets/phone-product.png', title: 'プロダクト開発|支援', en: 'Product Development',
       desc: '新しいサービスやアプリを形にするお手伝いをします。「何を作ればよいか」の整理から、開発・リリースまで伴走します。',
       forWho: '新しいサービスのアイデアがある方 / 何から始めればよいか迷っている方',
       deliverables: ['アイデアの整理・要件定義', 'スマホアプリ（iOS）の開発', 'WEBシステムの開発'],
@@ -85,13 +85,16 @@ function ConsultingPage({ go }) {
           <div className="rgrid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24, alignItems: 'stretch' }}>
             {areas.map(s => (
               <div key={s.n} style={{ background: 'var(--white)', border: '1px solid #D5E2EE', borderRadius: 16, padding: 'clamp(24px, 3vw, 36px)', boxShadow: '0 16px 36px rgba(30,58,95,0.08)', display: 'flex', flexDirection: 'column' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <div style={{ width: 56, height: 56, borderRadius: 16, background: '#1E3A5F', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{icons[s.icon]}</svg>
-                  </div>
-                  <span style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 34, lineHeight: 1, color: '#C9D8E8' }}>{s.n}</span>
+                {/* 上のパネル: 画像があれば画像、なければ大きな線のアイコン */}
+                <div style={{ position: 'relative', height: 210, borderRadius: 12, background: 'linear-gradient(160deg, #EAF1F7 0%, #D5E2EE 100%)', overflow: 'hidden', display: 'flex', alignItems: s.image ? 'flex-end' : 'center', justifyContent: 'center' }}>
+                  {s.image ? (
+                    <img src={s.image} alt="スマホアプリの画面のイメージ" style={{ display: 'block', height: 236, width: 'auto', marginBottom: -26 }} />
+                  ) : (
+                    <svg width="92" height="92" viewBox="0 0 24 24" fill="none" stroke="#1E3A5F" strokeOpacity="0.55" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{icons[s.icon]}</svg>
+                  )}
+                  <span style={{ position: 'absolute', top: 14, left: 14, fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 15, letterSpacing: '0.04em', color: '#fff', background: '#1E3A5F', borderRadius: 999, padding: '5px 12px', lineHeight: 1 }}>{s.n}</span>
                 </div>
-                <div style={{ marginTop: 28, fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 'clamp(24px, 2.6vw, 30px)', lineHeight: 1.3, color: 'var(--zinc-950)' }}>{s.title.split('|').map(t => <span key={t} style={{ display: 'inline-block' }}>{t}</span>)}</div>
+                <div style={{ marginTop: 24, fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 'clamp(24px, 2.6vw, 30px)', lineHeight: 1.3, color: 'var(--zinc-950)' }}>{s.title.split('|').map(t => <span key={t} style={{ display: 'inline-block' }}>{t}</span>)}</div>
                 <div style={{ marginTop: 6, fontFamily: 'var(--font-ui)', fontSize: 12, fontWeight: 600, letterSpacing: '0.04em', color: '#1E3A5F' }}>{s.en}</div>
                 <p style={{ margin: '18px 0 0', fontFamily: 'var(--font-body)', fontSize: 15, lineHeight: 1.9, color: 'var(--text-on-light-muted)' }}>{s.desc}</p>
                 <div style={{ marginTop: 20, paddingTop: 18, borderTop: '1px solid var(--neutral-200)' }}>
