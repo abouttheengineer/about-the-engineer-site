@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SpeakFlow - モバイル英会話アプリ</title>
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="vendor/speakflow.css">
+    <script src="vendor/vue.global.prod.js"></script>
+    <style>
+        /* 狭い画面（サイト内の埋め込み表示）でラベルが折り返さないようにする */
+        nav button { padding-left: 0.25rem; padding-right: 0.25rem; min-width: 0; }
+        nav button span, .grid-cols-4 > button span { white-space: nowrap; }
+        .grid-cols-4 > button { padding-left: 0.25rem; padding-right: 0.25rem; }
+        /* タッチ＆スマホ向けスムーズスクロール */
+        body {
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+        /* スクロールバー非表示（横スクロール用） */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        /* ボトムシートアニメーション */
+        .sheet-enter-active, .sheet-leave-active {
+            transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+        }
+        .sheet-enter-from, .sheet-leave-to {
+            transform: translateY(100%);
+            opacity: 0;
+        }
+        /* 音声波形アニメーション */
+        @keyframes soundWave {
+            0%, 100% { height: 6px; }
+            50% { height: 22px; }
+        }
+        .wave-bar {
+            animation: soundWave 1.2s infinite ease-in-out;
+        }
+        .wave-bar:nth-child(2) { animation-delay: 0.2s; }
+        .wave-bar:nth-child(3) { animation-delay: 0.4s; }
+        .wave-bar:nth-child(4) { animation-delay: 0.1s; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased h-screen overflow-hidden selection:bg-brand-500 selection:text-white">
+    
+    <div id="app" class="w-full h-full">
+
+        <!-- PC閲覧用のスマホ外枠シェル（レスポンシブでスマホ実機では全画面化） -->
+        <div class="bg-slate-50 relative flex flex-col w-full h-full overflow-hidden">
+
+
+
+            <!-- ================= 1. スマホヘッダー & モード切り替え ================= -->
+            <header class="bg-white border-b border-slate-200/80 sticky top-0 z-30 pt-3 pb-2.5 px-4 shadow-sm flex flex-col justify-between">
+                <!-- ステータスバー（時計・バッテリーイメージ） -->
+                <div class="flex justify-between items-center text-[11px] font-semibold text-slate-500 mb-1.5 px-1">
+                    <span>9:41</span>
+                    <div class="flex items-center space-x-1.5 text-xs text-slate-700">
+                        <i class="fa-solid fa-signal"></i>
+                        <i class="fa-solid fa-wifi"></i>
+                        <i class="fa-solid fa-battery-full"></i>
+                    </div>
+                </div>
+
+                <!-- アプリロゴ & 生徒/講師 切替スイッチ -->
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-2">
+                        <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-brand-600 to-accent-500 flex items-center justify-center text-white shadow-md shadow-brand-500/20">
+                            <i class="fa-solid fa-comments text-sm"></i>
+                        </div>
+                        <div>
+                            <h1 class="text-base font-bold bg-gradient-to-r from-brand-700 to-accent-600 bg-clip-text text-transparent leading-none">SpeakFlow</h1>
+                            <span class="text-[10px] text-slate-400 font-medium">英会話ラーニング</span>
+                        </div>
+                    </div>
+
+                    <!-- 生徒 ↔ 講師 切り替えトグル -->
+                    <div class="bg-slate-100 p-0.5 rounded-xl flex items-center text-[11px] font-semibold border border-slate-200">
+                        <button @click="switchRole('student')" 
+                                :class="userRole === 'student' ? 'bg-white text-brand-700 shadow-sm' : 'text-slate-500'"
+                                class="px-2.5 py-1 rounded-lg transition-all">
+                            生徒
+                        </button>
+                        <button @click="switchRole('teacher')" 
+                                :class="userRole === 'teacher' ? 'bg-purple-600 text-white shadow-sm' : 'text-slate-500'"
+                                class="px-2.5 py-1 rounded-lg transition-all">
+                            講師
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- トースト通知 -->
+            <transition enter-active-class="transform transition ease-out duration-200" enter-from-class="-translate-y-4 opacity-0" enter-to-class="translate-y-0 opacity-100" leave-active-class="transition ease-in duration-150" leave-from-class="opacity-100" leave-to-class="opacity-0">
+                <div v-if="toast.show" class="absolute top-16 left-4 right-4 z-50 bg-slate-900/95 text-white px-3.5 py-2.5 rounded-2xl shadow-xl flex items-center space-x-2.5 border border-slate-700/60 backdrop-blur-md">
+                    <i class="fa-solid fa-circle-check text-emerald-400 text-sm"></i>
+                    <span class="text-xs font-medium leading-tight">{{ toast.message }}</span>
+                </div>
+            </transition>
+
+            <!-- ================= スクロールコンテンツエリア ================= -->
+            <main class="flex-1 overflow-y-auto pb-20 relative bg-slate-50">
+
+                <!-- ---------------- A. ホームタブ ---------------- -->
+                <div v-if="currentTab === 'home'" class="p-4 space-y-4">
+                    
+                    <!-- 次回レッスン・ヒーローカード（シンプルグレーデザイン） -->
+                    <div class="bg-slate-100 border border-slate-200 rounded-3xl p-5 text-slate-800 shadow-sm relative overflow-hidden">
+                        
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="bg-white border border-slate-200 text-slate-700 inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold shadow-xs">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                                <span>次回予約あり</span>
+                            </span>
+                            <span class="text-[11px] text-slate-500 font-semibold"><i class="fa-regular fa-calendar-check mr-1"></i>本日 20:00 〜 20:25</span>
+                        </div>
+
+                        <div class="flex items-center justify-between my-2">
+                            <div class="flex items-center space-x-3">
+                                <img :src="teachers[0].avatar" alt="" class="w-12 h-12 rounded-full object-cover ring-2 ring-slate-200 shadow-sm">
+                                <div>
+                                    <h3 class="text-sm font-bold text-slate-900">Anna Watson 講師</h3>
+                                    <p class="text-[11px] text-slate-500 font-medium">フリートーク・日常会話</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 pt-3 border-t border-slate-200/80 flex items-center justify-between">
+                            <span class="text-[11px] text-slate-500 font-medium"><i class="fa-regular fa-clock mr-1"></i>開始5分前から入室可能</span>
+                            
+                            <button @click="startCall('Anna Watson')" 
+                                    class="bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow-sm active:scale-95 transition-all flex items-center space-x-1.5">
+                                <i class="fa-solid fa-video"></i>
+                                <span>通話ルームに入室</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 講師モード用ダッシュボード（切り替え時） -->
+                    <div v-if="userRole === 'teacher'" class="bg-purple-900/90 text-white p-4 rounded-2xl border border-purple-700 shadow-sm space-y-2">
+                        <div class="flex justify-between items-center">
+                            <h3 class="text-xs font-bold text-purple-200"><i class="fa-solid fa-user-gear mr-1"></i> 講師用タスク</h3>
+                            <span class="text-[10px] bg-purple-700 px-2 py-0.5 rounded-full">未承認: {{ pendingBookingsCount }}件</span>
+                        </div>
+                        <p class="text-xs text-purple-100">生徒からのスケジュール申請が届いています。内容を確認して承認・修正を行ってください。</p>
+                    </div>
+
+                    <!-- クイックアクションアイコン -->
+                    <div>
+                        <h2 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 px-1">クイックアクション</h2>
+                        <div class="grid grid-cols-4 gap-2">
+                            <button @click="startCall('即時レッスン')" class="bg-white p-3 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col items-center text-center active:scale-95 transition-all">
+                                <div class="w-10 h-10 rounded-xl bg-teal-50 text-brand-600 flex items-center justify-center text-base mb-1.5">
+                                    <i class="fa-solid fa-bolt"></i>
+                                </div>
+                                <span class="text-[11px] font-bold text-slate-700">今すぐ通話</span>
+                            </button>
+
+                            <button @click="currentTab = 'teachers'" class="bg-white p-3 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col items-center text-center active:scale-95 transition-all">
+                                <div class="w-10 h-10 rounded-xl bg-blue-50 text-accent-600 flex items-center justify-center text-base mb-1.5">
+                                    <i class="fa-solid fa-calendar-plus"></i>
+                                </div>
+                                <span class="text-[11px] font-bold text-slate-700">予約申請</span>
+                            </button>
+
+                            <button @click="currentTab = 'chat'" class="bg-white p-3 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col items-center text-center active:scale-95 transition-all">
+                                <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-base mb-1.5">
+                                    <i class="fa-solid fa-comment-dots"></i>
+                                </div>
+                                <span class="text-[11px] font-bold text-slate-700">チャット</span>
+                            </button>
+
+                            <button @click="showToast('学習履歴・復習ノートを開きました')" class="bg-white p-3 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col items-center text-center active:scale-95 transition-all">
+                                <div class="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center text-base mb-1.5">
+                                    <i class="fa-solid fa-book-open"></i>
+                                </div>
+                                <span class="text-[11px] font-bold text-slate-700">復習ノート</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- おすすめ講師 横スクロール（スライダー） -->
+                    <div>
+                        <div class="flex justify-between items-center mb-2 px-1">
+                            <h2 class="text-xs font-bold text-slate-500 uppercase tracking-wider">人気ネイティブ講師</h2>
+                            <button @click="currentTab = 'teachers'" class="text-xs text-brand-600 font-bold">すべて見る <i class="fa-solid fa-chevron-right text-[10px]"></i></button>
+                        </div>
+
+                        <div class="flex space-x-3 overflow-x-auto no-scrollbar pb-1">
+                            <div v-for="teacher in teachers" :key="teacher.id" 
+                                 @click="openBookingModal(teacher)"
+                                 class="min-w-[210px] bg-white p-3.5 rounded-2xl border border-slate-200/80 shadow-sm shrink-0 active:scale-98 transition-all flex flex-col justify-between">
+                                <div>
+                                    <div class="flex items-center space-x-2.5 mb-2">
+                                        <div class="relative">
+                                            <img :src="teacher.avatar" class="w-11 h-11 rounded-full object-cover">
+                                            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 border-2 border-white absolute bottom-0 right-0"></span>
+                                        </div>
+                                        <div>
+                                            <div class="flex items-center space-x-1">
+                                                <h4 class="font-bold text-xs text-slate-800">{{ teacher.name }}</h4>
+                                                <span class="text-xs">{{ teacher.flag }}</span>
+                                            </div>
+                                            <p class="text-[10px] text-slate-400 font-medium truncate w-24">{{ teacher.title }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center space-x-1 text-[11px] text-amber-500 font-bold mb-2">
+                                        <i class="fa-solid fa-star"></i>
+                                        <span>{{ teacher.rating }}</span>
+                                        <span class="text-slate-400 font-normal">({{ teacher.reviewsCount }})</span>
+                                    </div>
+                                </div>
+                                <button class="w-full py-1.5 bg-brand-50 text-brand-700 font-bold text-[11px] rounded-xl border border-brand-100">
+                                    空き予約枠を見る
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- スケジュール申請・レッスンステータス -->
+                    <div>
+                        <h2 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-2 px-1">予約・申請ステータス</h2>
+                        <div class="space-y-2">
+                            <div v-for="booking in bookings" :key="booking.id" 
+                                 class="bg-white p-3 rounded-2xl border border-slate-200/80 shadow-sm flex items-center justify-between">
+                                <div class="flex items-center space-x-3">
+                                    <img :src="booking.teacherAvatar" class="w-10 h-10 rounded-full object-cover">
+                                    <div>
+                                        <div class="flex items-center space-x-1.5">
+                                            <h4 class="font-bold text-xs text-slate-800">{{ booking.teacherName }}</h4>
+                                            <span v-if="booking.status === 'confirmed'" class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-emerald-100 text-emerald-800">確定</span>
+                                            <span v-else class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-amber-100 text-amber-800">承認待ち</span>
+                                        </div>
+                                        <p class="text-[10px] text-slate-500 font-medium mt-0.5"><i class="fa-regular fa-clock mr-1"></i>{{ booking.datetime }}</p>
+                                    </div>
+                                </div>
+
+                                <!-- 講師モード時の承認アクション -->
+                                <div v-if="userRole === 'teacher' && booking.status === 'pending'" class="flex space-x-1">
+                                    <button @click="approveBooking(booking.id)" class="px-2 py-1 bg-brand-600 text-white rounded-lg text-[10px] font-bold">承認</button>
+                                    <button @click="rejectBooking(booking.id)" class="px-2 py-1 bg-slate-200 text-slate-600 rounded-lg text-[10px]">辞退</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- ---------------- B. 講師検索タブ ---------------- -->
+                <div v-if="currentTab === 'teachers'" class="p-4 space-y-3">
+                    <!-- 検索バー -->
+                    <div class="relative">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-slate-400 text-xs"></i>
+                        <input v-model="searchQuery" type="text" placeholder="講師名、得意分野（ビジネス、日常会話）..." class="w-full pl-9 pr-4 py-2.5 bg-white border border-slate-200 rounded-2xl text-xs focus:outline-none focus:ring-2 focus:ring-brand-500 shadow-sm">
+                    </div>
+
+                    <!-- 講師一覧カード -->
+                    <div class="space-y-3">
+                        <div v-for="teacher in filteredTeachers" :key="teacher.id" 
+                             class="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-sm space-y-3">
+                            <div class="flex justify-between items-start">
+                                <div class="flex space-x-3">
+                                    <img :src="teacher.avatar" class="w-12 h-12 rounded-full object-cover">
+                                    <div>
+                                        <div class="flex items-center space-x-1">
+                                            <h3 class="font-bold text-sm text-slate-800">{{ teacher.name }}</h3>
+                                            <span class="text-sm">{{ teacher.flag }}</span>
+                                        </div>
+                                        <p class="text-[11px] text-slate-500 font-medium leading-tight">{{ teacher.title }}</p>
+                                        <div class="flex items-center text-[11px] text-amber-400 font-bold mt-1">
+                                            <i class="fa-solid fa-star mr-1"></i>
+                                            <span class="text-slate-700">{{ teacher.rating }}</span>
+                                            <span class="text-slate-400 font-normal ml-1">({{ teacher.reviewsCount }}件)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <p class="text-xs text-slate-600 line-clamp-2 leading-relaxed bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+                                "{{ teacher.bio }}"
+                            </p>
+
+                            <div class="flex justify-between items-center pt-1">
+                                <div class="flex space-x-1">
+                                    <span v-for="tag in teacher.tags.slice(0,2)" :key="tag" class="text-[10px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded-md font-medium">
+                                        #{{ tag }}
+                                    </span>
+                                </div>
+                                <button @click="openBookingModal(teacher)" class="bg-brand-600 text-white font-bold text-xs px-3.5 py-2 rounded-xl shadow-sm active:scale-95 transition-all flex items-center space-x-1">
+                                    <i class="fa-regular fa-calendar-check"></i>
+                                    <span>スケジュール申請</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ---------------- C. 通話画面タブ（スマホ全画面ビデオUI） ---------------- -->
+                <div v-if="currentTab === 'call'" class="h-full flex flex-col justify-between p-3 relative bg-slate-950 text-white">
+                    
+                    <!-- 通話ヘッダー (時間カウンター) -->
+                    <div class="z-20 flex justify-between items-center pt-2 px-2">
+                        <div class="flex items-center space-x-2 bg-slate-900/80 backdrop-blur px-3 py-1 rounded-full border border-slate-700/60">
+                            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+                            <span class="text-xs font-mono font-bold">{{ callDurationText }}</span>
+                        </div>
+                        <button @click="showCallNotesModal = true" class="bg-slate-800/90 hover:bg-slate-700 px-3 py-1 rounded-full text-xs font-semibold border border-slate-700">
+                            <i class="fa-solid fa-book-open mr-1"></i>教材/メモ
+                        </button>
+                    </div>
+
+                    <!-- メイン映像エリア（講師） -->
+                    <div class="absolute inset-0 z-0 overflow-hidden">
+                        <img :src="callBg" alt="" class="w-full h-full object-cover opacity-90">
+                        
+                        <!-- 講師ステータス & 音声波形 overlay -->
+                        <div class="absolute bottom-24 left-4 z-10 bg-slate-900/80 backdrop-blur-md px-3.5 py-2 rounded-2xl border border-slate-700/60 flex items-center space-x-3">
+                            <div class="w-8 h-8 rounded-full bg-brand-600 flex items-center justify-center font-bold text-xs">AW</div>
+                            <div>
+                                <p class="text-xs font-bold">Anna Watson</p>
+                                <div class="flex items-end space-x-0.5 h-3 mt-0.5">
+                                    <span class="w-1 bg-emerald-400 rounded-full wave-bar"></span>
+                                    <span class="w-1 bg-emerald-400 rounded-full wave-bar"></span>
+                                    <span class="w-1 bg-emerald-400 rounded-full wave-bar"></span>
+                                    <span class="w-1 bg-emerald-400 rounded-full wave-bar"></span>
+                                    <span class="text-[9px] text-slate-400 ml-1">Speaking</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- サブカメラ (生徒プレビュー) -->
+                        <div class="absolute bottom-24 right-4 z-10 w-28 h-36 bg-slate-800 rounded-2xl overflow-hidden border-2 border-white/20 shadow-2xl">
+                            <img v-if="!isVideoOff" :src="avatars.student" alt="" class="w-full h-full object-cover">
+                            <div v-else class="w-full h-full bg-slate-900 flex flex-col items-center justify-center text-slate-500">
+                                <i class="fa-solid fa-video-slash text-base"></i>
+                                <span class="text-[9px] mt-1">OFF</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 下部コントロールバー -->
+                    <div class="z-20 bg-slate-900/90 backdrop-blur-xl p-3 rounded-3xl border border-slate-800 flex items-center justify-around">
+                        <button @click="isMuted = !isMuted" :class="isMuted ? 'bg-rose-600' : 'bg-slate-800'" class="w-11 h-11 rounded-2xl flex items-center justify-center text-base shadow">
+                            <i class="fa-solid" :class="isMuted ? 'fa-microphone-slash' : 'fa-microphone'"></i>
+                        </button>
+                        <button @click="isVideoOff = !isVideoOff" :class="isVideoOff ? 'bg-rose-600' : 'bg-slate-800'" class="w-11 h-11 rounded-2xl flex items-center justify-center text-base shadow">
+                            <i class="fa-solid" :class="isVideoOff ? 'fa-video-slash' : 'fa-video'"></i>
+                        </button>
+                        <button @click="currentTab = 'chat'" class="bg-slate-800 w-11 h-11 rounded-2xl flex items-center justify-center text-base shadow">
+                            <i class="fa-solid fa-comment"></i>
+                        </button>
+                        <button @click="endCall" class="bg-rose-600 hover:bg-rose-700 text-white px-5 h-11 rounded-2xl font-bold text-xs flex items-center space-x-1.5 shadow-lg shadow-rose-600/30">
+                            <i class="fa-solid fa-phone-slash"></i>
+                            <span>終了</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ---------------- D. チャットタブ ---------------- -->
+                <div v-if="currentTab === 'chat'" class="h-full flex flex-col justify-between bg-slate-50">
+                    
+                    <!-- チャット相手選定・スレッドヘッダー -->
+                    <div class="bg-white p-3 border-b border-slate-200 flex items-center space-x-3 shadow-xs">
+                        <img :src="currentChatThread?.avatar" class="w-9 h-9 rounded-full object-cover">
+                        <div class="flex-1">
+                            <h3 class="font-bold text-xs text-slate-800">{{ currentChatThread?.name }} 講師</h3>
+                            <p class="text-[10px] text-emerald-600 font-medium">● オンライン (返信目安: 10分以内)</p>
+                        </div>
+                    </div>
+
+                    <!-- メッセージタイムライン -->
+                    <div class="flex-1 p-3 overflow-y-auto space-y-3" id="chat-box">
+                        <div v-for="msg in activeMessages" :key="msg.id" 
+                             :class="msg.isMine ? 'flex justify-end' : 'flex justify-start'">
+                            <div class="flex space-x-2 max-w-[80%]" :class="msg.isMine ? 'flex-row-reverse space-x-reverse' : 'flex-row'">
+                                <img v-if="!msg.isMine" :src="currentChatThread?.avatar" class="w-7 h-7 rounded-full object-cover mt-1">
+                                <div>
+                                    <div :class="msg.isMine ? 'bg-brand-600 text-white rounded-2xl rounded-tr-none' : 'bg-white text-slate-800 border border-slate-200/80 rounded-2xl rounded-tl-none shadow-xs'"
+                                         class="p-3 text-xs leading-relaxed">
+                                        {{ msg.text }}
+                                    </div>
+                                    <span class="text-[9px] text-slate-400 mt-1 block" :class="msg.isMine ? 'text-right' : 'text-left'">
+                                        {{ msg.time }}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 定型文チップス & 送信入力 -->
+                    <div class="p-3 bg-white border-t border-slate-200 space-y-2">
+                        <!-- スワイプ定型文 -->
+                        <div class="flex space-x-1.5 overflow-x-auto no-scrollbar text-[11px]">
+                            <button @click="insertTemplate('よろしくお願いします！')" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-full shrink-0 font-medium">
+                                👋 よろしくお願いします！
+                            </button>
+                            <button @click="insertTemplate('宿題を提出させていただきます。')" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-full shrink-0 font-medium">
+                                📚 宿題提出
+                            </button>
+                            <button @click="insertTemplate('スケジュールの変更をお願いできますか？')" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-full shrink-0 font-medium">
+                                🕒 日時変更
+                            </button>
+                        </div>
+
+                        <!-- メッセージ送信フォーム -->
+                        <form @submit.prevent="sendMessage" class="flex items-center space-x-2">
+                            <input v-model="newMessageText" type="text" placeholder="メッセージを入力..." class="flex-1 bg-slate-100 border border-slate-200 rounded-xl px-3.5 py-2 text-xs focus:outline-none focus:ring-2 focus:ring-brand-500">
+                            <button type="submit" class="bg-brand-600 text-white w-9 h-9 rounded-xl flex items-center justify-center text-xs shadow-md active:scale-95">
+                                <i class="fa-solid fa-paper-plane"></i>
+                            </button>
+                        </form>
+                    </div>
+
+                </div>
+
+                <!-- ---------------- E. マイページタブ ---------------- -->
+                <div v-if="currentTab === 'profile'" class="p-4 space-y-4">
+                    <!-- アバター & ステータス -->
+                    <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm text-center">
+                        <img :src="currentUser.avatar" class="w-16 h-16 rounded-full object-cover mx-auto ring-4 ring-brand-500/20 mb-2">
+                        <h3 class="font-bold text-base text-slate-800">{{ currentUser.name }}</h3>
+                        <p class="text-xs text-slate-500">{{ currentUser.plan }}</p>
+
+                        <div class="grid grid-cols-3 gap-2 mt-4 pt-3 border-t border-slate-100 text-center">
+                            <div>
+                                <p class="text-[10px] text-slate-400">受講回数</p>
+                                <p class="text-base font-extrabold text-slate-800">12回</p>
+                            </div>
+                            <div>
+                                <p class="text-[10px] text-slate-400">総時間</p>
+                                <p class="text-base font-extrabold text-slate-800">28.5h</p>
+                            </div>
+                            <div>
+                                <p class="text-[10px] text-slate-400">レベル</p>
+                                <p class="text-base font-extrabold text-brand-600">B2</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- メニュー項目 -->
+                    <div class="bg-white rounded-2xl border border-slate-200/80 shadow-sm divide-y divide-slate-100 text-xs font-medium text-slate-700">
+                        <button @click="showToast('アカウント設定画面を開きます')" class="w-full p-3.5 flex justify-between items-center text-left">
+                            <span><i class="fa-solid fa-user-pen mr-2 text-slate-400"></i>プロフィール編集</span>
+                            <i class="fa-solid fa-chevron-right text-slate-300 text-[10px]"></i>
+                        </button>
+                        <button @click="showToast('目標設定を変更できます')" class="w-full p-3.5 flex justify-between items-center text-left">
+                            <span><i class="fa-solid fa-bullseye mr-2 text-slate-400"></i>学習目標・レベル設定</span>
+                            <i class="fa-solid fa-chevron-right text-slate-300 text-[10px]"></i>
+                        </button>
+                        <button @click="showToast('支払い情報を表示します')" class="w-full p-3.5 flex justify-between items-center text-left">
+                            <span><i class="fa-solid fa-credit-card mr-2 text-slate-400"></i>プラン・お支払い設定</span>
+                            <i class="fa-solid fa-chevron-right text-slate-300 text-[10px]"></i>
+                        </button>
+                    </div>
+                </div>
+
+            </main>
+
+            <!-- ================= 2. ボトムシート風 予約モーダル ================= -->
+            <transition name="sheet">
+                <div v-if="bookingModal.show" class="absolute inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex flex-col justify-end">
+                    <!-- タップで閉じる透明エリア -->
+                    <div class="flex-1" @click="bookingModal.show = false"></div>
+
+                    <!-- スライドアップシート本体 -->
+                    <div class="bg-white rounded-t-3xl p-5 shadow-2xl border-t border-slate-200 max-h-[85%] overflow-y-auto space-y-4">
+                        <div class="w-12 h-1 bg-slate-300 rounded-full mx-auto -mt-1 mb-2"></div>
+
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-3">
+                                <img :src="bookingModal.teacher?.avatar" class="w-10 h-10 rounded-full object-cover">
+                                <div>
+                                    <h3 class="font-bold text-xs text-slate-800">{{ bookingModal.teacher?.name }} 講師</h3>
+                                    <p class="text-[10px] text-slate-500">スケジュール申請</p>
+                                </div>
+                            </div>
+                            <button @click="bookingModal.show = false" class="text-slate-400 text-base p-1"><i class="fa-solid fa-xmark"></i></button>
+                        </div>
+
+                        <!-- スロット選択 -->
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-2">希望の日時枠を選択</label>
+                            <div class="grid grid-cols-2 gap-2">
+                                <button v-for="slot in bookingModal.teacher?.availableSlots" :key="slot"
+                                        @click="bookingModal.selectedSlot = slot"
+                                        :class="bookingModal.selectedSlot === slot ? 'bg-brand-600 text-white border-brand-600' : 'bg-slate-50 text-slate-700 border-slate-200'"
+                                        class="p-2 rounded-xl border text-xs font-mono font-bold transition-all text-center">
+                                    {{ slot }}
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- トピック選択 -->
+                        <div>
+                            <label class="block text-xs font-bold text-slate-700 mb-1.5">レッスントピック</label>
+                            <select v-model="bookingModal.topic" class="w-full text-xs border border-slate-200 rounded-xl p-2.5 bg-slate-50">
+                                <option value="フリートーク・日常会話">フリートーク・日常会話</option>
+                                <option value="ビジネス英語・プレゼン">ビジネス英語・プレゼン</option>
+                                <option value="発音矯正・フォニックス">発音矯正・フォニックス</option>
+                            </select>
+                        </div>
+
+                        <!-- 申請ボタン -->
+                        <button @click="submitBooking" class="w-full py-3 bg-brand-600 text-white text-xs font-bold rounded-xl shadow-lg active:scale-98 transition-all flex items-center justify-center space-x-1.5">
+                            <i class="fa-solid fa-paper-plane"></i>
+                            <span>予約申請を送信</span>
+                        </button>
+                    </div>
+                </div>
+            </transition>
+
+            <!-- ================= 3. 通話中ノート モーダル ================= -->
+            <transition name="sheet">
+                <div v-if="showCallNotesModal" class="absolute inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex flex-col justify-end">
+                    <div class="flex-1" @click="showCallNotesModal = false"></div>
+                    <div class="bg-white rounded-t-3xl p-5 shadow-2xl space-y-3">
+                        <div class="flex justify-between items-center">
+                            <h3 class="font-bold text-xs text-slate-800">通話メモ & 教材</h3>
+                            <button @click="showCallNotesModal = false" class="text-slate-400"><i class="fa-solid fa-xmark"></i></button>
+                        </div>
+                        <textarea v-model="callNotes" class="w-full h-32 border border-slate-200 rounded-xl p-3 text-xs focus:ring-2 focus:ring-brand-500 font-mono"></textarea>
+                        <button @click="showCallNotesModal = false; showToast('メモを保存しました')" class="w-full py-2.5 bg-slate-900 text-white font-bold text-xs rounded-xl">保存する</button>
+                    </div>
+                </div>
+            </transition>
+
+            <!-- ================= 4. モバイル固定 ボトムナビゲーションバー ================= -->
+            <nav class="absolute bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-slate-200/80 z-40 px-2 py-1.5 flex justify-around items-center">
+                <button @click="currentTab = 'home'" :class="currentTab === 'home' ? 'text-brand-600 font-bold' : 'text-slate-400'" class="flex flex-col items-center py-1 px-3 active:scale-90 transition-all">
+                    <i class="fa-solid fa-house text-base"></i>
+                    <span class="text-[10px] mt-0.5">ホーム</span>
+                </button>
+
+                <button @click="currentTab = 'teachers'" :class="currentTab === 'teachers' ? 'text-brand-600 font-bold' : 'text-slate-400'" class="flex flex-col items-center py-1 px-3 active:scale-90 transition-all">
+                    <i class="fa-solid fa-magnifying-glass text-base"></i>
+                    <span class="text-[10px] mt-0.5">講師を探す</span>
+                </button>
+
+                <button @click="currentTab = 'call'" :class="currentTab === 'call' ? 'text-brand-600 font-bold' : 'text-slate-400'" class="flex flex-col items-center py-1 px-3 active:scale-90 transition-all relative">
+                    <div class="w-7 h-7 rounded-full bg-brand-500 text-white flex items-center justify-center -mt-2 shadow-md">
+                        <i class="fa-solid fa-video text-xs"></i>
+                    </div>
+                    <span class="text-[10px] mt-0.5">通話</span>
+                </button>
+
+                <button @click="currentTab = 'chat'" :class="currentTab === 'chat' ? 'text-brand-600 font-bold' : 'text-slate-400'" class="flex flex-col items-center py-1 px-3 active:scale-90 transition-all">
+                    <i class="fa-solid fa-paper-plane text-base"></i>
+                    <span class="text-[10px] mt-0.5">チャット</span>
+                </button>
+
+                <button @click="currentTab = 'profile'" :class="currentTab === 'profile' ? 'text-brand-600 font-bold' : 'text-slate-400'" class="flex flex-col items-center py-1 px-3 active:scale-90 transition-all">
+                    <i class="fa-solid fa-user text-base"></i>
+                    <span class="text-[10px] mt-0.5">マイページ</span>
+                </button>
+            </nav>
+
+        </div>
+
+    </div>
+
+    <!-- Vue 3 ロジック -->
+    <script>
+        const { createApp, ref, computed, onUnmounted } = Vue;
+
+        // 人物写真の代わりに使うイラスト（SVG）。外部の画像は読み込まない
+        const makeAvatar = (c1, c2) => 'data:image/svg+xml;utf8,' + encodeURIComponent(
+            `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${c1}"/><stop offset="1" stop-color="${c2}"/></linearGradient></defs><rect width="100" height="100" fill="url(#g)"/><circle cx="50" cy="40" r="17" fill="#fff" fill-opacity=".9"/><path d="M16 100C16 72 32 62 50 62s34 10 34 38Z" fill="#fff" fill-opacity=".9"/></svg>`);
+        const avatars = {
+            watson: makeAvatar('#5eead4', '#0f766e'),
+            wilson: makeAvatar('#c4b5fd', '#6d28d9'),
+            brown: makeAvatar('#93c5fd', '#1d4ed8'),
+            student: makeAvatar('#fcd34d', '#b45309'),
+        };
+
+        createApp({
+            setup() {
+                const userRole = ref('student');
+                const currentTab = ref('home');
+                                const toast = ref({ show: false, message: '' });
+
+                const currentUser = computed(() => {
+                    return userRole.value === 'student' 
+                        ? { name: '田中 太郎', plan: 'プレミアム (月8回)', avatar: avatars.student }
+                        : { name: 'Sarah Wilson', plan: '認定ネイティブ講師', avatar: avatars.wilson };
+                });
+
+                const switchRole = (role) => {
+                    userRole.value = role;
+                    showToast(role === 'student' ? '生徒モードに変更' : '講師モードに変更');
+                };
+
+                const showToast = (msg) => {
+                    toast.value.message = msg;
+                    toast.value.show = true;
+                    setTimeout(() => { toast.value.show = false; }, 2500);
+                };
+
+                // 講師データ
+                const teachers = ref([
+                    {
+                        id: 1,
+                        name: 'Anna Watson',
+                        flag: '🇨🇦',
+                        title: '日常会話・初心者専門',
+                        rating: 5.0,
+                        reviewsCount: 210,
+                        avatar: avatars.watson,
+                        tags: ['日常会話', '旅の英会話'],
+                        bio: 'リラックスして楽しくお話ししましょう！旅行や趣味のトピックが得意です。',
+                        availableSlots: ['本日 20:00 - 20:25', '明日 18:00 - 18:25']
+                    },
+                    {
+                        id: 2,
+                        name: 'Sarah Wilson',
+                        flag: '🇺🇸',
+                        title: 'ビジネス英語 / TESOL資格',
+                        rating: 4.9,
+                        reviewsCount: 142,
+                        avatar: avatars.wilson,
+                        tags: ['ビジネス英語', '面接対策'],
+                        bio: '実践的なビジネスフレーズや面接、プレゼン添削を中心にサポートします！',
+                        availableSlots: ['本日 21:00 - 21:25', '明日 15:00 - 15:25']
+                    },
+                    {
+                        id: 3,
+                        name: 'Michael Brown',
+                        flag: '🇬🇧',
+                        title: 'IELTS / 英国英語',
+                        rating: 4.8,
+                        reviewsCount: 98,
+                        avatar: avatars.brown,
+                        tags: ['TOEIC/IELTS', '発音矯正'],
+                        bio: '正しいグラマーとエレガントな会話表現を指導いたします。',
+                        availableSlots: ['11/9 10:00 - 10:25', '11/9 14:00 - 14:25']
+                    }
+                ]);
+
+                const searchQuery = ref('');
+                const filteredTeachers = computed(() => {
+                    return teachers.value.filter(t => t.name.toLowerCase().includes(searchQuery.value.toLowerCase()) || t.bio.includes(searchQuery.value));
+                });
+
+                // 予約データ
+                const bookings = ref([
+                    { id: 1, teacherName: 'Anna Watson', teacherAvatar: avatars.watson, datetime: '本日 20:00 - 20:25', status: 'confirmed' },
+                    { id: 2, teacherName: 'Michael Brown', teacherAvatar: avatars.brown, datetime: '明日 15:00 - 15:25', status: 'pending' }
+                ]);
+                const pendingBookingsCount = computed(() => bookings.value.filter(b => b.status === 'pending').length);
+
+                // ボトムシート予約
+                const bookingModal = ref({ show: false, teacher: null, selectedSlot: '', topic: 'フリートーク・日常会話' });
+                const openBookingModal = (teacher) => {
+                    bookingModal.value.teacher = teacher;
+                    bookingModal.value.selectedSlot = teacher.availableSlots[0] || '';
+                    bookingModal.value.show = true;
+                };
+                const submitBooking = () => {
+                    bookings.value.unshift({
+                        id: Date.now(),
+                        teacherName: bookingModal.value.teacher.name,
+                        teacherAvatar: bookingModal.value.teacher.avatar,
+                        datetime: bookingModal.value.selectedSlot,
+                        status: 'pending'
+                    });
+                    bookingModal.value.show = false;
+                    showToast('予約申請を送信しました！');
+                };
+                const approveBooking = (id) => {
+                    const b = bookings.value.find(x => x.id === id);
+                    if (b) b.status = 'confirmed';
+                    showToast('申請を承認しました');
+                };
+                const rejectBooking = (id) => {
+                    bookings.value = bookings.value.filter(x => x.id !== id);
+                    showToast('申請を辞退しました');
+                };
+
+                // 通話制御
+                const isMuted = ref(false);
+                const isVideoOff = ref(false);
+                const showCallNotesModal = ref(false);
+                const callNotes = ref("【フィードバック】\n- 'Specifically' のアクセント位置注意");
+                const callDuration = ref(845);
+                let callTimerInterval = null;
+
+                const callDurationText = computed(() => {
+                    const m = Math.floor(callDuration.value / 60);
+                    const s = callDuration.value % 60;
+                    return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+                });
+
+                const startCall = (name) => {
+                    currentTab.value = 'call';
+                    showToast(`${name}との通話ルームに入室しました`);
+                    if (!callTimerInterval) {
+                        callTimerInterval = setInterval(() => { callDuration.value++; }, 1000);
+                    }
+                };
+
+                const endCall = () => {
+                    if (callTimerInterval) clearInterval(callTimerInterval);
+                    callTimerInterval = null;
+                    showToast('通話を終了しました');
+                    currentTab.value = 'home';
+                };
+
+                // チャット
+                const currentChatThread = ref({
+                    name: 'Anna Watson',
+                    avatar: avatars.watson
+                });
+                const activeMessages = ref([
+                    { id: 1, text: 'Looking forward to our lesson tonight!', isMine: false, time: '11:00' },
+                    { id: 2, text: 'See you at 20:00 tonight!', isMine: true, time: '11:05' }
+                ]);
+                const newMessageText = ref('');
+
+                const sendMessage = () => {
+                    if (!newMessageText.value.trim()) return;
+                    const timeNow = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                    activeMessages.value.push({ id: Date.now(), text: newMessageText.value, isMine: true, time: timeNow });
+                    const sentMsg = newMessageText.value;
+                    newMessageText.value = '';
+
+                    setTimeout(() => {
+                        activeMessages.value.push({
+                            id: Date.now(),
+                            text: `Thanks! Got your message about "${sentMsg.slice(0, 10)}..."`,
+                            isMine: false,
+                            time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+                        });
+                    }, 1200);
+                };
+
+                const insertTemplate = (txt) => { newMessageText.value = txt; };
+
+                onUnmounted(() => {
+                    if (callTimerInterval) clearInterval(callTimerInterval);
+                });
+
+                return {
+                    userRole,
+                    currentTab,
+                    avatars,
+                    callBg: avatars.watson,
+                    currentUser,
+                    switchRole,
+                    toast,
+                    showToast,
+                    teachers,
+                    searchQuery,
+                    filteredTeachers,
+                    bookings,
+                    pendingBookingsCount,
+                    bookingModal,
+                    openBookingModal,
+                    submitBooking,
+                    approveBooking,
+                    rejectBooking,
+                    isMuted,
+                    isVideoOff,
+                    showCallNotesModal,
+                    callNotes,
+                    callDurationText,
+                    startCall,
+                    endCall,
+                    currentChatThread,
+                    activeMessages,
+                    newMessageText,
+                    sendMessage,
+                    insertTemplate
+                };
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>

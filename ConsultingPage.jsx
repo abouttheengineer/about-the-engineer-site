@@ -132,10 +132,10 @@ function ConsultingPage({ go }) {
               <div style={{ fontFamily: 'var(--font-ui)', fontSize: 13, fontWeight: 700, color: 'var(--neutral-600)' }}>Demo</div>
               <h2 style={{ margin: '10px 0 0', fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 'clamp(26px, 3.4vw, 40px)', lineHeight: 1.3, color: 'var(--zinc-950)' }}>画面を触って、<br />イメージを確かめる</h2>
               <p style={{ margin: '20px 0 0', maxWidth: 460, fontFamily: 'var(--font-body)', fontSize: 16, lineHeight: 2, color: 'var(--text-on-light-muted)' }}>
-                英会話教室向けの通話アプリの、サンプル画面です。実際のアプリのように、タップして操作できます。
+                英会話教室向けの通話アプリの、サンプル画面です。実際のアプリのように、タップして操作できます。生徒と講師、2つの立場で試せます。
               </p>
               <ol style={{ margin: '24px 0 0', padding: 0, listStyle: 'none', maxWidth: 460 }}>
-                {['「レッスンに入る」を押して、通話画面を見る', '通話中に、ミュートやカメラを切り替える', '「予約」タブで、次のレッスンを予約する'].map((t, i) => (
+                {['「通話ルームに入室」を押して、通話画面を見る', '「講師を探す」から、レッスンの予約を申請する', '右上を「講師」に切り替えて、申請を承認する'].map((t, i) => (
                   <li key={t} style={{ display: 'grid', gridTemplateColumns: '32px 1fr', gap: 12, alignItems: 'center', padding: '10px 0', fontFamily: 'var(--font-body)', fontSize: 15, color: 'var(--zinc-950)' }}>
                     <span style={{ width: 28, height: 28, borderRadius: 999, background: '#1E3A5F', color: '#fff', fontSize: 13, fontWeight: 700, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>{i + 1}</span>{t}
                   </li>
@@ -143,7 +143,7 @@ function ConsultingPage({ go }) {
               </ol>
               <p style={{ margin: '20px 0 0', fontFamily: 'var(--font-body)', fontSize: 13, lineHeight: 1.8, color: 'var(--neutral-600)' }}>※ サンプル画面です。実際のデザインや機能は、ご要望に合わせて設計します。</p>
             </div>
-            <LessonAppMock />
+            <DemoFrame src="demos/speakflow.html?v=20261107" title="英会話教室向け通話アプリのサンプル" />
           </div>
         </Container>
       </div>
