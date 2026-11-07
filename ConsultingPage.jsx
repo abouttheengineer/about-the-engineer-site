@@ -127,6 +127,26 @@ function ConsultingPage({ go }) {
         </div>
       </Container>
 
+      {/* Other fees */}
+      <Container id="price" style={{ paddingBottom: 96 }}>
+        <SectionHead kicker="Price" title="その他の料金" />
+        <div className="rgrid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24 }}>
+          {[
+            { label: '運用保守', price: '月5,000円〜', unit: '（税抜）', desc: '公開したあとの運用と保守を承ります。ドメイン設定の支援なども含みます。内容は、ご利用の状況に合わせてご相談します。' },
+            { label: '初回のご相談', price: '30分まで無料', unit: '', desc: 'はじめてのご相談は、30分まで無料です。お困りごとやご希望を、お聞かせください。' },
+            { label: '都度のシステム相談・作業', price: '60分 5,000円', unit: '（税抜）', desc: 'システムのご相談を、1回ごとにご利用いただけます。ドメイン設定などの単発の作業も承ります（作業時間に応じて、お見積りします）。' },
+          ].map(p => (
+            <div key={p.label} style={{ border: '1px solid var(--neutral-200)', borderRadius: 12, padding: 28, background: 'var(--white)' }}>
+              <div style={{ fontFamily: 'var(--font-ui)', fontSize: 12, fontWeight: 600, color: 'var(--neutral-600)' }}>{p.label}</div>
+              <div style={{ marginTop: 10, fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 'clamp(22px, 2.4vw, 28px)', lineHeight: 1.3, color: '#1E3A5F' }}>
+                {p.price}<span style={{ fontSize: 13, fontWeight: 400, color: 'var(--neutral-600)', marginLeft: 4 }}>{p.unit}</span>
+              </div>
+              <p style={{ margin: '14px 0 0', fontFamily: 'var(--font-body)', fontSize: 14, lineHeight: 1.8, color: 'var(--text-on-light-muted)' }}>{p.desc}</p>
+            </div>
+          ))}
+        </div>
+      </Container>
+
       {/* Process */}
       <Container style={{ paddingBottom: 96 }}>
         <SectionHead kicker="Process" title="進め方" />
