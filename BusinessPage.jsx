@@ -59,7 +59,7 @@ function BusinessPage({ go }) {
       </Container>
 
       {/* Global Life Support — service entry linking to SupportPage */}
-      <Container style={{ paddingBottom: 96 }}>
+      <Container style={{ paddingBottom: 72 }}>
         <div style={{ display: 'flex', alignItems: 'baseline', gap: 16, marginBottom: 8 }}>
           <span style={{ fontFamily: 'var(--font-ui)', fontSize: 13, fontWeight: 600, letterSpacing: 'var(--tracking-wide)', textTransform: 'uppercase', color: 'var(--neutral-600)' }}>Life Support</span>
           <span style={{ fontFamily: 'var(--font-ui)', fontSize: 13, color: 'var(--neutral-600)' }}>生活サポート</span>
@@ -82,6 +82,51 @@ function BusinessPage({ go }) {
                 <Badge key={t} tone="outline" style={{ color: 'var(--zinc-950)' }}>{t}</Badge>
               ))}
             </div>
+          </div>
+          <div style={{ alignSelf: 'center', fontFamily: 'var(--font-body)', fontSize: 22, color: 'var(--zinc-950)' }}>→</div>
+        </div>
+        <Rule />
+      </Container>
+
+      {/* Security diagnosis — service entry linking to Contact */}
+      <Container id="security" style={{ paddingBottom: 96 }}>
+        <div style={{ display: 'flex', alignItems: 'baseline', gap: 16, marginBottom: 8 }}>
+          <span style={{ fontFamily: 'var(--font-ui)', fontSize: 13, fontWeight: 600, letterSpacing: 'var(--tracking-wide)', textTransform: 'uppercase', color: 'var(--neutral-600)' }}>Security</span>
+          <span style={{ fontFamily: 'var(--font-ui)', fontSize: 13, color: 'var(--neutral-600)' }}>セキュリティ診断</span>
+        </div>
+        <Rule strong />
+        <div
+          onClick={() => go('contact')}
+          className="rgrid"
+          style={{ display: 'grid', gridTemplateColumns: '0.32fr 1fr auto', gap: 40, alignItems: 'start', padding: '40px 0', cursor: 'pointer' }}>
+          <div>
+            <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, textTransform: 'uppercase', fontSize: 'clamp(24px,3vw,38px)', letterSpacing: '0.02em', lineHeight: 0.95, color: 'var(--zinc-950)' }}>Security Diagnosis</div>
+            <div style={{ marginTop: 8, fontFamily: 'var(--font-ui)', fontSize: 12, fontWeight: 600, letterSpacing: 'var(--tracking-wide)', textTransform: 'uppercase', color: 'var(--neutral-600)' }}>セキュリティ診断</div>
+          </div>
+          <div>
+            <p style={{ margin: 0, fontFamily: 'var(--font-body)', fontSize: 16, lineHeight: 1.75, color: 'var(--text-on-light-muted)', maxWidth: 560 }}>
+              Webサイトやアプリに、攻撃を受けやすい弱点がないかを調べます。診断の結果は、報告書にまとめてお渡しします。見つかった問題への対応も、ご相談ください。
+            </p>
+            <div style={{ marginTop: 22, maxWidth: 560 }}>
+              {[
+                { name: '簡易診断', sub: 'ツールによる自動診断', price: '3万円〜' },
+                { name: 'Webサイト・Webアプリ診断', sub: '手動の確認を含む診断', price: '10万円〜' },
+                { name: 'AI・LLMを使ったアプリの診断', sub: 'AIを使った機能の弱点の確認', price: '20万円〜' },
+              ].map((p, i, arr) => (
+                <div key={p.name} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 16, padding: '14px 0', borderTop: '1px solid var(--neutral-200)', borderBottom: i === arr.length - 1 ? '1px solid var(--neutral-200)' : 'none' }}>
+                  <div>
+                    <div style={{ fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 15, color: 'var(--zinc-950)' }}>{p.name}</div>
+                    <div style={{ marginTop: 2, fontFamily: 'var(--font-body)', fontSize: 13, color: 'var(--neutral-600)' }}>{p.sub}</div>
+                  </div>
+                  <div style={{ fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 18, color: 'var(--zinc-950)', whiteSpace: 'nowrap' }}>
+                    {p.price}<span style={{ marginLeft: 4, fontSize: 12, fontWeight: 400, color: 'var(--neutral-600)' }}>（税抜）</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <p style={{ margin: '14px 0 0', maxWidth: 560, fontFamily: 'var(--font-body)', fontSize: 13, lineHeight: 1.8, color: 'var(--neutral-600)' }}>
+              ※ 料金は参考です。対象の大きさによって変わります。診断は、お客様の許可をいただいた対象にだけ行います。
+            </p>
           </div>
           <div style={{ alignSelf: 'center', fontFamily: 'var(--font-body)', fontSize: 22, color: 'var(--zinc-950)' }}>→</div>
         </div>
