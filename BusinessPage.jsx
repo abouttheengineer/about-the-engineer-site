@@ -88,40 +88,32 @@ function BusinessPage({ go }) {
         <Rule />
       </Container>
 
-      {/* Security diagnosis — service entry linking to Contact */}
-      <Container id="security-section" style={{ paddingBottom: 96 }}>
+      {/* Global Tech Assistant — technical-trouble consultation desk; links to its own page */}
+      <Container id="tech-assistant-section" style={{ paddingBottom: 96 }}>
         <div style={{ display: 'flex', alignItems: 'baseline', gap: 16, marginBottom: 8 }}>
-          <span style={{ fontFamily: 'var(--font-ui)', fontSize: 13, fontWeight: 600, letterSpacing: 'var(--tracking-wide)', textTransform: 'uppercase', color: 'var(--neutral-600)' }}>Security</span>
-          <span style={{ fontFamily: 'var(--font-ui)', fontSize: 13, color: 'var(--neutral-600)' }}>セキュリティ診断</span>
+          <span style={{ fontFamily: 'var(--font-ui)', fontSize: 13, fontWeight: 600, letterSpacing: 'var(--tracking-wide)', textTransform: 'uppercase', color: 'var(--neutral-600)' }}>Tech Support</span>
+          <span style={{ fontFamily: 'var(--font-ui)', fontSize: 13, color: 'var(--neutral-600)' }}>技術トラブル相談</span>
         </div>
         <Rule strong />
         <div
-          onClick={() => go('security')}
+          onClick={() => go('tech-assistant')}
           className="rgrid"
           style={{ display: 'grid', gridTemplateColumns: '0.32fr 1fr auto', gap: 40, alignItems: 'start', padding: '40px 0', cursor: 'pointer' }}>
           <div>
-            <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, textTransform: 'uppercase', fontSize: 'clamp(24px,3vw,38px)', letterSpacing: '0.02em', lineHeight: 0.95, color: 'var(--zinc-950)' }}>Security Diagnosis</div>
-            <div style={{ marginTop: 8, fontFamily: 'var(--font-ui)', fontSize: 12, fontWeight: 600, letterSpacing: 'var(--tracking-wide)', textTransform: 'uppercase', color: 'var(--neutral-600)' }}>セキュリティ診断</div>
+            <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, textTransform: 'uppercase', fontSize: 'clamp(24px,3vw,38px)', letterSpacing: '0.02em', lineHeight: 0.95, color: 'var(--zinc-950)' }}>Global Tech Assistant</div>
+            <div style={{ marginTop: 8, fontFamily: 'var(--font-ui)', fontSize: 12, fontWeight: 600, letterSpacing: 'var(--tracking-wide)', textTransform: 'uppercase', color: 'var(--neutral-600)' }}>技術トラブル相談・セキュリティ診断</div>
           </div>
           <div>
             <p style={{ margin: 0, fontFamily: 'var(--font-body)', fontSize: 16, lineHeight: 1.75, color: 'var(--text-on-light-muted)', maxWidth: 560 }}>
-              Webサイトやアプリに、攻撃を受けやすい弱点がないかを調べます。診断の結果は、報告書にまとめてお渡しします。見つかった問題への対応も、ご相談ください。
+              コード、GAS、Firebase、ドメイン・SSLなどの、「どこに頼めばいいかわからない」技術のトラブルを、原因の切り分けから、解決までお手伝いします。簡易的なセキュリティ診断も行います。初回30分は無料、続きは60分 5,000円（税抜）です。
             </p>
-            <div style={{ marginTop: 22, maxWidth: 560 }}>
-              {(window.SECURITY_PLANS || []).map((p, i, arr) => (
-                <div key={p.name} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 16, padding: '14px 0', borderTop: '1px solid var(--neutral-200)', borderBottom: i === arr.length - 1 ? '1px solid var(--neutral-200)' : 'none' }}>
-                  <div>
-                    <div style={{ fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 15, color: 'var(--zinc-950)' }}>{p.name}</div>
-                    <div style={{ marginTop: 2, fontFamily: 'var(--font-body)', fontSize: 13, color: 'var(--neutral-600)' }}>{p.sub}</div>
-                  </div>
-                  <div style={{ fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 18, color: 'var(--zinc-950)', whiteSpace: 'nowrap' }}>
-                    {p.price}<span style={{ marginLeft: 4, fontSize: 12, fontWeight: 400, color: 'var(--neutral-600)' }}>（税抜）</span>
-                  </div>
-                </div>
+            <div style={{ display: 'flex', gap: 10, marginTop: 18, flexWrap: 'wrap' }}>
+              {['コードの修復', 'GAS', 'Firebase', 'ドメイン・SSL', 'セキュリティ診断'].map(t => (
+                <Badge key={t} tone="outline" style={{ color: 'var(--zinc-950)' }}>{t}</Badge>
               ))}
             </div>
             <p style={{ margin: '14px 0 0', maxWidth: 560, fontFamily: 'var(--font-body)', fontSize: 13, lineHeight: 1.8, color: 'var(--neutral-600)' }}>
-              ※ 料金は参考です。対象の大きさによって変わります。診断は、お客様の許可をいただいた対象にだけ行います。
+              ※ セキュリティ診断は、簡易的なチェックです。安全の保証はできません。
             </p>
           </div>
           <div style={{ alignSelf: 'center', fontFamily: 'var(--font-body)', fontSize: 22, color: 'var(--zinc-950)' }}>→</div>
