@@ -6,13 +6,13 @@ function ConsultingPage({ go }) {
   // 支援領域は3つ: プロダクト開発支援 / AI支援 / Webサイト制作
   const areas = [
     {
-      n: '01', icon: 'product', image: 'assets/phone-product.png', title: 'プロダクト開発|支援', en: 'Product Development',
+      n: '01', icon: 'product', image: 'assets/phone-product.png', imageFit: 'bottom', imageAlt: 'スマホアプリの画面のイメージ', title: 'プロダクト開発|支援', en: 'Product Development',
       desc: '新しいサービスやアプリを形にするお手伝いをします。「何を作ればよいか」の整理から、開発・リリースまで伴走します。',
       forWho: '新しいサービスのアイデアがある方 / 何から始めればよいか迷っている方',
       deliverables: ['アイデアの整理・要件定義', 'スマホアプリ（iOS）の開発', 'WEBシステムの開発'],
     },
     {
-      n: '02', icon: 'web', title: 'Webサイト制作', en: 'Website Production',
+      n: '02', icon: 'web', image: 'assets/website-imac.jpg', imageFit: 'contain', imageAlt: 'Webサイトを表示したパソコンのイメージ', title: 'Webサイト制作', en: 'Website Production',
       desc: '会社やお店、サービスを紹介するWebサイトを、企画から制作、公開まで手がけます。',
       forWho: '会社やお店のサイトを作りたい方 / いまのサイトを作り直したい方',
       deliverables: ['サイトの構成・デザイン', 'Webサイトの制作', 'サイトの公開'],
@@ -86,9 +86,13 @@ function ConsultingPage({ go }) {
             {areas.map(s => (
               <div key={s.n} style={{ background: 'var(--white)', border: '1px solid #D5E2EE', borderRadius: 16, padding: 'clamp(24px, 3vw, 36px)', boxShadow: '0 16px 36px rgba(30,58,95,0.08)', display: 'flex', flexDirection: 'column' }}>
                 {/* 上のパネル: 画像があれば画像、なければ大きな線のアイコン */}
-                <div style={{ position: 'relative', height: 210, borderRadius: 12, background: 'linear-gradient(160deg, #EAF1F7 0%, #D5E2EE 100%)', overflow: 'hidden', display: 'flex', alignItems: s.image ? 'flex-end' : 'center', justifyContent: 'center' }}>
+                <div style={{ position: 'relative', height: 210, borderRadius: 12, background: 'linear-gradient(160deg, #EAF1F7 0%, #D5E2EE 100%)', overflow: 'hidden', display: 'flex', alignItems: s.image && s.imageFit === 'bottom' ? 'flex-end' : 'center', justifyContent: 'center' }}>
                   {s.image ? (
-                    <img src={s.image} alt="スマホアプリの画面のイメージ" style={{ display: 'block', height: 236, width: 'auto', marginBottom: -26 }} />
+                    s.imageFit === 'contain' ? (
+                      <img src={s.image} alt={s.imageAlt} style={{ display: 'block', width: '100%', height: '100%', objectFit: 'contain', mixBlendMode: 'multiply' }} />
+                    ) : (
+                      <img src={s.image} alt={s.imageAlt} style={{ display: 'block', height: 236, width: 'auto', marginBottom: -26 }} />
+                    )
                   ) : (
                     <svg width="92" height="92" viewBox="0 0 24 24" fill="none" stroke="#1E3A5F" strokeOpacity="0.55" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{icons[s.icon]}</svg>
                   )}
