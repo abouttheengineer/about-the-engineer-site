@@ -43,6 +43,7 @@ function ConsultingPage({ go }) {
       desc: '店舗やサロンの予約と、お客様の情報をまとめて管理できるシステムです。電話や紙の台帳での管理を置き換えます。',
       rows: [['対象', '店舗・サロンのスタッフ'], ['対応端末', 'パソコン・スマートフォン'], ['開発内容', '予約画面、顧客台帳、スタッフ用管理画面']],
       tags: ['予約管理', '顧客台帳', 'リマインド通知'],
+      demo: 'demo-reservation',
     },
   ];
   const steps = [
@@ -168,6 +169,30 @@ function ConsultingPage({ go }) {
           </div>
         </div>
       </Container>
+
+      {/* Interactive demo: reservation system */}
+      <div id="demo-reservation" style={{ background: '#EAF1F7', marginBottom: 96 }}>
+        <Container style={{ paddingTop: 96, paddingBottom: 96 }}>
+          <div className="rgrid" style={{ display: 'grid', gridTemplateColumns: '1fr 1.4fr', gap: 'clamp(32px, 5vw, 64px)', alignItems: 'center' }}>
+            <div>
+              <div style={{ fontFamily: 'var(--font-ui)', fontSize: 13, fontWeight: 700, color: 'var(--neutral-600)' }}>Demo</div>
+              <h2 style={{ margin: '10px 0 0', fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 'clamp(26px, 3.4vw, 40px)', lineHeight: 1.3, color: 'var(--zinc-950)' }}>予約も顧客も、<br />1つの画面で</h2>
+              <p style={{ margin: '20px 0 0', maxWidth: 420, fontFamily: 'var(--font-body)', fontSize: 16, lineHeight: 2, color: 'var(--text-on-light-muted)' }}>
+                予約・顧客管理システムの、サンプル画面です。予約を入れたり、お客様の情報を確かめたりできます。
+              </p>
+              <ol style={{ margin: '24px 0 0', padding: 0, listStyle: 'none', maxWidth: 420 }}>
+                {['日付を選び、「空き」の枠を押して予約を入れる', '予約済みの枠を押して、内容を見る・キャンセルする', '「顧客」タブで、お客様の来店履歴とメモを見る'].map((t, i) => (
+                  <li key={t} style={{ display: 'grid', gridTemplateColumns: '32px 1fr', gap: 12, alignItems: 'center', padding: '10px 0', fontFamily: 'var(--font-body)', fontSize: 15, color: 'var(--zinc-950)' }}>
+                    <span style={{ width: 28, height: 28, borderRadius: 999, background: '#1E3A5F', color: '#fff', fontSize: 13, fontWeight: 700, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>{i + 1}</span>{t}
+                  </li>
+                ))}
+              </ol>
+              <p style={{ margin: '20px 0 0', fontFamily: 'var(--font-body)', fontSize: 13, lineHeight: 1.8, color: 'var(--neutral-600)' }}>※ 架空のお客様名・サンプルデータです。実際の内容は、ご要望に合わせて設計します。</p>
+            </div>
+            <ReservationMock />
+          </div>
+        </Container>
+      </div>
 
       {/* Process */}
       <Container style={{ paddingBottom: 96 }}>
