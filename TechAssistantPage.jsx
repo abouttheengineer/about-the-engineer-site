@@ -154,8 +154,8 @@ function TechAssistantPage({ go }) {
           <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
             <div style={{ width: 44, height: 44, borderRadius: '50%', background: '#F5B83D', color: '#5A3B00', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: 22, flexShrink: 0 }}>!</div>
             <div>
-              <div style={{ fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 'clamp(20px, 2.4vw, 26px)', lineHeight: 1.4, color: 'var(--zinc-950)' }}>ご利用の前に、ちょっとだけ大事なおはなし</div>
-              <div style={{ marginTop: 4, fontFamily: 'var(--font-body)', fontSize: 14, lineHeight: 1.8, color: '#6B5420' }}>安心してご利用いただくために、できること・できないことを、先にお伝えしますね。</div>
+              <div style={{ fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 'clamp(20px, 2.4vw, 26px)', lineHeight: 1.4, color: 'var(--zinc-950)' }}>ご利用にあたって</div>
+              <div style={{ marginTop: 4, fontFamily: 'var(--font-body)', fontSize: 14, lineHeight: 1.8, color: '#6B5420' }}>ご利用にあたり、できること・できないことを、あらかじめご案内いたします。</div>
             </div>
           </div>
 
