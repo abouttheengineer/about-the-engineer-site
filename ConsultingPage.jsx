@@ -3,24 +3,31 @@
  * Editorial layout: hero, lead statement, support areas, process, CTA.
  */
 function ConsultingPage({ go }) {
+  // 支援領域は「プロダクト開発支援」ひとつ。その中に、3つの開発の種類を入れる。
+  const area = {
+    title: 'プロダクト開発支援',
+    desc: '新しいサービスやアプリを形にするお手伝いをします。「何を作ればよいか」の整理から、開発・リリースまで伴走します。',
+    forWho: '新しいサービスのアイデアがある方 / 何から始めればよいか迷っている方',
+    deliverables: ['アイデアの整理・要件定義', '画面・使い勝手の設計', '開発・リリースの進行支援'],
+  };
   const services = [
     {
-      n: '01', title: 'スマホアプリ（iOS）',
+      n: '01', title: 'アプリ開発', sub: 'スマホアプリ（iOS）',
       desc: 'iPhoneで使えるアプリを、企画から開発、App Storeでの公開まで手がけます。',
       forWho: '自社のアプリを出したい方 / 店舗やサービスをアプリ化したい方',
       deliverables: ['アプリの企画・画面設計', 'iPhoneアプリの開発', 'App Storeへの公開・運用'],
     },
     {
-      n: '02', title: 'WEBアプリ（業務用システム等）',
+      n: '02', title: 'システム開発', sub: 'WEBアプリ（業務用システム等）',
       desc: 'ブラウザで使えるシステムを開発します。会社の仕事をラクにする業務用システムなどに対応します。',
       forWho: '紙やExcelでの管理をやめたい方 / 社内の作業を効率化したい方',
       deliverables: ['業務用システム', '管理画面・社内ツール', 'お客様向けWEBサービス'],
     },
     {
-      n: '03', title: 'プロダクト開発支援',
-      desc: '新しいサービスやアプリを形にするお手伝いをします。「何を作ればよいか」の整理から、開発・リリースまで伴走します。',
-      forWho: '新しいサービスのアイデアがある方 / 何から始めればよいか迷っている方',
-      deliverables: ['アイデアの整理・要件定義', '画面・使い勝手の設計', '開発・リリースの進行支援'],
+      n: '03', title: 'Webサイト制作', sub: '会社・お店・サービスのサイト',
+      desc: '会社やお店、サービスを紹介するWebサイトを、企画から制作、公開まで手がけます。',
+      forWho: '会社やお店のサイトを作りたい方 / いまのサイトを作り直したい方',
+      deliverables: ['サイトの構成・デザイン', 'Webサイトの制作', 'サイトの公開'],
     },
   ];
   const examples = [
@@ -68,26 +75,37 @@ function ConsultingPage({ go }) {
         </div>
       </Container>
 
-      {/* Support areas */}
+      {/* Support area */}
       <Container style={{ paddingBottom: 96 }}>
         <SectionHead kicker="Services" title="支援領域" />
         <Rule strong />
-        {services.map((s, i) => (
-          <div key={s.n} className="rgrid" style={{ display: 'grid', gridTemplateColumns: '64px 1fr', gap: 24, alignItems: 'start', padding: '36px 0', borderTop: i === 0 ? 'none' : '1px solid var(--neutral-200)' }}>
-            <span style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 22, color: 'var(--neutral-300)' }}>({s.n})</span>
-            <div>
-              <div style={{ fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 'clamp(24px,3vw,36px)', lineHeight: 1.3, color: 'var(--zinc-950)' }}>{s.title}</div>
-              <p style={{ margin: '10px 0 0', fontFamily: 'var(--font-body)', fontSize: 15, lineHeight: 1.7, color: 'var(--text-on-light-muted)', maxWidth: 560 }}>{s.desc}</p>
-              <p style={{ margin: '12px 0 0', fontFamily: 'var(--font-body)', fontSize: 14, lineHeight: 1.7, color: 'var(--zinc-950)', maxWidth: 560 }}><strong style={{ marginRight: 8 }}>こんな方に</strong>{s.forWho}</p>
-              <ul style={{ margin: '16px 0 0', padding: 0, listStyle: 'none', display: 'flex', flexWrap: 'wrap', gap: 10 }}>
+        <div style={{ padding: '36px 0 40px' }}>
+          <div style={{ fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 'clamp(26px,3.4vw,40px)', lineHeight: 1.3, color: 'var(--zinc-950)' }}>{area.title}</div>
+          <p style={{ margin: '10px 0 0', fontFamily: 'var(--font-body)', fontSize: 15, lineHeight: 1.7, color: 'var(--text-on-light-muted)', maxWidth: 620 }}>{area.desc}</p>
+          <p style={{ margin: '12px 0 0', fontFamily: 'var(--font-body)', fontSize: 14, lineHeight: 1.7, color: 'var(--zinc-950)', maxWidth: 620 }}><strong style={{ marginRight: 8 }}>こんな方に</strong>{area.forWho}</p>
+          <ul style={{ margin: '16px 0 0', padding: 0, listStyle: 'none', display: 'flex', flexWrap: 'wrap', gap: 10 }}>
+            {area.deliverables.map(d => (
+              <li key={d} style={{ fontFamily: 'var(--font-ui)', fontSize: 12, fontWeight: 600, letterSpacing: 'var(--tracking-wide)', color: 'var(--zinc-950)', border: '1px solid var(--neutral-300)', borderRadius: 999, padding: '6px 14px' }}>{d}</li>
+            ))}
+          </ul>
+        </div>
+        <div style={{ fontFamily: 'var(--font-ui)', fontSize: 13, fontWeight: 700, color: 'var(--neutral-600)', marginBottom: 14 }}>この中で、次のものを手がけます</div>
+        <div className="rgrid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24 }}>
+          {services.map(s => (
+            <div key={s.n} style={{ border: '1px solid var(--neutral-200)', borderRadius: 12, padding: 28, background: 'var(--white)' }}>
+              <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 18, color: 'var(--neutral-300)' }}>({s.n})</div>
+              <div style={{ marginTop: 8, fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 'clamp(22px,2.4vw,28px)', lineHeight: 1.3, color: 'var(--zinc-950)' }}>{s.title}</div>
+              <div style={{ marginTop: 4, fontFamily: 'var(--font-ui)', fontSize: 12, fontWeight: 600, color: 'var(--neutral-600)' }}>{s.sub}</div>
+              <p style={{ margin: '14px 0 0', fontFamily: 'var(--font-body)', fontSize: 14, lineHeight: 1.8, color: 'var(--text-on-light-muted)' }}>{s.desc}</p>
+              <p style={{ margin: '12px 0 0', fontFamily: 'var(--font-body)', fontSize: 13, lineHeight: 1.7, color: 'var(--zinc-950)' }}><strong style={{ marginRight: 8 }}>こんな方に</strong>{s.forWho}</p>
+              <ul style={{ margin: '16px 0 0', padding: 0, listStyle: 'none', display: 'flex', flexWrap: 'wrap', gap: 8 }}>
                 {s.deliverables.map(d => (
-                  <li key={d} style={{ fontFamily: 'var(--font-ui)', fontSize: 12, fontWeight: 600, letterSpacing: 'var(--tracking-wide)', color: 'var(--zinc-950)', border: '1px solid var(--neutral-300)', borderRadius: 999, padding: '6px 14px' }}>{d}</li>
+                  <li key={d} style={{ fontFamily: 'var(--font-body)', fontSize: 12, fontWeight: 700, color: 'var(--zinc-950)', border: '1px solid var(--neutral-300)', borderRadius: 999, padding: '4px 12px' }}>{d}</li>
                 ))}
               </ul>
             </div>
-          </div>
-        ))}
-        <Rule />
+          ))}
+        </div>
       </Container>
 
       {/* Examples */}
@@ -132,7 +150,7 @@ function ConsultingPage({ go }) {
         <SectionHead kicker="Price" title="その他の料金" />
         <div className="rgrid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24 }}>
           {[
-            { label: '運用保守', price: '月5,000円〜', unit: '（税抜）', desc: '公開したあとの運用と保守を承ります。ドメイン設定の支援なども含みます。内容は、ご利用の状況に合わせてご相談します。' },
+            { label: '運用保守', price: '月5,000円〜', unit: '（税抜）', desc: '公開したあとの運用と保守を承ります。内容は、ご利用の状況に合わせてご相談します。' },
             { label: '初回のご相談', price: '30分まで無料', unit: '', desc: 'はじめてのご相談は、30分まで無料です。お困りごとやご希望を、お聞かせください。' },
             { label: '都度のシステム相談・作業', price: '60分 5,000円', unit: '（税抜）', desc: 'システムのご相談を、1回ごとにご利用いただけます。ドメイン設定などの単発の作業も承ります（作業時間に応じて、お見積りします）。' },
           ].map(p => (
