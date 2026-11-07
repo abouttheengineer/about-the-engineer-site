@@ -3,33 +3,33 @@
  * Editorial layout: hero, lead statement, support areas, process, CTA.
  */
 function ConsultingPage({ go }) {
-  // 支援領域は「プロダクト開発支援」ひとつ。その中に、3つの開発の種類を入れる。
-  const area = {
-    title: 'プロダクト開発支援',
-    desc: '新しいサービスやアプリを形にするお手伝いをします。「何を作ればよいか」の整理から、開発・リリースまで伴走します。',
-    forWho: '新しいサービスのアイデアがある方 / 何から始めればよいか迷っている方',
-    deliverables: ['アイデアの整理・要件定義', '画面・使い勝手の設計', '開発・リリースの進行支援'],
-  };
-  const services = [
+  // 支援領域は3つ: プロダクト開発支援 / AI支援 / Webサイト制作
+  const areas = [
     {
-      n: '01', title: 'アプリ開発', sub: 'スマホアプリ（iOS）',
-      desc: 'iPhoneで使えるアプリを、企画から開発、App Storeでの公開まで手がけます。',
-      forWho: '自社のアプリを出したい方 / 店舗やサービスをアプリ化したい方',
-      deliverables: ['アプリの企画・画面設計', 'iPhoneアプリの開発', 'App Storeへの公開・運用'],
+      n: '01', icon: 'product', title: 'プロダクト開発|支援', en: 'Product Development',
+      desc: '新しいサービスやアプリを形にするお手伝いをします。「何を作ればよいか」の整理から、開発・リリースまで伴走します。',
+      forWho: '新しいサービスのアイデアがある方 / 何から始めればよいか迷っている方',
+      deliverables: ['アイデアの整理・要件定義', 'スマホアプリ（iOS）の開発', 'WEBシステムの開発'],
     },
     {
-      n: '02', title: 'システム開発', sub: 'WEBアプリ（業務用システム等）',
-      desc: 'ブラウザで使えるシステムを開発します。会社の仕事をラクにする業務用システムなどに対応します。',
-      forWho: '紙やExcelでの管理をやめたい方 / 社内の作業を効率化したい方',
-      deliverables: ['業務用システム', '管理画面・社内ツール', 'お客様向けWEBサービス'],
-    },
-    {
-      n: '03', title: 'Webサイト制作', sub: '会社・お店・サービスのサイト',
+      n: '02', icon: 'web', title: 'Webサイト制作', en: 'Website Production',
       desc: '会社やお店、サービスを紹介するWebサイトを、企画から制作、公開まで手がけます。',
       forWho: '会社やお店のサイトを作りたい方 / いまのサイトを作り直したい方',
       deliverables: ['サイトの構成・デザイン', 'Webサイトの制作', 'サイトの公開'],
     },
+    {
+      n: '03', icon: 'ai', title: 'AI支援', en: 'AI Support',
+      desc: '業務や自社のサービスに、AIを取り入れるお手伝いをします。バックオフィス業務の効率化など、活用のご相談から、実際の開発まで対応します。',
+      forWho: 'バックオフィスの作業を減らしたい方 / 自社のサービスにAIの機能を入れたい方',
+      deliverables: ['AI活用のご相談', 'バックオフィス支援', '業務へのAI導入支援', 'AIを使った機能の開発'],
+    },
   ];
+  // 線で描いたアイコン（外部の画像は使わない）
+  const icons = {
+    product: <g><path d="M12 3 3 8l9 5 9-5-9-5Z" /><path d="m3 12.5 9 5 9-5" /><path d="m3 17 9 5 9-5" /></g>,
+    ai: <g><path d="M11 3l2 5.5L18.5 10.5 13 12.5 11 18l-2-5.5L3.5 10.5 9 8.5 11 3Z" /><path d="M19 15l.9 2.1L22 18l-2.1.9L19 21l-.9-2.1L16 18l2.1-.9L19 15Z" /></g>,
+    web: <g><rect x="3" y="4" width="18" height="16" rx="2" /><path d="M3 9h18" /><path d="M7 6.5h.01M10 6.5h.01" /><path d="M7 13h6M7 16h10" /></g>,
+  };
   const examples = [
     {
       title: 'SNS分析ダッシュボード', kind: 'WEBアプリ',
@@ -75,38 +75,39 @@ function ConsultingPage({ go }) {
         </div>
       </Container>
 
-      {/* Support area */}
-      <Container style={{ paddingBottom: 96 }}>
-        <SectionHead kicker="Services" title="支援領域" />
-        <Rule strong />
-        <div style={{ padding: '36px 0 40px' }}>
-          <div style={{ fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 'clamp(26px,3.4vw,40px)', lineHeight: 1.3, color: 'var(--zinc-950)' }}>{area.title}</div>
-          <p style={{ margin: '10px 0 0', fontFamily: 'var(--font-body)', fontSize: 15, lineHeight: 1.7, color: 'var(--text-on-light-muted)', maxWidth: 620 }}>{area.desc}</p>
-          <p style={{ margin: '12px 0 0', fontFamily: 'var(--font-body)', fontSize: 14, lineHeight: 1.7, color: 'var(--zinc-950)', maxWidth: 620 }}><strong style={{ marginRight: 8 }}>こんな方に</strong>{area.forWho}</p>
-          <ul style={{ margin: '16px 0 0', padding: 0, listStyle: 'none', display: 'flex', flexWrap: 'wrap', gap: 10 }}>
-            {area.deliverables.map(d => (
-              <li key={d} style={{ fontFamily: 'var(--font-ui)', fontSize: 12, fontWeight: 600, letterSpacing: 'var(--tracking-wide)', color: 'var(--zinc-950)', border: '1px solid var(--neutral-300)', borderRadius: 999, padding: '6px 14px' }}>{d}</li>
+      {/* Support areas */}
+      <div style={{ background: '#EAF1F7', marginBottom: 96 }}>
+        <Container style={{ paddingTop: 88, paddingBottom: 96 }}>
+          <SectionHead kicker="Services" title="支援領域" style={{ marginBottom: 20 }} />
+          <p style={{ margin: '0 auto 52px', maxWidth: 560, textAlign: 'center', fontFamily: 'var(--font-body)', fontSize: 15, lineHeight: 1.9, color: 'var(--text-on-light-muted)' }}>
+            ITの力で、お客様のビジネスを支える3つの領域です。
+          </p>
+          <div className="rgrid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24, alignItems: 'stretch' }}>
+            {areas.map(s => (
+              <div key={s.n} style={{ background: 'var(--white)', border: '1px solid #D5E2EE', borderRadius: 16, padding: 'clamp(24px, 3vw, 36px)', boxShadow: '0 16px 36px rgba(30,58,95,0.08)', display: 'flex', flexDirection: 'column' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div style={{ width: 56, height: 56, borderRadius: 16, background: '#1E3A5F', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{icons[s.icon]}</svg>
+                  </div>
+                  <span style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 34, lineHeight: 1, color: '#C9D8E8' }}>{s.n}</span>
+                </div>
+                <div style={{ marginTop: 28, fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 'clamp(24px, 2.6vw, 30px)', lineHeight: 1.3, color: 'var(--zinc-950)' }}>{s.title.split('|').map(t => <span key={t} style={{ display: 'inline-block' }}>{t}</span>)}</div>
+                <div style={{ marginTop: 6, fontFamily: 'var(--font-ui)', fontSize: 12, fontWeight: 600, letterSpacing: '0.04em', color: '#1E3A5F' }}>{s.en}</div>
+                <p style={{ margin: '18px 0 0', fontFamily: 'var(--font-body)', fontSize: 15, lineHeight: 1.9, color: 'var(--text-on-light-muted)' }}>{s.desc}</p>
+                <div style={{ marginTop: 20, paddingTop: 18, borderTop: '1px solid var(--neutral-200)' }}>
+                  <div style={{ fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 13, color: 'var(--zinc-950)' }}>こんな方に</div>
+                  <p style={{ margin: '6px 0 0', fontFamily: 'var(--font-body)', fontSize: 14, lineHeight: 1.8, color: 'var(--zinc-950)' }}>{s.forWho}</p>
+                </div>
+                <ul style={{ margin: 'auto 0 0', padding: '22px 0 0', listStyle: 'none', display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                  {s.deliverables.map(d => (
+                    <li key={d} style={{ fontFamily: 'var(--font-body)', fontSize: 12, fontWeight: 700, color: '#1E3A5F', background: '#EAF1F7', borderRadius: 999, padding: '6px 14px' }}>{d}</li>
+                  ))}
+                </ul>
+              </div>
             ))}
-          </ul>
-        </div>
-        <div style={{ fontFamily: 'var(--font-ui)', fontSize: 13, fontWeight: 700, color: 'var(--neutral-600)', marginBottom: 14 }}>この中で、次のものを手がけます</div>
-        <div className="rgrid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24 }}>
-          {services.map(s => (
-            <div key={s.n} style={{ border: '1px solid var(--neutral-200)', borderRadius: 12, padding: 28, background: 'var(--white)' }}>
-              <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, fontSize: 18, color: 'var(--neutral-300)' }}>({s.n})</div>
-              <div style={{ marginTop: 8, fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 'clamp(22px,2.4vw,28px)', lineHeight: 1.3, color: 'var(--zinc-950)' }}>{s.title}</div>
-              <div style={{ marginTop: 4, fontFamily: 'var(--font-ui)', fontSize: 12, fontWeight: 600, color: 'var(--neutral-600)' }}>{s.sub}</div>
-              <p style={{ margin: '14px 0 0', fontFamily: 'var(--font-body)', fontSize: 14, lineHeight: 1.8, color: 'var(--text-on-light-muted)' }}>{s.desc}</p>
-              <p style={{ margin: '12px 0 0', fontFamily: 'var(--font-body)', fontSize: 13, lineHeight: 1.7, color: 'var(--zinc-950)' }}><strong style={{ marginRight: 8 }}>こんな方に</strong>{s.forWho}</p>
-              <ul style={{ margin: '16px 0 0', padding: 0, listStyle: 'none', display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-                {s.deliverables.map(d => (
-                  <li key={d} style={{ fontFamily: 'var(--font-body)', fontSize: 12, fontWeight: 700, color: 'var(--zinc-950)', border: '1px solid var(--neutral-300)', borderRadius: 999, padding: '4px 12px' }}>{d}</li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-      </Container>
+          </div>
+        </Container>
+      </div>
 
       {/* Examples */}
       <Container id="examples" style={{ paddingBottom: 96 }}>
