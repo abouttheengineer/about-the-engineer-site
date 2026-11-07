@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sample Dashboard - Sales & Marketing Analytics</title>
+    <!-- Chart.js -->
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="vendor/dashboard.css">
+    <script src="vendor/vue.global.prod.js"></script>
+    <script src="vendor/chart.umd.js"></script>
+    <style>
+        /* カスタムスクロールバー */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        [v-cloak] { display: none; }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800 font-sans antialiased h-screen overflow-hidden">
+
+    <div id="app" v-cloak class="flex h-screen overflow-hidden">
+
+        <!-- ================= 1. サイドバーナビゲーション ================= -->
+        <aside :class="isSidebarOpen ? 'translate-x-0' : '-translate-x-full md:translate-x-0'"
+               class="fixed md:static inset-y-0 left-0 z-40 w-64 bg-slate-900 text-slate-300 transition-transform duration-300 ease-in-out flex flex-col justify-between shrink-0 border-r border-slate-800">
+            
+            <div>
+                <!-- アプリロゴエリア -->
+                <div class="h-16 flex items-center px-6 border-b border-slate-800/80 justify-between">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-brand-600 to-indigo-500 flex items-center justify-center text-white shadow-lg shadow-brand-500/30">
+                            <i class="fa-solid fa-chart-line text-lg"></i>
+                        </div>
+                        <div>
+                            <span class="font-bold text-base text-white tracking-tight">Sample Dashboard</span>
+                            <span class="block text-[10px] text-slate-400 font-medium">Sales & Marketing Analytics</span>
+                        </div>
+                    </div>
+                    <button @click="isSidebarOpen = false" class="md:hidden text-slate-400 hover:text-white">
+                        <i class="fa-solid fa-xmark text-lg"></i>
+                    </button>
+                </div>
+
+                <!-- ユーザー・ワークスペース情報 -->
+                <div class="p-4 mx-3 my-3 bg-slate-800/60 rounded-xl border border-slate-700/50 flex items-center space-x-3">
+                    <img :src="avatar" alt="" class="w-9 h-9 rounded-full object-cover ring-2 ring-brand-500">
+                    <div class="overflow-hidden">
+                        <p class="text-xs font-bold text-white truncate">サンプル株式会社</p>
+                        <p class="text-[11px] text-slate-400 truncate">営業マーケ統括本部</p>
+                    </div>
+                </div>
+
+                <!-- メニュー一覧 -->
+                <nav class="px-3 space-y-1">
+                    <div class="px-3 py-2 text-[10px] font-bold text-slate-500 uppercase tracking-wider">メイン分析</div>
+                    
+                    <button @click="currentTab = 'dashboard'" 
+                            :class="currentTab === 'dashboard' ? 'bg-brand-600 text-white shadow-md shadow-brand-600/30' : 'hover:bg-slate-800/80 text-slate-400 hover:text-slate-200'"
+                            class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all">
+                        <i class="fa-solid fa-chart-pie w-4"></i>
+                        <span>Sample Dashboard</span>
+                    </button>
+
+                    <button @click="currentTab = 'sales'" 
+                            :class="currentTab === 'sales' ? 'bg-brand-600 text-white shadow-md shadow-brand-600/30' : 'hover:bg-slate-800/80 text-slate-400 hover:text-slate-200'"
+                            class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all">
+                        <i class="fa-solid fa-coins w-4"></i>
+                        <span>売上・案件分析</span>
+                    </button>
+
+                    <button @click="currentTab = 'traffic'" 
+                            :class="currentTab === 'traffic' ? 'bg-brand-600 text-white shadow-md shadow-brand-600/30' : 'hover:bg-slate-800/80 text-slate-400 hover:text-slate-200'"
+                            class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all">
+                        <i class="fa-solid fa-globe w-4"></i>
+                        <span>アクセス解析・Web</span>
+                    </button>
+
+                    <div class="px-3 pt-4 pb-2 text-[10px] font-bold text-slate-500 uppercase tracking-wider">データ管理・設定</div>
+
+                    <button @click="currentTab = 'integration'" 
+                            :class="currentTab === 'integration' ? 'bg-brand-600 text-white shadow-md shadow-brand-600/30' : 'hover:bg-slate-800/80 text-slate-400 hover:text-slate-200'"
+                            class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all relative">
+                        <i class="fa-solid fa-plug w-4"></i>
+                        <span>データ連携・自動集計</span>
+                        <span class="ml-auto w-2 h-2 rounded-full bg-emerald-400"></span>
+                    </button>
+
+                    <button @click="currentTab = 'reports'" 
+                            :class="currentTab === 'reports' ? 'bg-brand-600 text-white shadow-md shadow-brand-600/30' : 'hover:bg-slate-800/80 text-slate-400 hover:text-slate-200'"
+                            class="w-full flex items-center space-x-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all">
+                        <i class="fa-solid fa-file-invoice w-4"></i>
+                        <span>レポート・CSV出力</span>
+                    </button>
+                </nav>
+            </div>
+
+            <!-- サイドバーフッター: 自動集計ステータス -->
+            <div class="p-4 border-t border-slate-800">
+                <div class="bg-slate-800/40 p-3 rounded-xl border border-slate-700/40 space-y-2">
+                    <div class="flex items-center justify-between text-[11px]">
+                        <span class="text-slate-400 font-medium">最終自動集計</span>
+                        <span class="text-emerald-400 font-bold">10分前</span>
+                    </div>
+                    <div class="w-full bg-slate-700 h-1.5 rounded-full overflow-hidden">
+                        <div class="bg-emerald-500 h-full rounded-full" style="width: 100%;"></div>
+                    </div>
+                    <p class="text-[10px] text-slate-500 leading-tight">営業管理・アクセス解析・決済システム連携中</p>
+                </div>
+            </div>
+        </aside>
+
+        <!-- メインコンテンツエリア -->
+        <div class="flex-1 flex flex-col min-w-0 overflow-hidden">
+
+            <!-- ================= 2. ヘッダーバー ================= -->
+            <header class="h-16 bg-white border-b border-slate-200 px-4 md:px-8 flex items-center justify-between shrink-0 z-10 shadow-xs">
+                
+                <div class="flex items-center space-x-4">
+                    <button @click="isSidebarOpen = true" class="md:hidden p-2 text-slate-500 hover:text-slate-800">
+                        <i class="fa-solid fa-bars text-lg"></i>
+                    </button>
+                    <div>
+                        <h1 class="text-lg font-bold text-slate-900 tracking-tight">{{ tabTitle }}</h1>
+                        <p class="text-xs text-slate-500 hidden sm:block">リアルタイムの営業・集客データを一元化し、自動集計・分析します</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-3">
+                    <!-- 検索窓 -->
+                    <div class="relative hidden lg:block w-64">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400 text-xs"></i>
+                        <input type="text" placeholder="案件名、担当者、指標を検索..." class="w-full pl-9 pr-3 py-1.5 bg-slate-100 border border-slate-200 rounded-xl text-xs focus:outline-none focus:ring-2 focus:ring-brand-500">
+                    </div>
+
+                    <!-- データ連携ステータスインジケータ -->
+                    <div class="hidden sm:flex items-center space-x-1.5 px-3 py-1 bg-emerald-50 border border-emerald-200 rounded-full text-emerald-700 text-xs font-semibold">
+                        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                        <span>データ自動同期中</span>
+                    </div>
+
+                    <!-- 通知アイコン -->
+                    <button @click="showToast('新着の自動集計レポートが届いています')" class="relative p-2 text-slate-400 hover:text-slate-600 rounded-xl hover:bg-slate-100 transition-all">
+                        <i class="fa-regular fa-bell text-base"></i>
+                        <span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-rose-500"></span>
+                    </button>
+
+                    <!-- ユーザー設定 -->
+                    <div class="flex items-center space-x-2 pl-2 border-l border-slate-200">
+                        <img :src="avatar" alt="" class="w-8 h-8 rounded-full object-cover border border-slate-200">
+                        <span class="text-xs font-bold text-slate-700 hidden md:block">佐藤 華子 (管理者)</span>
+                    </div>
+                </div>
+
+            </header>
+
+            <!-- トースト通知 -->
+            <transition enter-active-class="transform transition ease-out duration-200" enter-from-class="-translate-y-4 opacity-0" enter-to-class="translate-y-0 opacity-100" leave-active-class="transition ease-in duration-150" leave-from-class="opacity-100" leave-to-class="opacity-0">
+                <div v-if="toast.show" class="fixed top-20 right-6 z-50 bg-slate-900 text-white px-4 py-3 rounded-2xl shadow-2xl flex items-center space-x-3 border border-slate-700 max-w-md">
+                    <div class="w-8 h-8 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-sm shrink-0">
+                        <i class="fa-solid fa-circle-check"></i>
+                    </div>
+                    <div>
+                        <p class="text-xs font-bold text-white">システム通知</p>
+                        <p class="text-xs text-slate-300 font-medium leading-tight mt-0.5">{{ toast.message }}</p>
+                    </div>
+                </div>
+            </transition>
+
+            <!-- メインスクロールコンテンツ -->
+            <main class="flex-1 overflow-y-auto p-4 md:p-8 space-y-6">
+
+                <!-- ---------------- A. コントロールツールバー ---------------- -->
+                <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-xs flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    
+                    <!-- 期間切り替えセグメントコントロール -->
+                    <div class="flex items-center space-x-1 bg-slate-100 p-1 rounded-xl border border-slate-200 w-full sm:w-auto">
+                        <button v-for="period in periodOptions" :key="period.value"
+                                @click="changePeriod(period.value)"
+                                :class="selectedPeriod === period.value ? 'bg-white text-brand-700 font-bold shadow-xs' : 'text-slate-600 hover:text-slate-900 font-medium'"
+                                class="flex-1 sm:flex-none px-3.5 py-1.5 rounded-lg text-xs transition-all">
+                            {{ period.label }}
+                        </button>
+                    </div>
+
+                    <!-- アクションボタン群 -->
+                    <div class="flex items-center space-x-3 w-full sm:w-auto justify-end">
+                        
+                        <!-- データ自動再集計ボタン -->
+                        <button @click="triggerSync" 
+                                :disabled="isSyncing"
+                                class="bg-slate-900 hover:bg-slate-800 disabled:opacity-70 text-white font-bold text-xs px-4 py-2.5 rounded-xl shadow-xs active:scale-95 transition-all flex items-center space-x-2">
+                            <i class="fa-solid fa-rotate text-xs" :class="isSyncing ? 'animate-spin' : ''"></i>
+                            <span>{{ isSyncing ? 'データ再集計中...' : 'データを自動再集計' }}</span>
+                        </button>
+
+                        <!-- レポートCSVダウンロード -->
+                        <button @click="openExportModal" class="bg-white hover:bg-slate-50 border border-slate-300 text-slate-700 font-bold text-xs px-4 py-2.5 rounded-xl shadow-xs active:scale-95 transition-all flex items-center space-x-2">
+                            <i class="fa-solid fa-download text-xs text-slate-500"></i>
+                            <span>CSVエクスポート</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ---------------- B. KPIサマリーカード（4カラム） ---------------- -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    
+                    <!-- KPI 1: 今月売上 -->
+                    <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs hover:shadow-md transition-shadow relative overflow-hidden">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-xs font-bold text-slate-500">売上合計 (確定)</p>
+                                <h3 class="text-2xl font-extrabold text-slate-900 mt-1.5 tracking-tight font-mono">{{ kpiData.revenue }}</h3>
+                            </div>
+                            <div class="w-10 h-10 rounded-xl bg-blue-50 text-brand-600 flex items-center justify-center text-lg">
+                                <i class="fa-solid fa-sack-dollar"></i>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex items-center space-x-2 text-xs">
+                            <span class="inline-flex items-center font-bold px-2 py-0.5 rounded-full text-emerald-700 bg-emerald-100 text-[11px]">
+                                <i class="fa-solid fa-arrow-up mr-1 text-[9px]"></i>+{{ kpiData.revenueGrowth }}%
+                            </span>
+                            <span class="text-slate-400 font-medium">前月比</span>
+                        </div>
+                    </div>
+
+                    <!-- KPI 2: アクセス数 / PV -->
+                    <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs hover:shadow-md transition-shadow">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-xs font-bold text-slate-500">Webアクセス数 (PV)</p>
+                                <h3 class="text-2xl font-extrabold text-slate-900 mt-1.5 tracking-tight font-mono">{{ kpiData.pv }}</h3>
+                            </div>
+                            <div class="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center text-lg">
+                                <i class="fa-solid fa-chart-line"></i>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex items-center space-x-2 text-xs">
+                            <span class="inline-flex items-center font-bold px-2 py-0.5 rounded-full text-emerald-700 bg-emerald-100 text-[11px]">
+                                <i class="fa-solid fa-arrow-up mr-1 text-[9px]"></i>+{{ kpiData.pvGrowth }}%
+                            </span>
+                            <span class="text-slate-400 font-medium">前月比</span>
+                        </div>
+                    </div>
+
+                    <!-- KPI 3: CVR (コンバージョン率) -->
+                    <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs hover:shadow-md transition-shadow">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-xs font-bold text-slate-500">成約率 (CVR)</p>
+                                <h3 class="text-2xl font-extrabold text-slate-900 mt-1.5 tracking-tight font-mono">{{ kpiData.cvr }}</h3>
+                            </div>
+                            <div class="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center text-lg">
+                                <i class="fa-solid fa-bullseye"></i>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex items-center space-x-2 text-xs">
+                            <span class="inline-flex items-center font-bold px-2 py-0.5 rounded-full text-emerald-700 bg-emerald-100 text-[11px]">
+                                <i class="fa-solid fa-arrow-up mr-1 text-[9px]"></i>+{{ kpiData.cvrGrowth }}%
+                            </span>
+                            <span class="text-slate-400 font-medium">前月比</span>
+                        </div>
+                    </div>
+
+                    <!-- KPI 4: 平均客単価 -->
+                    <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs hover:shadow-md transition-shadow">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-xs font-bold text-slate-500">平均顧客単価 (ARPU)</p>
+                                <h3 class="text-2xl font-extrabold text-slate-900 mt-1.5 tracking-tight font-mono">{{ kpiData.arpu }}</h3>
+                            </div>
+                            <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-lg">
+                                <i class="fa-solid fa-user-tag"></i>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex items-center space-x-2 text-xs">
+                            <span class="inline-flex items-center font-bold px-2 py-0.5 rounded-full text-emerald-700 bg-emerald-100 text-[11px]">
+                                <i class="fa-solid fa-arrow-up mr-1 text-[9px]"></i>+{{ kpiData.arpuGrowth }}%
+                            </span>
+                            <span class="text-slate-400 font-medium">前月比</span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- ---------------- C. メイン対話型グラフエリア ---------------- -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    
+                    <!-- 1. 売上＆アクセス推移 (複合チャート 2/3幅) -->
+                    <div class="lg:col-span-2 bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs space-y-4">
+                        <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-2">
+                            <div>
+                                <h3 class="font-bold text-sm text-slate-900">売上高 & アクセス数推移 (月別)</h3>
+                                <p class="text-xs text-slate-500">営業売上（棒グラフ）とWeb PV数（折れ線グラフ）の複合分析</p>
+                            </div>
+                            <div class="flex items-center space-x-2 text-xs font-semibold">
+                                <span class="inline-flex items-center text-slate-600"><span class="w-3 h-3 rounded-sm bg-brand-500 mr-1.5"></span>売上 (万円)</span>
+                                <span class="inline-flex items-center text-slate-600"><span class="w-3 h-3 rounded-full bg-emerald-500 mr-1.5"></span>アクセス (千PV)</span>
+                            </div>
+                        </div>
+
+                        <!-- グラフキャンバス -->
+                        <div class="relative w-full h-[320px]">
+                            <canvas id="salesTrafficChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- 2. 流入チャネル別割合 (ドーナツチャート 1/3幅) -->
+                    <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs space-y-4 flex flex-col justify-between">
+                        <div>
+                            <h3 class="font-bold text-sm text-slate-900">流入チャネル別アクセス割合</h3>
+                            <p class="text-xs text-slate-500">マーケティング施策別の集客比率</p>
+                        </div>
+
+                        <div class="relative w-full h-[240px] flex items-center justify-center">
+                            <canvas id="channelChart"></canvas>
+                        </div>
+
+                        <!-- チャネル内訳リスト -->
+                        <div class="grid grid-cols-2 gap-2 text-xs pt-2 border-t border-slate-100">
+                            <div class="flex items-center justify-between p-1.5 bg-slate-50 rounded-lg">
+                                <span class="text-slate-600 flex items-center"><span class="w-2.5 h-2.5 rounded-full bg-blue-500 mr-1.5"></span>SEO検索</span>
+                                <span class="font-bold font-mono">42%</span>
+                            </div>
+                            <div class="flex items-center justify-between p-1.5 bg-slate-50 rounded-lg">
+                                <span class="text-slate-600 flex items-center"><span class="w-2.5 h-2.5 rounded-full bg-indigo-500 mr-1.5"></span>Web広告</span>
+                                <span class="font-bold font-mono">28%</span>
+                            </div>
+                            <div class="flex items-center justify-between p-1.5 bg-slate-50 rounded-lg">
+                                <span class="text-slate-600 flex items-center"><span class="w-2.5 h-2.5 rounded-full bg-purple-500 mr-1.5"></span>SNSマーケ</span>
+                                <span class="font-bold font-mono">18%</span>
+                            </div>
+                            <div class="flex items-center justify-between p-1.5 bg-slate-50 rounded-lg">
+                                <span class="text-slate-600 flex items-center"><span class="w-2.5 h-2.5 rounded-full bg-emerald-500 mr-1.5"></span>直接/指名</span>
+                                <span class="font-bold font-mono">12%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- ---------------- D. サブ分析＆営業ランキング ---------------- -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    
+                    <!-- 1. 製品カテゴリ別売上 (横棒チャート 1/3幅) -->
+                    <div class="bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs space-y-4">
+                        <div>
+                            <h3 class="font-bold text-sm text-slate-900">製品カテゴリ別売上</h3>
+                            <p class="text-xs text-slate-500">主要ソリューションの売上比重</p>
+                        </div>
+
+                        <div class="relative w-full h-[250px]">
+                            <canvas id="categoryChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- 2. 直近の営業取引・案件データテーブル (2/3幅) -->
+                    <div class="lg:col-span-2 bg-white p-5 rounded-2xl border border-slate-200/80 shadow-xs space-y-4">
+                        <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-2">
+                            <div>
+                                <h3 class="font-bold text-sm text-slate-900">最新の自動集計取引データ</h3>
+                                <p class="text-xs text-slate-500">営業管理・決済システムからリアルタイム同期された成約案件</p>
+                            </div>
+                            <div class="relative">
+                                <i class="fa-solid fa-filter absolute left-3 top-2.5 text-slate-400 text-xs"></i>
+                                <select v-model="tableStatusFilter" class="pl-8 pr-4 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none">
+                                    <option value="all">すべてのステータス</option>
+                                    <option value="成約完了">成約完了</option>
+                                    <option value="最終交渉中">最終交渉中</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- テーブルデータ -->
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="border-b border-slate-200 text-[11px] font-bold text-slate-400 uppercase tracking-wider bg-slate-50/50">
+                                        <th class="py-2.5 px-3">取引ID / 企業名</th>
+                                        <th class="py-2.5 px-3">担当営業</th>
+                                        <th class="py-2.5 px-3">製品カテゴリ</th>
+                                        <th class="py-2.5 px-3 text-right">金額</th>
+                                        <th class="py-2.5 px-3 text-center">ステータス</th>
+                                        <th class="py-2.5 px-3 text-right">受注日</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-slate-100 text-xs">
+                                    <tr v-for="deal in filteredDeals" :key="deal.id" class="hover:bg-slate-50/80 transition-colors">
+                                        <td class="py-3 px-3">
+                                            <div class="font-bold text-slate-800">{{ deal.client }}</div>
+                                            <div class="text-[10px] text-slate-400 font-mono">{{ deal.id }}</div>
+                                        </td>
+                                        <td class="py-3 px-3">
+                                            <div class="flex items-center space-x-2">
+                                                <div class="w-6 h-6 rounded-full bg-slate-200 flex items-center justify-center text-[10px] font-bold text-slate-600">
+                                                    {{ deal.rep.charAt(0) }}
+                                                </div>
+                                                <span class="font-medium text-slate-700">{{ deal.rep }}</span>
+                                            </div>
+                                        </td>
+                                        <td class="py-3 px-3">
+                                            <span class="px-2 py-0.5 rounded-md text-[10px] font-medium bg-slate-100 text-slate-600">
+                                                {{ deal.category }}
+                                            </span>
+                                        </td>
+                                        <td class="py-3 px-3 text-right font-bold text-slate-900 font-mono">
+                                            ¥{{ deal.amount.toLocaleString() }}
+                                        </td>
+                                        <td class="py-3 px-3 text-center">
+                                            <span v-if="deal.status === '成約完了'" class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-800">
+                                                成約完了
+                                            </span>
+                                            <span v-else class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800">
+                                                最終交渉中
+                                            </span>
+                                        </td>
+                                        <td class="py-3 px-3 text-right text-slate-400 font-mono text-[11px]">
+                                            {{ deal.date }}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+
+            </main>
+        </div>
+
+        <!-- ================= 3. データ自動集計・連携設定モーダル (タブ3/4用) ================= -->
+        <transition enter-active-class="ease-out duration-200" enter-from-class="opacity-0 scale-95" enter-to-class="opacity-100 scale-100" leave-active-class="ease-in duration-150" leave-from-class="opacity-100 scale-100" leave-to-class="opacity-0 scale-95">
+            <div v-if="showExportModal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+                <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl space-y-5 border border-slate-200">
+                    <div class="flex justify-between items-center">
+                        <div class="flex items-center space-x-2.5">
+                            <div class="w-9 h-9 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center text-lg font-bold">
+                                <i class="fa-solid fa-file-csv"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-base text-slate-900">分析データのCSVエクスポート</h3>
+                                <p class="text-xs text-slate-500">集計条件を指定してファイルを生成します</p>
+                            </div>
+                        </div>
+                        <button @click="showExportModal = false" class="text-slate-400 hover:text-slate-600">
+                            <i class="fa-solid fa-xmark text-lg"></i>
+                        </button>
+                    </div>
+
+                    <div class="space-y-3 text-xs">
+                        <div>
+                            <label class="block font-bold text-slate-700 mb-1">出力範囲</label>
+                            <select v-model="exportConfig.type" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl">
+                                <option value="all">売上データ + Webアクセスデータ（統合データ）</option>
+                                <option value="sales">売上・案件データのみ</option>
+                                <option value="traffic">Webアクセス解析データのみ</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block font-bold text-slate-700 mb-1">対象期間</label>
+                            <select v-model="exportConfig.period" class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl">
+                                <option value="current">当月 (2026年11月分)</option>
+                                <option value="last">先月 (2026年10月分)</option>
+                                <option value="quarter">過去3ヶ月分 (2026年 Q3-Q4)</option>
+                            </select>
+                        </div>
+
+                        <div class="p-3 bg-slate-50 rounded-xl border border-slate-200/80 space-y-1.5">
+                            <div class="flex justify-between text-slate-600">
+                                <span>推定量:</span>
+                                <span class="font-bold font-mono">1,480 件</span>
+                            </div>
+                            <div class="flex justify-between text-slate-600">
+                                <span>文字コード:</span>
+                                <span class="font-bold font-mono">UTF-8 (BOM付き)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex space-x-3 pt-2">
+                        <button @click="showExportModal = false" class="flex-1 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl">
+                            キャンセル
+                        </button>
+                        <button @click="executeExport" class="flex-1 py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs rounded-xl shadow-md">
+                            CSVダウンロード開始
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </transition>
+
+    </div>
+    <script>
+        const { createApp, ref, computed, onMounted, watch } = Vue;
+
+        // 人物写真の代わりに使うイラスト（SVG）。外部の画像は読み込まない
+        const avatar = 'data:image/svg+xml;utf8,' + encodeURIComponent(
+            '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#93c5fd"/><stop offset="1" stop-color="#1d4ed8"/></linearGradient></defs><rect width="100" height="100" fill="url(#g)"/><circle cx="50" cy="40" r="17" fill="#fff" fill-opacity=".9"/><path d="M16 100C16 72 32 62 50 62s34 10 34 38Z" fill="#fff" fill-opacity=".9"/></svg>');
+        // グラフの文字も、サイト内のフォントに揃える
+        Chart.defaults.font.family = 'Meiryo, "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Noto Sans JP", sans-serif';
+
+        createApp({
+            setup() {
+                const isSidebarOpen = ref(false);
+                const currentTab = ref('dashboard');
+                const selectedPeriod = ref('month');
+                const isSyncing = ref(false);
+                const showExportModal = ref(false);
+                const tableStatusFilter = ref('all');
+
+                const toast = ref({ show: false, message: '' });
+
+                const periodOptions = [
+                    { label: '今月', value: 'month' },
+                    { label: '先月', value: 'last_month' },
+                    { label: '過去3ヶ月', value: 'quarter' },
+                    { label: '今年度', value: 'year' }
+                ];
+
+                const tabTitle = computed(() => {
+                    switch (currentTab.value) {
+                        case 'dashboard': return 'Sample Dashboard';
+                        case 'sales': return '売上・案件詳細分析';
+                        case 'traffic': return 'アクセス解析・Web集客';
+                        case 'integration': return 'データ連携・自動集計設定';
+                        case 'reports': return 'レポート・データ出力';
+                        default: return 'Sample Dashboard';
+                    }
+                });
+
+                // KPIデータ（期間で切り替えシミュレーション）
+                const kpiDataMap = {
+                    month: { revenue: '¥12,480,000', revenueGrowth: '14.2', pv: '145,200', pvGrowth: '8.5', cvr: '3.24%', cvrGrowth: '0.4', arpu: '¥385,000', arpuGrowth: '5.1' },
+                    last_month: { revenue: '¥10,920,000', revenueGrowth: '9.1', pv: '133,800', pvGrowth: '4.2', cvr: '3.10%', cvrGrowth: '0.2', arpu: '¥366,000', arpuGrowth: '3.0' },
+                    quarter: { revenue: '¥35,800,000', revenueGrowth: '18.4', pv: '420,500', pvGrowth: '12.1', cvr: '3.18%', cvrGrowth: '0.6', arpu: '¥378,000', arpuGrowth: '6.2' },
+                    year: { revenue: '¥142,500,000', revenueGrowth: '22.0', pv: '1,680,000', pvGrowth: '15.4', cvr: '3.25%', cvrGrowth: '0.8', arpu: '¥390,000', arpuGrowth: '7.8' }
+                };
+
+                const kpiData = computed(() => kpiDataMap[selectedPeriod.value]);
+
+                // 取引データ一覧
+                const deals = ref([
+                    { id: 'TX-9042', client: 'アイティソリューションズ(株)', rep: '高橋 健太', category: 'SaaSプラットフォーム', amount: 2400000, status: '成約完了', date: '2026/11/06' },
+                    { id: 'TX-9041', client: 'グローバルロジスティクス(同)', rep: '佐藤 華子', category: 'AIアナリティクス', amount: 1800000, status: '成約完了', date: '2026/11/05' },
+                    { id: 'TX-9040', client: 'フューチャーリテール(株)', rep: '鈴木 一郎', category: 'マーケティングコンサル', amount: 3200000, status: '最終交渉中', date: '2026/11/04' },
+                    { id: 'TX-9039', client: 'メディカルケア・ジャパン', rep: '高橋 健太', category: 'SaaSプラットフォーム', amount: 1200000, status: '成約完了', date: '2026/11/03' },
+                    { id: 'TX-9038', client: 'ネクストイノベーション(株)', rep: '渡辺 恵', category: 'データ連携アドオン', amount: 850000, status: '成約完了', date: '2026/11/02' },
+                ]);
+
+                const filteredDeals = computed(() => {
+                    if (tableStatusFilter.value === 'all') return deals.value;
+                    return deals.value.filter(d => d.status === tableStatusFilter.value);
+                });
+
+                // トースト表示関数
+                const showToast = (msg) => {
+                    toast.value.message = msg;
+                    toast.value.show = true;
+                    setTimeout(() => { toast.value.show = false; }, 3000);
+                };
+
+                // 自動集計ボタン処理
+                const triggerSync = () => {
+                    isSyncing.value = true;
+                    setTimeout(() => {
+                        isSyncing.value = false;
+                        showToast('データ自動集計完了：最新の売上データ320件とアクセスログを集計しました');
+                        updateCharts();
+                    }, 1200);
+                };
+
+                // CSVエクスポート
+                const exportConfig = ref({ type: 'all', period: 'current' });
+                const openExportModal = () => { showExportModal.value = true; };
+                const executeExport = () => {
+                    showExportModal.value = false;
+                    showToast('CSVファイルのダウンロードを開始しました（report_202611.csv）');
+                };
+
+                // Chart.js インスタンス保持
+                let salesTrafficChartInstance = null;
+                let channelChartInstance = null;
+                let categoryChartInstance = null;
+
+                const initCharts = () => {
+                    // 1. 売上 & アクセス推移（複合グラフ）
+                    const ctx1 = document.getElementById('salesTrafficChart')?.getContext('2d');
+                    if (ctx1) {
+                        salesTrafficChartInstance = new Chart(ctx1, {
+                            type: 'bar',
+                            data: {
+                                labels: ['6月', '7月', '8月', '9月', '10月', '11月(予測)'],
+                                datasets: [
+                                    {
+                                        label: '売上金額 (万円)',
+                                        data: [850, 920, 1050, 980, 1092, 1248],
+                                        backgroundColor: '#3b82f6',
+                                        borderRadius: 8,
+                                        yAxisID: 'y'
+                                    },
+                                    {
+                                        label: 'アクセス数 (千PV)',
+                                        data: [110, 118, 125, 128, 133, 145],
+                                        type: 'line',
+                                        borderColor: '#10b981',
+                                        backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                                        borderWidth: 3,
+                                        tension: 0.3,
+                                        pointBackgroundColor: '#10b981',
+                                        yAxisID: 'y1'
+                                    }
+                                ]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                plugins: {
+                                    legend: { display: false }
+                                },
+                                scales: {
+                                    x: { grid: { display: false } },
+                                    y: {
+                                        type: 'linear',
+                                        position: 'left',
+                                        grid: { color: '#f1f5f9' },
+                                        ticks: { callback: v => `¥${v}万` }
+                                    },
+                                    y1: {
+                                        type: 'linear',
+                                        position: 'right',
+                                        grid: { drawOnChartArea: false },
+                                        ticks: { callback: v => `${v}k` }
+                                    }
+                                }
+                            }
+                        });
+                    }
+
+                    // 2. 流入チャネル（ドーナツチャート）
+                    const ctx2 = document.getElementById('channelChart')?.getContext('2d');
+                    if (ctx2) {
+                        channelChartInstance = new Chart(ctx2, {
+                            type: 'doughnut',
+                            data: {
+                                labels: ['SEO検索', 'Web広告', 'SNSマーケ', '直接/指名'],
+                                datasets: [{
+                                    data: [42, 28, 18, 12],
+                                    backgroundColor: ['#3b82f6', '#6366f1', '#a855f7', '#10b981'],
+                                    borderWidth: 0,
+                                    hoverOffset: 6
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                plugins: {
+                                    legend: { display: false }
+                                },
+                                cutout: '72%'
+                            }
+                        });
+                    }
+
+                    // 3. カテゴリ別売上（横棒グラフ）
+                    const ctx3 = document.getElementById('categoryChart')?.getContext('2d');
+                    if (ctx3) {
+                        categoryChartInstance = new Chart(ctx3, {
+                            type: 'bar',
+                            data: {
+                                labels: ['SaaS基盤', 'AIアナリティクス', 'コンサル', 'データ拡張'],
+                                datasets: [{
+                                    label: '売上構成 (万円)',
+                                    data: [540, 380, 220, 108],
+                                    backgroundColor: ['#2563eb', '#3b82f6', '#60a5fa', '#93c5fd'],
+                                    borderRadius: 6
+                                }]
+                            },
+                            options: {
+                                indexAxis: 'y',
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                plugins: { legend: { display: false } },
+                                scales: {
+                                    x: { grid: { color: '#f1f5f9' } },
+                                    y: { grid: { display: false } }
+                                }
+                            }
+                        });
+                    }
+                };
+
+                const updateCharts = () => {
+                    if (!salesTrafficChartInstance) return;
+                    // ダミーデータ更新演出
+                    const mult = selectedPeriod.value === 'quarter' ? 1.4 : (selectedPeriod.value === 'year' ? 2.1 : 1.0);
+                    salesTrafficChartInstance.data.datasets[0].data = [850, 920, 1050, 980, 1092, 1248].map(v => Math.round(v * mult * (0.9 + Math.random() * 0.2)));
+                    salesTrafficChartInstance.update();
+                };
+
+                const changePeriod = (p) => {
+                    selectedPeriod.value = p;
+                    updateCharts();
+                    showToast(`表示期間を「${periodOptions.find(o => o.value === p).label}」に変更しました`);
+                };
+
+                onMounted(() => {
+                    setTimeout(() => {
+                        initCharts();
+                    }, 100);
+                });
+
+                return {
+                    avatar,
+                    isSidebarOpen,
+                    currentTab,
+                    tabTitle,
+                    selectedPeriod,
+                    periodOptions,
+                    changePeriod,
+                    isSyncing,
+                    triggerSync,
+                    showExportModal,
+                    openExportModal,
+                    executeExport,
+                    exportConfig,
+                    kpiData,
+                    deals,
+                    tableStatusFilter,
+                    filteredDeals,
+                    toast,
+                    showToast
+                };
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>

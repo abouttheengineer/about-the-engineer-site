@@ -1,0 +1,20 @@
+module.exports = Object.assign({content: [require('path').join(__dirname, '..', 'dashboard.html')]}, {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            800: '#1e40af',
+                            900: '#1e3a8a',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Meiryo','"Hiragino Kaku Gothic ProN"','"Hiragino Sans"','"Noto Sans JP"','sans-serif'],
+                    }
+                }
+            }
+        });
