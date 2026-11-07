@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salon Reserve - 予約・顧客管理システム（サンプル）</title>
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="vendor/salon.css">
+    <style>
+        /* カスタムスクロールバー */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #E5E5E5;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #D4A373;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.3s ease-out forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body class="bg-salon-bg text-salon-text font-sans antialiased">
+
+    <div class="flex h-screen overflow-hidden pb-16 md:pb-0">
+
+        <!-- ================= 1. サイドバー (PC用) ================= -->
+        <aside class="hidden md:flex flex-col w-64 bg-salon-surface border-r border-stone-200 z-40 shadow-[4px_0_24px_rgba(0,0,0,0.02)]">
+            <div class="h-20 flex items-center justify-center border-b border-stone-100">
+                <h1 class="font-serif text-2xl font-semibold tracking-widest text-salon-accent flex items-center gap-3">
+                    <i class="fa-solid fa-spa"></i>
+                    Lumière
+                </h1>
+            </div>
+            
+            <nav class="flex-1 px-4 py-6 space-y-2">
+                <button class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl transition-all text-sm font-medium active text-salon-accent bg-rose-50/50" data-target="reservation">
+                    <i class="fa-regular fa-calendar-check w-5 text-center"></i>
+                    <span>予約管理</span>
+                </button>
+                <button class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl transition-all text-sm font-medium text-salon-subtext hover:text-salon-text hover:bg-stone-50" data-target="customers">
+                    <i class="fa-regular fa-id-card w-5 text-center"></i>
+                    <span>顧客台帳</span>
+                </button>
+                <button class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl transition-all text-sm font-medium text-salon-subtext hover:text-salon-text hover:bg-stone-50" data-target="staff">
+                    <i class="fa-solid fa-users-viewfinder w-5 text-center"></i>
+                    <span>スタッフ管理</span>
+                </button>
+                <button class="nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl transition-all text-sm font-medium text-salon-subtext hover:text-salon-text hover:bg-stone-50" data-target="settings">
+                    <i class="fa-solid fa-sliders w-5 text-center"></i>
+                    <span>設定</span>
+                </button>
+            </nav>
+
+            <div class="p-4 border-t border-stone-100">
+                <div class="flex items-center space-x-3 px-2">
+                    <img src="data:image/svg+xml;utf8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Cdefs%3E%3ClinearGradient id=%22g%22 x1=%220%22 y1=%220%22 x2=%221%22 y2=%221%22%3E%3Cstop offset=%220%22 stop-color=%22%23f3d9da%22/%3E%3Cstop offset=%221%22 stop-color=%22%23d98a92%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%22100%22 height=%22100%22 fill=%22url(%23g)%22/%3E%3Ccircle cx=%2250%22 cy=%2240%22 r=%2217%22 fill=%22%23fff%22 fill-opacity=%22.9%22/%3E%3Cpath d=%22M16 100C16 72 32 62 50 62s34 10 34 38Z%22 fill=%22%23fff%22 fill-opacity=%22.9%22/%3E%3C/svg%3E" alt="スタッフ" class="w-10 h-10 rounded-full object-cover border border-stone-200">
+                    <div>
+                        <p class="text-sm font-medium">高橋 美咲</p>
+                        <p class="text-[11px] text-salon-subtext">店長 / スタイリスト</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- ================= 2. メインコンテンツ ================= -->
+        <main class="flex-1 flex flex-col h-full overflow-hidden relative">
+            
+            <!-- ヘッダー -->
+            <header class="h-16 bg-salon-surface/80 backdrop-blur-md border-b border-stone-200 px-6 flex items-center justify-between z-30 sticky top-0">
+                <h2 id="page-title" class="font-serif text-xl font-medium tracking-wide">本日の予約状況</h2>
+                
+                <div class="flex items-center gap-4">
+                    <p class="hidden sm:block text-sm text-salon-subtext font-medium" id="current-date"></p>
+                    <button class="relative p-2 text-salon-subtext hover:text-salon-text transition-colors">
+                        <i class="fa-regular fa-bell text-lg"></i>
+                        <span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-salon-rosestrong border border-white"></span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- スクロール領域 -->
+            <div class="flex-1 overflow-y-auto p-4 md:p-8">
+
+                <!-- ---------------- A. 予約管理ビュー ---------------- -->
+                <div id="reservation" class="tab-content active fade-in space-y-6">
+                    
+                    <!-- サマリー -->
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                        <div class="bg-salon-surface p-4 rounded-2xl border border-stone-100 shadow-sm flex items-center gap-4">
+                            <div class="w-10 h-10 rounded-full bg-orange-50 text-salon-accent flex items-center justify-center text-lg">
+                                <i class="fa-solid fa-clipboard-user"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs text-salon-subtext">本日の予約</p>
+                                <p class="text-xl font-serif font-semibold">12<span class="text-sm font-sans font-normal text-stone-400 ml-1">件</span></p>
+                            </div>
+                        </div>
+                        <div class="bg-salon-surface p-4 rounded-2xl border border-stone-100 shadow-sm flex items-center gap-4">
+                            <div class="w-10 h-10 rounded-full bg-rose-50 text-salon-rosestrong flex items-center justify-center text-lg">
+                                <i class="fa-solid fa-heart"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs text-salon-subtext">指名予約</p>
+                                <p class="text-xl font-serif font-semibold">8<span class="text-sm font-sans font-normal text-stone-400 ml-1">件</span></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- タイムライン -->
+                    <div class="bg-salon-surface rounded-2xl border border-stone-100 shadow-sm overflow-hidden">
+                        <div class="p-4 border-b border-stone-100 flex justify-between items-center bg-stone-50/50">
+                            <div class="flex items-center gap-2">
+                                <button class="p-1.5 text-stone-400 hover:text-stone-600 rounded-lg hover:bg-stone-100" aria-label="前の日" onclick="showToast('サンプルのため、日付は切り替えできません')"><i class="fa-solid fa-chevron-left"></i></button>
+                                <span class="font-medium text-sm" id="timeline-date">本日</span>
+                                <button class="p-1.5 text-stone-400 hover:text-stone-600 rounded-lg hover:bg-stone-100" aria-label="次の日" onclick="showToast('サンプルのため、日付は切り替えできません')"><i class="fa-solid fa-chevron-right"></i></button>
+                            </div>
+                            <div class="flex gap-2 text-xs">
+                                <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-salon-rosestrong"></span>カット&カラー</span>
+                                <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-full bg-stone-300"></span>ケア・その他</span>
+                            </div>
+                        </div>
+                        
+                        <div class="p-4 overflow-x-auto">
+                            <!-- タイムラインモック (CSS Grid) -->
+                            <div class="min-w-[600px]">
+                                <!-- 時間軸 -->
+                                <div class="grid grid-cols-[80px_repeat(5,1fr)] gap-4 pb-2 border-b border-stone-100 text-xs text-salon-subtext font-medium">
+                                    <div class="text-right pr-4">スタッフ</div>
+                                    <div>10:00</div><div>11:00</div><div>12:00</div><div>13:00</div><div>14:00</div>
+                                </div>
+                                
+                                <!-- スタッフ1 -->
+                                <div class="grid grid-cols-[80px_repeat(5,1fr)] gap-4 py-4 border-b border-stone-50 relative">
+                                    <div class="text-sm font-medium text-right pr-4 self-center">高橋</div>
+                                    <div class="col-span-2 relative h-14 bg-rose-50 border border-salon-rose rounded-xl p-2 cursor-pointer hover:shadow-md transition-shadow" onclick="openModal('yamada')">
+                                        <p class="text-xs font-bold text-salon-text">山田 花子 様</p>
+                                        <p class="text-[10px] text-salon-rosestrong">カット+カラー</p>
+                                    </div>
+                                    <div class="col-span-1"></div>
+                                    <div class="col-span-2 relative h-14 bg-stone-100 border border-stone-200 rounded-xl p-2 cursor-pointer hover:shadow-md transition-shadow" onclick="openModal('suzuki')">
+                                        <p class="text-xs font-bold text-salon-text">鈴木 愛 様</p>
+                                        <p class="text-[10px] text-stone-500">トリートメント</p>
+                                    </div>
+                                </div>
+
+                                <!-- スタッフ2 -->
+                                <div class="grid grid-cols-[80px_repeat(5,1fr)] gap-4 py-4 border-b border-stone-50 relative">
+                                    <div class="text-sm font-medium text-right pr-4 self-center">佐藤</div>
+                                    <div class="col-span-1"></div>
+                                    <div class="col-span-3 relative h-14 bg-rose-50 border border-salon-rose rounded-xl p-2 cursor-pointer hover:shadow-md transition-shadow" onclick="openModal('tanaka')">
+                                        <p class="text-xs font-bold text-salon-text">田中 優子 様</p>
+                                        <p class="text-[10px] text-salon-rosestrong">パーマ+カット+トリートメント</p>
+                                    </div>
+                                    <div class="col-span-1"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ---------------- B. 顧客台帳ビュー ---------------- -->
+                <div id="customers" class="tab-content fade-in space-y-6">
+                    
+                    <!-- 検索バー -->
+                    <div class="flex flex-col sm:flex-row gap-4 justify-between">
+                        <div class="relative w-full sm:w-96">
+                            <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-stone-400"></i>
+                            <input type="text" id="customer-search" oninput="filterCustomers(this.value)" placeholder="名前、電話番号、カナで検索..." class="w-full pl-10 pr-4 py-2.5 bg-white border border-stone-200 rounded-full text-sm focus:outline-none focus:border-salon-accent focus:ring-1 focus:ring-salon-accent transition-all">
+                        </div>
+                        <button onclick="showToast('サンプルのため、新規登録はできません')" class="bg-salon-text text-white px-5 py-2.5 rounded-full text-sm font-medium hover:bg-stone-700 transition-colors flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-plus"></i> 新規顧客登録
+                        </button>
+                    </div>
+
+                    <!-- 顧客一覧テーブル -->
+                    <div class="bg-white rounded-2xl border border-stone-100 shadow-sm overflow-hidden">
+                        <div class="overflow-x-auto">
+                            <table class="w-full min-w-[560px] text-left">
+                                <thead>
+                                    <tr class="border-b border-stone-100 bg-stone-50/50 text-[11px] font-medium text-salon-subtext tracking-wider">
+                                        <th class="py-3 px-4">顧客名</th>
+                                        <th class="py-3 px-4">電話番号</th>
+                                        <th class="py-3 px-4">最終来店日</th>
+                                        <th class="py-3 px-4">累計来店回数</th>
+                                        <th class="py-3 px-4">ステータス</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-sm divide-y divide-stone-50">
+                                    <tr class="customer-row hover:bg-stone-50/80 cursor-pointer transition-colors" data-search="山田 花子 ヤマダ ハナコ 090-XXXX-1234" onclick="openModal('yamada')">
+                                        <td class="py-4 px-4">
+                                            <div class="font-medium text-salon-text whitespace-nowrap">山田 花子</div>
+                                            <div class="text-[10px] text-salon-subtext">ヤマダ ハナコ</div>
+                                        </td>
+                                        <td class="py-4 px-4 text-salon-subtext font-mono">090-XXXX-1234</td>
+                                        <td class="py-4 px-4 text-salon-subtext">2026/10/15</td>
+                                        <td class="py-4 px-4">12回</td>
+                                        <td class="py-4 px-4">
+                                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-medium bg-emerald-50 text-emerald-600 border border-emerald-100">
+                                                <i class="fa-solid fa-check"></i> 来店予定あり
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr class="customer-row hover:bg-stone-50/80 cursor-pointer transition-colors" data-search="鈴木 愛 スズキ アイ 080-XXXX-3456" onclick="openModal('suzuki')">
+                                        <td class="py-4 px-4">
+                                            <div class="font-medium text-salon-text whitespace-nowrap">鈴木 愛</div>
+                                            <div class="text-[10px] text-salon-subtext">スズキ アイ</div>
+                                        </td>
+                                        <td class="py-4 px-4 text-salon-subtext font-mono">080-XXXX-3456</td>
+                                        <td class="py-4 px-4 text-salon-subtext">2026/10/28</td>
+                                        <td class="py-4 px-4">8回</td>
+                                        <td class="py-4 px-4">
+                                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-medium bg-emerald-50 text-emerald-600 border border-emerald-100">
+                                                <i class="fa-solid fa-check"></i> 来店予定あり
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr class="customer-row hover:bg-stone-50/80 cursor-pointer transition-colors" data-search="田中 優子 タナカ ユウコ 090-XXXX-7788" onclick="openModal('tanaka')">
+                                        <td class="py-4 px-4">
+                                            <div class="font-medium text-salon-text whitespace-nowrap">田中 優子</div>
+                                            <div class="text-[10px] text-salon-subtext">タナカ ユウコ</div>
+                                        </td>
+                                        <td class="py-4 px-4 text-salon-subtext font-mono">090-XXXX-7788</td>
+                                        <td class="py-4 px-4 text-salon-subtext">2026/09/12</td>
+                                        <td class="py-4 px-4">15回</td>
+                                        <td class="py-4 px-4">
+                                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-medium bg-emerald-50 text-emerald-600 border border-emerald-100">
+                                                <i class="fa-solid fa-check"></i> 来店予定あり
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr class="customer-row hover:bg-stone-50/80 cursor-pointer transition-colors" data-search="佐藤 理恵 サトウ リエ 080-XXXX-5678" onclick="openModal('sato')">
+                                        <td class="py-4 px-4">
+                                            <div class="font-medium text-salon-text whitespace-nowrap">佐藤 理恵</div>
+                                            <div class="text-[10px] text-salon-subtext">サトウ リエ</div>
+                                        </td>
+                                        <td class="py-4 px-4 text-salon-subtext font-mono">080-XXXX-5678</td>
+                                        <td class="py-4 px-4 text-salon-subtext">2026/08/20</td>
+                                        <td class="py-4 px-4">3回</td>
+                                        <td class="py-4 px-4">
+                                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-medium bg-amber-50 text-amber-600 border border-amber-100">
+                                                <i class="fa-regular fa-paper-plane"></i> リマインド済
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr class="customer-row hover:bg-stone-50/80 cursor-pointer transition-colors" data-search="伊藤 結衣 イトウ ユイ 070-XXXX-9012" onclick="openModal('ito')">
+                                        <td class="py-4 px-4">
+                                            <div class="font-medium text-salon-text whitespace-nowrap">伊藤 結衣</div>
+                                            <div class="text-[10px] text-salon-subtext">イトウ ユイ</div>
+                                        </td>
+                                        <td class="py-4 px-4 text-salon-subtext font-mono">070-XXXX-9012</td>
+                                        <td class="py-4 px-4 text-salon-subtext">2026/05/10</td>
+                                        <td class="py-4 px-4">1回 (新規)</td>
+                                        <td class="py-4 px-4">
+                                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-medium bg-stone-100 text-stone-500 border border-stone-200">
+                                                未予約
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="p-4 border-t border-stone-100 flex justify-center">
+                            <p id="customer-empty" class="hidden text-sm text-salon-subtext">該当するお客様がいません</p>
+                            <button id="load-more" onclick="showToast('これ以上のお客様はいません（サンプル）')" class="text-sm font-medium text-salon-accent hover:text-orange-400">さらに読み込む</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ---------------- C,D. その他タブ (プレースホルダー) ---------------- -->
+                <div id="staff" class="tab-content fade-in text-center py-20 text-salon-subtext">
+                    <i class="fa-solid fa-users text-4xl mb-4 text-stone-300"></i>
+                    <p>スタッフのシフト管理機能は開発中です</p>
+                </div>
+                <div id="settings" class="tab-content fade-in text-center py-20 text-salon-subtext">
+                    <i class="fa-solid fa-gear text-4xl mb-4 text-stone-300"></i>
+                    <p>サロン設定画面は開発中です</p>
+                </div>
+
+            </div>
+        </main>
+
+        <!-- ================= 3. ボトムナビゲーション (スマホ用) ================= -->
+        <nav class="md:hidden fixed bottom-0 w-full bg-salon-surface/90 backdrop-blur-md border-t border-stone-200 flex justify-around items-center h-16 z-40 px-2 pb-safe">
+            <button class="nav-btn flex flex-col items-center justify-center w-full h-full text-salon-accent" data-target="reservation">
+                <i class="fa-regular fa-calendar-check text-xl mb-1"></i>
+                <span class="text-[10px] font-medium">予約</span>
+            </button>
+            <button class="nav-btn flex flex-col items-center justify-center w-full h-full text-stone-400 hover:text-salon-text" data-target="customers">
+                <i class="fa-regular fa-id-card text-xl mb-1"></i>
+                <span class="text-[10px] font-medium">顧客</span>
+            </button>
+            <button class="nav-btn flex flex-col items-center justify-center w-full h-full text-stone-400 hover:text-salon-text" data-target="staff">
+                <i class="fa-solid fa-users text-xl mb-1"></i>
+                <span class="text-[10px] font-medium">スタッフ</span>
+            </button>
+            <button class="nav-btn flex flex-col items-center justify-center w-full h-full text-stone-400 hover:text-salon-text" data-target="settings">
+                <i class="fa-solid fa-bars text-xl mb-1"></i>
+                <span class="text-[10px] font-medium">メニュー</span>
+            </button>
+        </nav>
+
+    </div>
+
+    <!-- ================= 4. 顧客詳細モーダル（カルテ） ================= -->
+    <div id="customer-modal" class="fixed inset-0 z-50 hidden">
+        <!-- オーバーレイ -->
+        <div class="absolute inset-0 bg-stone-900/40 backdrop-blur-sm transition-opacity" onclick="closeModal()"></div>
+        
+        <!-- モーダル本体 -->
+        <div class="absolute inset-y-0 right-0 w-full md:w-[500px] bg-salon-surface shadow-2xl flex flex-col transform transition-transform duration-300 translate-x-full" id="modal-content">
+            
+            <div class="px-6 py-4 border-b border-stone-100 flex justify-between items-center bg-stone-50/50">
+                <h3 class="font-serif text-lg font-semibold">顧客カルテ</h3>
+                <button onclick="closeModal()" class="w-8 h-8 flex items-center justify-center rounded-full bg-white border border-stone-200 text-stone-500 hover:text-stone-800 hover:bg-stone-100 transition-colors">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="flex-1 overflow-y-auto p-6 space-y-6">
+                <!-- 顧客基本情報 -->
+                <div class="flex items-start gap-4">
+                    <div class="w-16 h-16 rounded-full bg-rose-100 text-salon-rosestrong flex items-center justify-center text-2xl font-serif">
+                        <i class="fa-regular fa-user"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-baseline gap-2">
+                            <h2 class="text-xl font-bold" id="modal-customer-name">山田 花子</h2>
+                            <span class="text-xs text-salon-subtext">様</span>
+                        </div>
+                        <p class="text-xs text-salon-subtext mb-2" id="modal-kana">ヤマダ ハナコ / 28歳</p>
+                        <div class="flex gap-3 text-xs">
+                            <span class="flex items-center gap-1 text-salon-accent"><i class="fa-solid fa-phone"></i> <span id="modal-phone">090-XXXX-1234</span></span>
+                            <button onclick="showToast('サンプルのため、メールは送信できません')" class="flex items-center gap-1 text-salon-accent hover:underline"><i class="fa-regular fa-envelope"></i> メール送信</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="bg-stone-50 p-3 rounded-xl border border-stone-100">
+                        <p class="text-[10px] text-salon-subtext mb-1">来店回数</p>
+                        <p class="font-semibold text-salon-text"><span id="modal-visits">12</span><span class="text-xs font-normal ml-1">回</span></p>
+                    </div>
+                    <div class="bg-stone-50 p-3 rounded-xl border border-stone-100">
+                        <p class="text-[10px] text-salon-subtext mb-1">平均単価</p>
+                        <p class="font-semibold text-salon-text" id="modal-avg">¥14,500</p>
+                    </div>
+                </div>
+
+                <!-- カルテメモ -->
+                <div>
+                    <div class="flex justify-between items-center mb-2">
+                        <h4 class="text-sm font-semibold flex items-center gap-2"><i class="fa-regular fa-note-sticky text-stone-400"></i> 特記事項・メモ</h4>
+                        <button onclick="showToast('サンプルのため、編集はできません')" class="text-xs text-salon-accent hover:underline">編集</button>
+                    </div>
+                    <div id="modal-memo" class="bg-yellow-50/50 border border-yellow-100 p-4 rounded-xl text-sm text-stone-700 leading-relaxed"></div>
+                </div>
+
+                <!-- 過去の履歴 -->
+                <div>
+                    <h4 class="text-sm font-semibold flex items-center gap-2 mb-3"><i class="fa-solid fa-clock-rotate-left text-stone-400"></i> 施術履歴</h4>
+                    <div id="modal-history" class="space-y-4 relative before:absolute before:inset-0 before:ml-2.5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-stone-200 before:to-transparent"></div>
+                </div>
+
+            </div>
+            
+            <div class="p-4 border-t border-stone-100 bg-white">
+                <button onclick="showToast('予約の登録画面が開きます（サンプル）')" class="w-full bg-salon-text text-white py-3 rounded-xl font-medium hover:bg-stone-700 transition-colors shadow-md">
+                    次回の予約を入れる
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" role="status" class="hidden fixed left-1/2 -translate-x-1/2 bottom-24 md:bottom-8 z-[60] bg-salon-text text-white text-xs px-4 py-2.5 rounded-full shadow-lg"></div>
+
+    <!-- JavaScript 制御 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // 現在日付の設定
+            const dateElement = document.getElementById('current-date');
+            if(dateElement) {
+                const now = new Date();
+                const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'short' };
+                dateElement.textContent = now.toLocaleDateString('ja-JP', options);
+                const tl = document.getElementById('timeline-date');
+                if (tl) tl.textContent = dateElement.textContent;
+            }
+
+            // タブ切り替えロジック
+            const navButtons = document.querySelectorAll('.nav-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+            const pageTitle = document.getElementById('page-title');
+
+            const titles = {
+                'reservation': '本日の予約状況',
+                'customers': '顧客台帳',
+                'staff': 'スタッフ管理',
+                'settings': 'システム設定'
+            };
+
+            navButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const targetId = btn.getAttribute('data-target');
+                    
+                    // タブコンテンツの表示・非表示
+                    tabContents.forEach(content => {
+                        content.classList.remove('active');
+                        if(content.id === targetId) {
+                            content.classList.add('active');
+                        }
+                    });
+
+                    // タイトルの更新
+                    pageTitle.textContent = titles[targetId] || 'ダッシュボード';
+
+                    // ボタンのアクティブ状態の更新 (PC/Mobile共通化処理)
+                    navButtons.forEach(b => {
+                        // PCサイドバーのスタイルリセット
+                        b.classList.remove('active', 'text-salon-accent', 'bg-rose-50/50');
+                        b.classList.add('text-salon-subtext');
+                        
+                        // Mobileボトムナビのスタイルリセット
+                        if (b.parentElement.tagName === 'NAV' && b.parentElement.classList.contains('md:hidden')) {
+                            b.classList.remove('text-salon-accent');
+                            b.classList.add('text-stone-400');
+                        }
+                        
+                        if(b.getAttribute('data-target') === targetId) {
+                            if (b.parentElement.tagName === 'NAV' && b.parentElement.classList.contains('md:hidden')) {
+                                // スマホ用アクティブ
+                                b.classList.remove('text-stone-400');
+                                b.classList.add('text-salon-accent');
+                            } else {
+                                // PC用アクティブ
+                                b.classList.remove('text-salon-subtext', 'hover:bg-stone-50', 'hover:text-salon-text');
+                                b.classList.add('active', 'text-salon-accent', 'bg-rose-50/50');
+                            }
+                        } else {
+                            if (b.parentElement.tagName === 'NAV' && !b.parentElement.classList.contains('md:hidden')) {
+                                // PC用非アクティブホバー復元
+                                b.classList.add('hover:bg-stone-50', 'hover:text-salon-text');
+                            }
+                        }
+                    });
+                });
+            });
+        });
+
+        // サンプルの顧客データ（すべて架空）
+        const CUSTOMERS = {
+            yamada: { name: '山田 花子', kana: 'ヤマダ ハナコ / 28歳', phone: '090-XXXX-1234', visits: '12', avg: '¥14,500',
+                memo: '髪質: 細め、乾燥気味。<br>カラーは赤みが出やすいのでアッシュ系を強めに入れること。<br>頭皮が敏感なため、保護スプレー必須。',
+                history: [['2026/10/15', 'カット + ツヤ感カラー', '高橋', '秋色にトーンダウン。毛先5cmカットし重めに。'], ['2026/08/20', 'カット + トリートメント', '高橋', '']] },
+            suzuki: { name: '鈴木 愛', kana: 'スズキ アイ / 34歳', phone: '080-XXXX-3456', visits: '8', avg: '¥11,200',
+                memo: 'ドライヤーの温度は低めを希望。<br>施術中の会話は控えめがお好み。',
+                history: [['2026/10/28', 'トリートメント', '高橋', '毛先の乾燥が気になるとのこと。集中ケアを実施。'], ['2026/09/02', 'カット + トリートメント', '高橋', '']] },
+            tanaka: { name: '田中 優子', kana: 'タナカ ユウコ / 42歳', phone: '090-XXXX-7788', visits: '15', avg: '¥21,000',
+                memo: 'パーマは弱めのかかりを希望。<br>毎回、トリートメントを併用。',
+                history: [['2026/09/12', 'パーマ + カット + トリートメント', '佐藤', 'ゆるめのウェーブ。次回は3か月後を目安に。'], ['2026/06/05', 'カット + トリートメント', '佐藤', '']] },
+            sato: { name: '佐藤 理恵', kana: 'サトウ リエ / 31歳', phone: '080-XXXX-5678', visits: '3', avg: '¥9,800',
+                memo: 'カラーの前に、パッチテストを実施済み。<br>次回のご来店をリマインド済み。',
+                history: [['2026/08/20', 'カット + カラー', '佐藤', '明るめのブラウン。色持ちを重視。'], ['2026/06/30', 'カット', '高橋', '']] },
+            ito: { name: '伊藤 結衣', kana: 'イトウ ユイ / 24歳', phone: '070-XXXX-9012', visits: '1', avg: '¥7,500',
+                memo: '新規のお客様。次回のご予約をご案内します。',
+                history: [['2026/05/10', 'カット', '高橋', 'ボブスタイル。初回のカウンセリングを実施。']] }
+        };
+
+        // 通知（ひとことメッセージ）
+        let toastTimer = null;
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg;
+            t.classList.remove('hidden');
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => t.classList.add('hidden'), 2400);
+        }
+
+        // 顧客の検索
+        function filterCustomers(q) {
+            const key = q.replace(/\s+/g, '').toLowerCase();
+            let shown = 0;
+            document.querySelectorAll('.customer-row').forEach(tr => {
+                const hit = !key || tr.dataset.search.replace(/\s+/g, '').toLowerCase().includes(key);
+                tr.classList.toggle('hidden', !hit);
+                if (hit) shown++;
+            });
+            document.getElementById('customer-empty').classList.toggle('hidden', shown > 0);
+            document.getElementById('load-more').classList.toggle('hidden', shown === 0);
+        }
+
+        // モーダル開閉ロジック
+        const modal = document.getElementById('customer-modal');
+        const modalContent = document.getElementById('modal-content');
+        const modalName = document.getElementById('modal-customer-name');
+
+        function openModal(key) {
+            const c = CUSTOMERS[key] || CUSTOMERS.yamada;
+            modalName.textContent = c.name;
+            document.getElementById('modal-kana').textContent = c.kana;
+            document.getElementById('modal-phone').textContent = c.phone;
+            document.getElementById('modal-visits').textContent = c.visits;
+            document.getElementById('modal-avg').textContent = c.avg;
+            document.getElementById('modal-memo').innerHTML = c.memo;
+            document.getElementById('modal-history').innerHTML = c.history.map((h, i) => i === 0
+                ? `<div class="relative flex items-start gap-4"><div class="w-5 h-5 rounded-full bg-salon-surface border-2 border-salon-accent z-10 mt-1 shadow-sm"></div><div class="flex-1 bg-white border border-stone-100 p-4 rounded-2xl shadow-sm"><div class="flex justify-between items-start mb-2"><div><p class="text-xs text-salon-subtext font-mono">${h[0]}</p><p class="font-semibold text-sm">${h[1]}</p></div><span class="text-xs font-medium text-stone-500">担当: ${h[2]}</span></div>${h[3] ? `<p class="text-xs text-stone-600">${h[3]}</p>` : ''}</div></div>`
+                : `<div class="relative flex items-start gap-4"><div class="w-5 h-5 rounded-full bg-stone-200 border-2 border-white z-10 mt-1"></div><div class="flex-1 bg-stone-50 border border-stone-100 p-4 rounded-2xl"><div class="flex justify-between items-start mb-2"><div><p class="text-xs text-stone-400 font-mono">${h[0]}</p><p class="font-semibold text-sm text-stone-600">${h[1]}</p></div><span class="text-xs font-medium text-stone-400">担当: ${h[2]}</span></div></div></div>`
+            ).join('');
+            modal.classList.remove('hidden');
+            // 少し遅延させてスライドインアニメーションを適用
+            setTimeout(() => {
+                modalContent.classList.remove('translate-x-full');
+            }, 10);
+            document.body.style.overflow = 'hidden'; // 背景スクロールロック
+        }
+
+        function closeModal() {
+            modalContent.classList.add('translate-x-full');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                document.body.style.overflow = '';
+            }, 300); // transition時間と合わせる
+        }
+    </script>
+</body>
+</html>

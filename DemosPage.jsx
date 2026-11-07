@@ -82,23 +82,26 @@ function DemosPage({ go }) {
       {/* Interactive demo: reservation system */}
       <div id="demo-reservation" style={{ background: '#EAF1F7', marginBottom: 96 }}>
         <Container style={{ paddingTop: 96, paddingBottom: 96 }}>
-          <div className="rgrid" style={{ display: 'grid', gridTemplateColumns: '1fr 1.4fr', gap: 'clamp(32px, 5vw, 64px)', alignItems: 'center' }}>
+          <div className="rgrid" style={{ display: 'grid', gridTemplateColumns: '1fr 1.25fr', gap: 'clamp(32px, 5vw, 64px)', alignItems: 'center' }}>
             <div>
               <div style={{ fontFamily: 'var(--font-ui)', fontSize: 13, fontWeight: 700, color: 'var(--neutral-600)' }}>Demo</div>
               <h2 style={{ margin: '10px 0 0', fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 'clamp(26px, 3.4vw, 40px)', lineHeight: 1.3, color: 'var(--zinc-950)' }}>予約も顧客も、<br />1つの画面で</h2>
               <p style={{ margin: '20px 0 0', maxWidth: 420, fontFamily: 'var(--font-body)', fontSize: 16, lineHeight: 2, color: 'var(--text-on-light-muted)' }}>
-                予約・顧客管理システムの、サンプル画面です。予約を入れたり、お客様の情報を確かめたりできます。
+                予約・顧客管理システムの、サンプル画面です。予約の時間割を見たり、お客様の顧客カルテを開いたりできます。ここでは小さく表示しています。見づらいときは、大きな画面で操作できます。
               </p>
               <ol style={{ margin: '24px 0 0', padding: 0, listStyle: 'none', maxWidth: 420 }}>
-                {['日付を選び、「空き」の枠を押して予約を入れる', '予約済みの枠を押して、内容を見る・キャンセルする', '「顧客」タブで、お客様の来店履歴とメモを見る'].map((t, i) => (
+                {['「予約管理」で、スタッフごとの予約の時間割を見る', '予約を押して、お客様の顧客カルテを開く', '「顧客台帳」で、お客様を名前で探す'].map((t, i) => (
                   <li key={t} style={{ display: 'grid', gridTemplateColumns: '32px 1fr', gap: 12, alignItems: 'center', padding: '10px 0', fontFamily: 'var(--font-body)', fontSize: 15, color: 'var(--zinc-950)' }}>
                     <span style={{ width: 28, height: 28, borderRadius: 999, background: '#1E3A5F', color: '#fff', fontSize: 13, fontWeight: 700, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>{i + 1}</span>{t}
                   </li>
                 ))}
               </ol>
+              <div style={{ marginTop: 24 }}>
+                <button onClick={() => go('demo-reservation')} style={window.btnSolid}>大きな画面で操作する&nbsp;→</button>
+              </div>
               <p style={{ margin: '20px 0 0', fontFamily: 'var(--font-body)', fontSize: 13, lineHeight: 1.8, color: 'var(--neutral-600)' }}>※ 架空のお客様名・サンプルデータです。実際の内容は、ご要望に合わせて設計します。</p>
             </div>
-            <ReservationMock />
+            <DemoFrame variant="browser" designWidth={900} scale={0.75} height={680} label="予約・顧客管理システム（サンプル）" src="demos/salon.html?v=20261107b" title="予約・顧客管理システムのサンプル" />
           </div>
         </Container>
       </div>
