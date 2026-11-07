@@ -85,12 +85,12 @@ function DemosPage({ go }) {
         <div className="rgrid" style={{ display: 'grid', gridTemplateColumns: '1fr 1.25fr', gap: 'clamp(32px, 5vw, 64px)', alignItems: 'center' }}>
           <div>
             <div style={{ fontFamily: 'var(--font-ui)', fontSize: 13, fontWeight: 700, color: 'var(--neutral-600)' }}>Demo</div>
-            <h2 style={{ margin: '10px 0 0', fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 'clamp(26px, 3.4vw, 40px)', lineHeight: 1.3, color: 'var(--zinc-950)' }}>数字が、ひと目で<br />わかる画面に</h2>
+            <h2 style={{ margin: '10px 0 0', fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 'clamp(26px, 3.4vw, 40px)', lineHeight: 1.3, color: 'var(--zinc-950)' }}>SNS分析<br />ダッシュボード</h2>
             <p style={{ margin: '20px 0 0', maxWidth: 440, fontFamily: 'var(--font-body)', fontSize: 16, lineHeight: 2, color: 'var(--text-on-light-muted)' }}>
-              分析用ダッシュボードの、サンプル画面です。期間を切り替えたり、データを再集計したりして、実際の使い心地を確かめられます。ここでは小さく表示しています。見づらいときは、大きな画面で操作できます。
+              Instagram などの分析データを、毎月のCSVで取り込んでためていくと、数年分を分析できます。ここでは小さく表示しています。見づらいときは、大きな画面で操作できます。
             </p>
             <ol style={{ margin: '24px 0 0', padding: 0, listStyle: 'none', maxWidth: 440 }}>
-              {['「今月・先月・過去3ヶ月」で、表示する期間を切り替える', '「データを自動再集計」を押して、グラフの更新を見る', '「CSVエクスポート」で、出力の画面を開く'].map((t, i) => (
+              {['「前の月のCSVを取り込む」を押して、グラフが過去へ伸びるのを見る', '「まとめて取り込む」で、3年分のデータを見る', '「前年と重ねて見る」で、去年との違いを比べる'].map((t, i) => (
                 <li key={t} style={{ display: 'grid', gridTemplateColumns: '32px 1fr', gap: 12, alignItems: 'center', padding: '10px 0', fontFamily: 'var(--font-body)', fontSize: 15, color: 'var(--zinc-950)' }}>
                   <span style={{ width: 28, height: 28, borderRadius: 999, background: '#1E3A5F', color: '#fff', fontSize: 13, fontWeight: 700, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>{i + 1}</span>{t}
                 </li>
@@ -99,10 +99,39 @@ function DemosPage({ go }) {
             <div style={{ marginTop: 24 }}>
               <button onClick={() => go('demo-dashboard')} style={window.btnSolid}>大きな画面で操作する&nbsp;→</button>
             </div>
-            <p style={{ margin: '20px 0 0', fontFamily: 'var(--font-body)', fontSize: 13, lineHeight: 1.8, color: 'var(--neutral-600)' }}>※ サンプルの数字・社名です。実際の内容は、ご要望に合わせて設計します。</p>
+            <p style={{ margin: '20px 0 0', fontFamily: 'var(--font-body)', fontSize: 13, lineHeight: 1.8, color: 'var(--neutral-600)' }}>※ 架空のアカウントのサンプルデータです。実際の内容は、ご要望に合わせて設計します。</p>
           </div>
-          <DemoFrame variant="browser" designWidth={800} scale={0.75} height={640} label="分析用ダッシュボード（サンプル）" src="demos/dashboard.html?v=20261107" title="分析用ダッシュボードのサンプル" />
+          <DemoFrame variant="browser" designWidth={900} scale={0.75} height={680} label="SNS分析ダッシュボード（サンプル）" src="demos/sns.html?v=20261107" title="SNS分析ダッシュボードのサンプル" />
         </div>
+      </Container>
+
+      {/* Merit of keeping the data (SNS analytics dashboard) */}
+      <Container id="demo-dashboard-merit" style={{ paddingBottom: 96 }}>
+        <div style={{ maxWidth: 760 }}>
+          <div style={{ fontFamily: 'var(--font-ui)', fontSize: 13, fontWeight: 700, color: 'var(--neutral-600)' }}>Merit</div>
+          <h2 style={{ margin: '10px 0 0', fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 'clamp(26px, 3.4vw, 40px)', lineHeight: 1.3, color: 'var(--zinc-950)' }}>標準の画面では見られない期間まで、<br />分析できます</h2>
+          <p style={{ margin: '20px 0 0', fontFamily: 'var(--font-body)', fontSize: 16, lineHeight: 2, color: 'var(--text-on-light-muted)' }}>
+            Instagram などの標準の画面で見られるのは、直近約90日です。90日より前を見るには、有料のサブスクリプションが必要です（公式ヘルプ、2026年11月時点）。毎月のCSVや公式のAPIで自社のアプリに保存しておくと、数年分のデータが手元に残ります。
+          </p>
+        </div>
+        <div className="rgrid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24, margin: '40px 0 16px' }}>
+          {[
+            ['数か月で見られなくなるデータを、数年分ためる', '毎月のCSVの取り込みや、公式のAPIでの自動保存で、自社のアプリにデータを積み上げます。サービス側の仕様が変わっても、手元のデータは残ります。'],
+            ['年をまたいで、施策の効果を比べる', '前年同月との比較や、季節ごとの傾向、キャンペーン前後の変化を見られます。投稿の反応がよい曜日や時間帯も、データが増えるほど正確になります。'],
+            ['SNSも広告もサイトも、ひとつの画面に', 'Instagram のほか、X や YouTube、自社サイトのアクセスなどを、ひとつの画面に並べられます。毎月のレポート作りの手間も減らせます。'],
+          ].map(([t, b], i) => (
+            <div key={t} style={{ border: '1px solid var(--neutral-200)', borderRadius: 12, padding: 24, background: 'var(--white)' }}>
+              <div style={{ width: 28, height: 28, borderRadius: 999, background: '#1E3A5F', color: '#fff', fontSize: 13, fontWeight: 700, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>{i + 1}</div>
+              <div style={{ marginTop: 14, fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 17, lineHeight: 1.5, color: 'var(--zinc-950)' }}>{t}</div>
+              <p style={{ margin: '10px 0 0', fontFamily: 'var(--font-body)', fontSize: 14, lineHeight: 1.8, color: 'var(--text-on-light-muted)' }}>{b}</p>
+            </div>
+          ))}
+        </div>
+        <p style={{ margin: '0 0 40px', maxWidth: 760, fontFamily: 'var(--font-body)', fontSize: 13, lineHeight: 1.9, color: 'var(--neutral-600)' }}>
+          データの取得は、公式のCSV出力と公式のAPIの範囲で行います。APIでは、一部の指標（フォロワーがオンラインの時間帯など）が直近30日分しか取れないため、毎日保存して履歴を積み上げます。
+        </p>
+        <div style={{ fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 20, color: 'var(--zinc-950)', marginBottom: 16 }}>レポート作成の手間を、計算してみる</div>
+        <ReportCalculator />
       </Container>
 
       {/* Interactive demo: reservation system */}

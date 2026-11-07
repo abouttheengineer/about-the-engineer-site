@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SNS分析ダッシュボード（サンプル）</title>
+    <!-- Chart.js -->
+    <link rel="icon" href="data:,">
+    <link rel="stylesheet" href="vendor/sns.css">
+    <script src="vendor/vue.global.prod.js"></script>
+    <script src="vendor/chart.umd.js"></script>
+    <style>
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
+        [v-cloak] { display: none; }
+        .num { font-variant-numeric: tabular-nums; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased h-screen overflow-hidden">
+
+<div id="app" v-cloak class="h-screen flex flex-col">
+
+    <!-- ===== ヘッダー ===== -->
+    <header class="bg-white border-b border-slate-200 px-4 md:px-6 py-3 flex items-center gap-3 shrink-0">
+        <img :src="avatar" alt="" class="w-10 h-10 rounded-full shrink-0">
+        <div class="min-w-0">
+            <div class="font-bold text-sm truncate">サンプルカフェ</div>
+            <div class="text-[11px] text-slate-500 truncate">SNSアカウントの分析（架空のデータ）</div>
+        </div>
+        <div class="ml-auto text-right shrink-0">
+            <div class="text-[11px] text-slate-500">蓄積したデータ</div>
+            <div class="text-navy font-bold"><span class="text-xl num">{{ loaded }}</span><span class="text-xs ml-0.5">か月分</span></div>
+        </div>
+    </header>
+
+    <main class="flex-1 overflow-y-auto p-4 md:p-6 space-y-5">
+
+        <!-- ===== CSV取り込み ===== -->
+        <section class="bg-white rounded-2xl border border-slate-200 p-4 md:p-5">
+            <div class="flex items-start gap-3">
+                <div class="w-9 h-9 rounded-xl bg-navy-soft text-navy flex items-center justify-center shrink-0"><i class="fa-solid fa-file-csv"></i></div>
+                <div>
+                    <h2 class="font-bold text-sm text-slate-900">毎月のCSVを取り込んで、データをためる</h2>
+                    <p class="text-xs text-slate-500 mt-1 leading-relaxed">Instagram などの標準の画面で見られるのは、直近約90日です（下のグラフの色のついた部分）。{{ loaded <= 3 ? 'いまは直近3か月だけを取り込んだ状態です。CSVを取り込むと、グラフが過去へ伸びていきます。' : 'いま ' + loaded + 'か月分を取り込み済みです。標準の画面では見られない範囲まで、グラフが伸びています。' }}</p>
+                </div>
+            </div>
+            <div class="mt-4 flex flex-wrap gap-2">
+                <button @click="importOne" :disabled="loaded >= total"
+                        class="bg-navy text-white text-xs font-bold px-4 py-2.5 rounded-xl disabled:opacity-40 active:scale-95 transition-all">
+                    <i class="fa-solid fa-download mr-1.5"></i>前の月のCSVを取り込む
+                </button>
+                <button @click="importAll" :disabled="loaded >= total"
+                        class="bg-white border border-slate-300 text-slate-700 text-xs font-bold px-4 py-2.5 rounded-xl disabled:opacity-40 active:scale-95 transition-all">
+                    まとめて取り込む（過去3年分）
+                </button>
+                <button @click="reset" :disabled="loaded <= 3"
+                        class="text-slate-500 text-xs font-bold px-3 py-2.5 rounded-xl disabled:opacity-40 hover:bg-slate-100">
+                    最初に戻す
+                </button>
+            </div>
+            <ul class="mt-3 space-y-0.5 text-[11px] text-slate-500" aria-live="polite">
+                <li v-for="(l, i) in log" :key="l + i"><i class="fa-solid fa-circle-check text-emerald-500 mr-1.5"></i>{{ l }}</li>
+            </ul>
+            <details class="mt-3">
+                <summary class="text-[11px] font-bold text-navy cursor-pointer">取り込むCSVのイメージを見る（サンプルの形式）</summary>
+                <div v-if="nextCsv" class="mt-2 overflow-x-auto">
+                    <p class="text-[11px] text-slate-500 mb-1">次に取り込む「{{ nextCsv.label }}」のCSV（日別データの一部）</p>
+                    <table class="w-full text-[11px] num border border-slate-200">
+                        <thead class="bg-slate-50 text-slate-500"><tr>
+                            <th class="text-left px-2 py-1 font-medium">日付</th><th class="text-right px-2 py-1 font-medium">リーチ</th>
+                            <th class="text-right px-2 py-1 font-medium">フォロワー数</th><th class="text-right px-2 py-1 font-medium">保存数</th>
+                        </tr></thead>
+                        <tbody>
+                            <tr v-for="r in nextCsv.rows" :key="r.d" class="border-t border-slate-100">
+                                <td class="px-2 py-1">{{ r.d }}</td><td class="px-2 py-1 text-right">{{ r.reach.toLocaleString() }}</td>
+                                <td class="px-2 py-1 text-right">{{ r.followers.toLocaleString() }}</td><td class="px-2 py-1 text-right">{{ r.saves }}</td>
+                            </tr>
+                            <tr class="border-t border-slate-100 text-slate-400"><td class="px-2 py-1" colspan="4">…（{{ nextCsv.days }}行）</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p v-else class="mt-2 text-[11px] text-slate-500">すべての月のCSVを取り込み済みです。</p>
+            </details>
+        </section>
+
+        <!-- ===== 主要な数字（クリックでグラフを切り替え） ===== -->
+        <section class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+            <button v-for="t in tiles" :key="t.key" @click="metric = t.key"
+                    :class="metric === t.key ? 'border-navy ring-1 ring-navy' : 'border-slate-200 hover:border-slate-300'"
+                    class="text-left bg-white border rounded-2xl p-4 transition-all">
+                <div class="text-[11px] font-bold text-slate-500">{{ t.label }}</div>
+                <div class="mt-1 text-xl font-extrabold text-slate-900 num">{{ t.value }}<span class="text-xs font-medium text-slate-500 ml-0.5">{{ t.unit }}</span></div>
+                <div class="mt-2 space-y-1 text-[11px]">
+                    <div class="flex items-center justify-between"><span class="text-slate-400">前月比</span>
+                        <span v-if="t.mom !== null" :class="t.mom >= 0 ? 'text-emerald-700 bg-emerald-50' : 'text-rose-700 bg-rose-50'" class="font-bold px-1.5 py-0.5 rounded-full num">{{ t.momText }}</span>
+                        <span v-else class="text-slate-300">—</span></div>
+                    <div class="flex items-center justify-between"><span class="text-slate-400">前年同月比</span>
+                        <span v-if="t.yoy !== null" :class="t.yoy >= 0 ? 'text-emerald-700 bg-emerald-50' : 'text-rose-700 bg-rose-50'" class="font-bold px-1.5 py-0.5 rounded-full num">{{ t.yoyText }}</span>
+                        <span v-else class="text-amber-600">取り込みが足りません</span></div>
+                </div>
+            </button>
+        </section>
+
+        <!-- ===== 推移グラフ ===== -->
+        <section class="bg-white rounded-2xl border border-slate-200 p-4 md:p-5">
+            <div class="flex flex-wrap items-start justify-between gap-2">
+                <div>
+                    <h3 class="font-bold text-sm text-slate-900">{{ currentMetric.label }}の推移（月別）</h3>
+                    <p class="text-[11px] text-slate-500 mt-0.5">{{ visibleLabelRange }}（{{ loaded }}か月分）</p>
+                </div>
+                <label class="flex items-center gap-1.5 text-xs font-bold" :class="canYoy ? 'text-slate-700 cursor-pointer' : 'text-slate-300'">
+                    <input type="checkbox" v-model="showYoy" :disabled="!canYoy" class="accent-navy">
+                    前年と重ねて見る
+                </label>
+            </div>
+            <div class="mt-1 text-[11px] text-slate-500 flex flex-wrap gap-x-4 gap-y-1">
+                <span><span class="inline-block w-3 h-0.5 bg-navy align-middle mr-1"></span>{{ currentMetric.label }}</span>
+                <span v-if="showYoy && canYoy"><span class="inline-block w-3 border-t-2 border-dashed border-slate-400 align-middle mr-1"></span>1年前の同じ月</span>
+                <span><span class="inline-block w-3 h-3 bg-navy/10 align-middle mr-1 rounded-sm"></span>標準の画面で見られる範囲</span>
+                <span><i class="fa-regular fa-gem text-[9px] mr-1"></i>施策（キャンペーンなど）</span>
+            </div>
+            <div class="relative w-full h-[280px] mt-2"><canvas id="trendChart"></canvas></div>
+            <p v-if="!canYoy" class="mt-2 text-[11px] text-amber-600"><i class="fa-solid fa-circle-info mr-1"></i>13か月以上取り込むと、前年と重ねて比べられます。</p>
+            <ul v-if="visibleEvents.length" class="mt-3 flex flex-wrap gap-1.5">
+                <li v-for="e in visibleEvents" :key="e.key" class="text-[11px] bg-navy-soft text-navy rounded-full px-2.5 py-1"><i class="fa-regular fa-gem text-[9px] mr-1"></i>{{ e.label }}　{{ e.text }}</li>
+            </ul>
+        </section>
+
+        <!-- ===== 季節性 / 投稿の傾向 ===== -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+
+            <!-- 季節ごとの傾向 -->
+            <section class="bg-white rounded-2xl border border-slate-200 p-4 md:p-5">
+                <h3 class="font-bold text-sm text-slate-900">季節ごとの傾向（月間リーチの月別平均）</h3>
+                <div v-if="season">
+                    <p class="text-[11px] text-slate-500 mt-0.5">{{ loaded }}か月分の平均です。いちばん高いのは {{ season.bestLabel }} です。</p>
+                    <div class="mt-4 flex items-end gap-1.5 h-[140px]">
+                        <div v-for="b in season.bars" :key="b.m" class="flex-1 flex flex-col items-center justify-end h-full">
+                            <span v-if="b.best" class="text-[10px] font-bold text-navy num mb-1">{{ b.text }}</span>
+                            <div class="w-full rounded-t" :style="{ height: b.h + '%', background: b.best ? '#1E3A5F' : '#BFD0E3' }"></div>
+                        </div>
+                    </div>
+                    <div class="mt-1 flex gap-1.5"><span v-for="b in season.bars" :key="'l' + b.m" class="flex-1 text-center text-[10px] text-slate-500 num">{{ b.m }}月</span></div>
+                </div>
+                <div v-else class="mt-3 rounded-xl bg-slate-50 border border-dashed border-slate-300 p-5 text-center text-xs text-slate-500 leading-relaxed">
+                    <i class="fa-solid fa-lock text-slate-300 text-lg"></i><br>
+                    12か月以上のデータを取り込むと、<br>季節ごとの傾向が見えます。（いま {{ loaded }}か月分）
+                </div>
+            </section>
+
+            <!-- 反応のよい曜日・時間帯 -->
+            <section class="bg-white rounded-2xl border border-slate-200 p-4 md:p-5">
+                <h3 class="font-bold text-sm text-slate-900">反応のよい曜日・時間帯</h3>
+                <p class="text-[11px] text-slate-500 mt-0.5">投稿 {{ visiblePosts.length }}件 の平均エンゲージメント率です。</p>
+                <div class="mt-3 overflow-x-auto">
+                    <table class="w-full text-[11px] num border-separate" style="border-spacing: 3px">
+                        <thead><tr><th class="w-12"></th><th v-for="b in bandLabels" :key="b" class="font-medium text-slate-500 text-center">{{ b }}</th></tr></thead>
+                        <tbody>
+                            <tr v-for="(row, d) in heat.rows" :key="d">
+                                <th class="font-medium text-slate-500 text-right pr-1">{{ dayLabels[d] }}</th>
+                                <td v-for="(c, b) in row" :key="b" :title="c.n + '件の投稿'"
+                                    :style="{ background: c.bg, color: c.dark ? '#fff' : '#1E3A5F' }"
+                                    class="rounded text-center py-2 font-bold">{{ c.text }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p v-if="heat.best" class="mt-2 text-[11px] text-slate-600">いちばん反応がよいのは「<strong>{{ heat.best }}</strong>」です。</p>
+                <p v-if="heat.sparse" class="mt-1 text-[11px] text-amber-600"><i class="fa-solid fa-circle-info mr-1"></i>データが少なく、まだ傾向がはっきりしません（「—」は投稿が3件未満）。取り込むほど、精度が上がります。</p>
+            </section>
+        </div>
+
+        <!-- ===== 投稿ランキング ===== -->
+        <section class="bg-white rounded-2xl border border-slate-200 p-4 md:p-5">
+            <div class="flex flex-wrap items-start justify-between gap-2">
+                <div>
+                    <h3 class="font-bold text-sm text-slate-900">よく見られた投稿 TOP5</h3>
+                    <p class="text-[11px] text-slate-500 mt-0.5">取り込んだ {{ loaded }}か月分（投稿 {{ visiblePosts.length }}件）の中から選んでいます。</p>
+                </div>
+                <div class="flex flex-wrap gap-1.5">
+                    <button v-for="t in typeOptions" :key="t" @click="typeFilter = t"
+                            :class="typeFilter === t ? 'bg-navy text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'"
+                            class="text-[11px] font-bold px-2.5 py-1 rounded-full">{{ t }}</button>
+                </div>
+            </div>
+            <div class="mt-3 overflow-x-auto">
+                <table class="w-full text-xs num min-w-[420px]">
+                    <thead><tr class="text-[11px] text-slate-400 border-b border-slate-100">
+                        <th class="text-left font-medium py-2 w-8">順位</th><th class="text-left font-medium py-2">投稿</th>
+                        <th class="text-right font-medium py-2">リーチ</th><th class="text-right font-medium py-2">保存数</th></tr></thead>
+                    <tbody>
+                        <tr v-for="(p, i) in ranking" :key="p.date + p.theme + p.reach" class="border-b border-slate-50">
+                            <td class="py-2.5"><span class="inline-flex w-5 h-5 rounded-full items-center justify-center text-[10px] font-bold" :class="i === 0 ? 'bg-navy text-white' : 'bg-slate-100 text-slate-600'">{{ i + 1 }}</span></td>
+                            <td class="py-2.5"><div class="font-bold text-slate-800">{{ p.theme }}</div><div class="text-[11px] text-slate-400">{{ p.date }}・{{ p.type }}</div></td>
+                            <td class="py-2.5 text-right font-bold">{{ p.reach.toLocaleString() }}</td>
+                            <td class="py-2.5 text-right text-slate-600">{{ p.saves.toLocaleString() }}</td>
+                        </tr>
+                        <tr v-if="!ranking.length"><td colspan="4" class="py-4 text-center text-slate-400">この種類の投稿はありません。</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <p class="text-[11px] text-slate-400 leading-relaxed pb-2">※ 架空のアカウントのサンプルデータです。実在のアカウントや数字ではありません。取り込むCSVの形式は、実際の出力形式とは異なる場合があります。</p>
+    </main>
+</div>
+
+<script>
+    const { createApp, ref, computed, onMounted, watch, nextTick } = Vue;
+
+    // ---------- 人物写真の代わりのイラスト ----------
+    const avatar = 'data:image/svg+xml;utf8,' + encodeURIComponent(
+        '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#bfd0e3"/><stop offset="1" stop-color="#1e3a5f"/></linearGradient></defs><rect width="100" height="100" fill="url(#g)"/><path d="M30 42h34v22a14 14 0 0 1-14 14h-6a14 14 0 0 1-14-14Z" fill="#fff" fill-opacity=".92"/><path d="M64 48h4a7 7 0 0 1 0 14h-4" fill="none" stroke="#fff" stroke-opacity=".92" stroke-width="4"/><path d="M40 34c0-5 5-5 5-10M50 34c0-5 5-5 5-10" fill="none" stroke="#fff" stroke-opacity=".8" stroke-width="3" stroke-linecap="round"/></svg>');
+
+    // ---------- サンプルデータ（すべて架空・毎回同じ数字） ----------
+    function mulberry32(a) {
+        return function () {
+            a |= 0; a = a + 0x6D2B79F5 | 0;
+            let t = Math.imul(a ^ a >>> 15, 1 | a);
+            t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+            return ((t ^ t >>> 14) >>> 0) / 4294967296;
+        };
+    }
+    const R = mulberry32(20261107);
+    const TOTAL = 36;                       // 取り込める最大の月数
+    const months = [];                      // 2023年11月 〜 2026年10月
+    (function () {
+        let y = 2023, m = 11;
+        for (let i = 0; i < TOTAL; i++) {
+            months.push({ y, m, label: y + '年' + m + '月', short: String(y).slice(2) + '/' + m });
+            m++; if (m > 12) { m = 1; y++; }
+        }
+    })();
+    const SEASON = [1.0, 0.92, 0.98, 1.02, 1.05, 1.08, 1.18, 1.22, 1.0, 1.02, 1.06, 1.16];
+    const EVENTS = { '2024-3': '新メニュー発売', '2024-7': '夏の限定ドリンク企画', '2024-12': 'クリスマス企画', '2025-4': '1周年イベント', '2025-8': '広告の運用開始', '2025-12': 'クリスマス企画', '2026-4': '2号店オープンの告知', '2026-8': '夏のキャンペーン' };
+    const eventText = months.map(x => EVENTS[x.y + '-' + x.m] || null);
+
+    const reach = [], followers = [], eng = [], saves = [];
+    (function () {
+        let f = 2400;
+        for (let i = 0; i < TOTAL; i++) {
+            const mo = months[i];
+            let r = 18000 * Math.pow(1.03, i) * SEASON[mo.m - 1] * (0.94 + R() * 0.12);
+            if (eventText[i]) r *= 1.25;
+            if (i > 0 && eventText[i - 1]) r *= 1.08;
+            reach.push(Math.round(r));
+            f += r * 0.0045 * (0.85 + R() * 0.3) + (eventText[i] ? 80 : 0);
+            followers.push(Math.round(f));
+            eng.push(+(4.0 - 0.015 * i + (eventText[i] ? 0.3 : 0) + (R() - 0.5) * 0.5).toFixed(2));
+            saves.push(Math.round(r * 0.011 * (0.9 + R() * 0.2) * (1 + 0.004 * i)));
+        }
+    })();
+
+    const THEMES = ['新作ドリンクの紹介', '季節のケーキ', 'スタッフの一日', '店内の雰囲気', 'おうちカフェのレシピ', 'お客様の声', '焼き菓子の詰め合わせ', '朝のルーティン', '限定メニュー', 'コーヒーの淹れ方'];
+    const posts = [];
+    (function () {
+        for (let i = 0; i < TOTAL; i++) {
+            const mo = months[i];
+            const n = 8 + Math.floor(R() * 6);
+            for (let k = 0; k < n; k++) {
+                const day = 1 + Math.floor(R() * 28);
+                const t = R();
+                const type = t < 0.4 ? 'リール' : (t < 0.85 ? '投稿' : 'ストーリー');
+                const hour = 7 + Math.floor(R() * 16);
+                const dow = (new Date(mo.y, mo.m - 1, day).getDay() + 6) % 7;   // 月=0
+                const band = hour < 10 ? 0 : hour < 14 ? 1 : hour < 18 ? 2 : 3;
+                const mult = type === 'リール' ? 1.8 : (type === '投稿' ? 1.0 : 0.5);
+                const rp = Math.round(reach[i] / n * (0.4 + 1.6 * R() * R()) * mult * (eventText[i] ? 1.2 : 1));
+                const er = 0.02 + 0.04 * Math.pow(R(), 1.5) + [0, 0.004, 0.006, 0.012][band] + ((dow === 3 || dow === 5) ? 0.008 : 0);
+                const sp = Math.round(rp * (type === 'ストーリー' ? 0.002 : (0.006 + 0.016 * R()) * (type === '投稿' ? 1.3 : 1)));
+                posts.push({ i, date: mo.y + '/' + String(mo.m).padStart(2, '0') + '/' + String(day).padStart(2, '0'), type, theme: THEMES[Math.floor(R() * THEMES.length)], reach: rp, saves: sp, er: er * 100, dow, band });
+            }
+        }
+    })();
+
+    const METRICS = {
+        followers: { label: 'フォロワー数', unit: '人', arr: followers, dec: 0 },
+        reach: { label: '月間リーチ', unit: '人', arr: reach, dec: 0 },
+        eng: { label: 'エンゲージメント率', unit: '%', arr: eng, dec: 2 },
+        saves: { label: '保存数', unit: '件', arr: saves, dec: 0 }
+    };
+    const fmt = (v, dec) => dec ? v.toFixed(dec) : Math.round(v).toLocaleString('ja-JP');
+    const pct = v => (v >= 0 ? '+' : '−') + Math.abs(v).toFixed(1) + '%';
+
+    createApp({
+        setup() {
+            const loaded = ref(3);
+            const metric = ref('reach');
+            const showYoy = ref(false);
+            const typeFilter = ref('すべて');
+            const log = ref(['直近3か月分（2026年8月〜10月）を取り込み済みです。']);
+            const typeOptions = ['すべて', 'リール', '投稿', 'ストーリー'];
+            const dayLabels = ['月', '火', '水', '木', '金', '土', '日'];
+            const bandLabels = ['朝 7–10時', '昼 10–14時', '夕 14–18時', '夜 18–23時'];
+
+            const lo = computed(() => TOTAL - loaded.value);
+            const currentMetric = computed(() => METRICS[metric.value]);
+            const canYoy = computed(() => loaded.value >= 13);
+            watch(canYoy, v => { if (!v) showYoy.value = false; });
+
+            const visibleLabelRange = computed(() => months[lo.value].label + ' 〜 ' + months[TOTAL - 1].label);
+
+            // 主要な数字
+            const tiles = computed(() => Object.keys(METRICS).map(key => {
+                const m = METRICS[key], a = m.arr, last = TOTAL - 1;
+                const mom = loaded.value >= 2 ? (a[last] / a[last - 1] - 1) * 100 : null;
+                const yoy = loaded.value >= 13 ? (a[last] / a[last - 12] - 1) * 100 : null;
+                return { key, label: m.label, unit: m.unit, value: fmt(a[last], m.dec), mom, yoy, momText: mom === null ? '' : pct(mom), yoyText: yoy === null ? '' : pct(yoy) };
+            }));
+
+            // 施策メモ
+            const visibleEvents = computed(() => {
+                const out = [];
+                for (let i = lo.value; i < TOTAL; i++) if (eventText[i]) out.push({ key: i, label: months[i].label, text: eventText[i] });
+                return out;
+            });
+
+            // 季節ごとの傾向
+            const season = computed(() => {
+                if (loaded.value < 12) return null;
+                const sum = Array(12).fill(0), cnt = Array(12).fill(0);
+                for (let i = lo.value; i < TOTAL; i++) { sum[months[i].m - 1] += reach[i]; cnt[months[i].m - 1]++; }
+                const avg = sum.map((s, k) => cnt[k] ? s / cnt[k] : 0);
+                const max = Math.max(...avg), bestK = avg.indexOf(max);
+                return {
+                    bestLabel: (bestK + 1) + '月（平均 ' + Math.round(max).toLocaleString('ja-JP') + '人）',
+                    bars: avg.map((v, k) => ({ m: k + 1, h: Math.max(4, v / max * 100), best: k === bestK, text: Math.round(v / 1000) + '千' }))
+                };
+            });
+
+            // 投稿
+            const visiblePosts = computed(() => posts.filter(p => p.i >= lo.value));
+            const ranking = computed(() => visiblePosts.value
+                .filter(p => typeFilter.value === 'すべて' || p.type === typeFilter.value)
+                .slice().sort((a, b) => b.reach - a.reach).slice(0, 5));
+
+            // 曜日 × 時間帯
+            const heat = computed(() => {
+                const sum = Array.from({ length: 7 }, () => Array(4).fill(0));
+                const cnt = Array.from({ length: 7 }, () => Array(4).fill(0));
+                visiblePosts.value.forEach(p => { sum[p.dow][p.band] += p.er; cnt[p.dow][p.band]++; });
+                const vals = [];
+                const cells = sum.map((row, d) => row.map((s, b) => {
+                    const n = cnt[d][b];
+                    const v = n >= 3 ? s / n : null;
+                    if (v !== null) vals.push({ v, d, b });
+                    return { n, v };
+                }));
+                const min = Math.min(...vals.map(x => x.v)), max = Math.max(...vals.map(x => x.v));
+                const rows = cells.map(row => row.map(c => {
+                    if (c.v === null) return { n: c.n, text: '—', bg: '#F1F5F9', dark: false };
+                    const t = max > min ? (c.v - min) / (max - min) : 0.5;
+                    const a = 0.12 + 0.88 * t;
+                    return { n: c.n, text: c.v.toFixed(1) + '%', bg: 'rgba(30,58,95,' + a.toFixed(2) + ')', dark: a > 0.5 };
+                }));
+                let best = null;
+                if (vals.length >= 6) { const top = vals.reduce((p, c) => (c.v > p.v ? c : p)); best = dayLabels[top.d] + '曜日の' + bandLabels[top.b].split(' ')[0] + '（平均 ' + top.v.toFixed(1) + '%）'; }
+                return { rows, best, sparse: vals.length < 14 };
+            });
+
+            // 次に取り込むCSV
+            const nextCsv = computed(() => {
+                const idx = lo.value - 1;
+                if (idx < 0) return null;
+                const mo = months[idx];
+                const days = new Date(mo.y, mo.m, 0).getDate();
+                const f0 = idx > 0 ? followers[idx - 1] : 2400;
+                const rows = [1, 2, 3].map(d => ({
+                    d: mo.y + '/' + String(mo.m).padStart(2, '0') + '/' + String(d).padStart(2, '0'),
+                    reach: Math.round(reach[idx] / days * (0.92 + 0.016 * ((d * 7 + idx) % 10))),
+                    followers: Math.round(f0 + (followers[idx] - f0) * d / days),
+                    saves: Math.round(saves[idx] / days * (0.9 + 0.02 * ((d * 5 + idx) % 10)))
+                }));
+                return { label: mo.label, days, rows };
+            });
+
+            // 取り込み操作
+            const countPosts = idx => posts.filter(p => p.i === idx).length;
+            function importOne() {
+                if (loaded.value >= TOTAL) return;
+                const idx = lo.value - 1, mo = months[idx];
+                const days = new Date(mo.y, mo.m, 0).getDate();
+                loaded.value++;
+                log.value = [mo.label + '分のCSVを取り込みました（日別データ' + days + '行・投稿' + countPosts(idx) + '件）。', ...log.value].slice(0, 3);
+            }
+            function importAll() {
+                if (loaded.value >= TOTAL) return;
+                const before = loaded.value;
+                loaded.value = TOTAL;
+                log.value = ['過去分の' + (TOTAL - before) + 'か月ぶん（' + months[0].label + '〜' + months[TOTAL - before - 1].label + '）をまとめて取り込みました。', ...log.value].slice(0, 3);
+            }
+            function reset() {
+                loaded.value = 3; showYoy.value = false;
+                log.value = ['直近3か月分（2026年8月〜10月）を取り込み済みの状態に戻しました。'];
+            }
+
+            // ---------- グラフ（Chart.js） ----------
+            let chart = null;
+            const shadePlugin = {
+                id: 'shade',
+                beforeDatasetsDraw(c) {
+                    const a = c.chartArea, x = c.scales.x, n = c.data.labels.length;
+                    if (!n) return;
+                    const ctx = c.ctx;
+                    const from = Math.max(0, n - 3);
+                    const step = n > 1 ? x.getPixelForValue(1) - x.getPixelForValue(0) : 0;
+                    const x0 = n <= 3 ? a.left : x.getPixelForValue(from) - step / 2;
+                    ctx.save();
+                    ctx.fillStyle = 'rgba(30,58,95,0.07)';
+                    ctx.fillRect(x0, a.top, a.right - x0, a.bottom - a.top);
+                    ctx.restore();
+                },
+                afterDatasetsDraw(c) {
+                    const a = c.chartArea, x = c.scales.x, ctx = c.ctx;
+                    const marks = c.options.plugins.shade.events || [];
+                    ctx.save();
+                    marks.forEach(i => {
+                        const px = x.getPixelForValue(i);
+                        ctx.strokeStyle = 'rgba(30,58,95,0.35)'; ctx.setLineDash([2, 3]); ctx.lineWidth = 1;
+                        ctx.beginPath(); ctx.moveTo(px, a.top + 8); ctx.lineTo(px, a.bottom); ctx.stroke();
+                        ctx.setLineDash([]); ctx.fillStyle = '#1E3A5F';
+                        ctx.beginPath(); ctx.moveTo(px, a.top); ctx.lineTo(px + 5, a.top + 6); ctx.lineTo(px, a.top + 12); ctx.lineTo(px - 5, a.top + 6); ctx.closePath(); ctx.fill();
+                    });
+                    ctx.restore();
+                }
+            };
+
+            function drawChart() {
+                const canvas = document.getElementById('trendChart');
+                if (!canvas) return;
+                const m = currentMetric.value, from = lo.value;
+                const labels = months.slice(from).map(x => x.short);
+                const data = m.arr.slice(from);
+                const evIdx = [];
+                const evText = {};
+                for (let i = from; i < TOTAL; i++) if (eventText[i]) { evIdx.push(i - from); evText[i - from] = eventText[i]; }
+                const datasets = [{
+                    label: m.label, data, borderColor: '#1E3A5F', backgroundColor: 'rgba(30,58,95,0.08)', fill: true, tension: 0.3,
+                    borderWidth: 2, pointRadius: data.length > 18 ? 0 : 3, pointHoverRadius: 5, pointBackgroundColor: '#1E3A5F'
+                }];
+                if (showYoy.value && canYoy.value) {
+                    datasets.push({
+                        label: '1年前の同じ月', borderColor: '#9CA3AF', borderDash: [5, 4], borderWidth: 2, fill: false, tension: 0.3, pointRadius: 0,
+                        data: data.map((_, k) => (k >= 12 ? m.arr[from + k - 12] : null)), spanGaps: false
+                    });
+                }
+                if (chart) chart.destroy();
+                chart = new Chart(canvas.getContext('2d'), {
+                    type: 'line', data: { labels, datasets }, plugins: [shadePlugin],
+                    options: {
+                        responsive: true, maintainAspectRatio: false, animation: { duration: 250 },
+                        interaction: { mode: 'index', intersect: false },
+                        layout: { padding: { top: 6 } },
+                        plugins: {
+                            legend: { display: false }, shade: { events: evIdx },
+                            tooltip: {
+                                callbacks: {
+                                    title: items => months[from + items[0].dataIndex].label,
+                                    label: ctx => ' ' + ctx.dataset.label + '：' + fmt(ctx.parsed.y, m.dec) + m.unit,
+                                    afterBody: items => (evText[items[0].dataIndex] ? ['施策：' + evText[items[0].dataIndex]] : [])
+                                }
+                            }
+                        },
+                        scales: {
+                            x: { grid: { display: false }, ticks: { maxTicksLimit: 12, color: '#64748b', font: { size: 10 } } },
+                            y: { grid: { color: '#f1f5f9' }, ticks: { color: '#64748b', font: { size: 10 }, callback: v => (m.dec ? v : Math.abs(v) >= 10000 ? (v / 10000) + '万' : v.toLocaleString('ja-JP')) } }
+                        }
+                    }
+                });
+            }
+            onMounted(() => setTimeout(drawChart, 50));
+            watch([loaded, metric, showYoy], () => nextTick(drawChart));
+
+            return {
+                avatar, total: TOTAL, loaded, metric, showYoy, canYoy, typeFilter, typeOptions, dayLabels, bandLabels, log,
+                currentMetric, visibleLabelRange, tiles, visibleEvents, season, visiblePosts, ranking, heat, nextCsv,
+                importOne, importAll, reset
+            };
+        }
+    }).mount('#app');
+</script>
+</body>
+</html>
