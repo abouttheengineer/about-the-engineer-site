@@ -1,5 +1,5 @@
 /**
- * TechAssistantPage — 「Global Tech Assistant」: a consultation desk for
+ * TechAssistantPage — 「Global Security Assistant」: a consultation desk for
  * technical trouble (code, GAS, Firebase, domain / SSL, PC & accounts) plus a
  * light security check. Layout follows a landing-page pattern in the site's
  * white / navy style: hero → what we handle → typical trouble → flow → price →
@@ -38,8 +38,8 @@ function TechAssistantPage({ go }) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
         body: JSON.stringify({
-          _subject: '【Global Tech Assistant】無料・緊急トラブル診断のお申し込み',
-          service: 'Global Tech Assistant',
+          _subject: '【Global Security Assistant】無料・緊急トラブル診断のお申し込み',
+          service: 'Global Security Assistant',
           category: form.category, deadline: form.deadline,
           company: form.company, name: form.name, email: form.email,
           github: form.github, message: form.message,
@@ -110,7 +110,7 @@ function TechAssistantPage({ go }) {
     <main>
       <PageHero
         kicker="Tech Support — 技術トラブル相談"
-        title="Global Tech Assistant"
+        title="Global Security Assistant"
         lead="コード、GAS、Firebase、ドメイン・SSLなどの、「どこに頼めばいいかわからない」技術のトラブルを、原因の切り分けから、解決までお手伝いします。" />
 
       {/* CTA */}

@@ -88,7 +88,7 @@ function BusinessPage({ go }) {
         <Rule />
       </Container>
 
-      {/* Global Tech Assistant — technical-trouble consultation desk; links to its own page */}
+      {/* Global Security Assistant — technical-trouble consultation desk; links to its own page */}
       <Container id="tech-assistant-section" style={{ paddingBottom: 96 }}>
         <div style={{ display: 'flex', alignItems: 'baseline', gap: 16, marginBottom: 8 }}>
           <span style={{ fontFamily: 'var(--font-ui)', fontSize: 13, fontWeight: 600, letterSpacing: 'var(--tracking-wide)', textTransform: 'uppercase', color: 'var(--neutral-600)' }}>Tech Support</span>
@@ -100,7 +100,7 @@ function BusinessPage({ go }) {
           className="rgrid"
           style={{ display: 'grid', gridTemplateColumns: '0.32fr 1fr auto', gap: 40, alignItems: 'start', padding: '40px 0', cursor: 'pointer' }}>
           <div>
-            <div style={{ fontFamily: 'var(--font-display)', fontWeight: 700, textTransform: 'uppercase', fontSize: 'clamp(24px,3vw,38px)', letterSpacing: '0.02em', lineHeight: 0.95, color: 'var(--zinc-950)' }}>Global Tech Assistant</div>
+            <img src="assets/global-security-assistant.png" alt="Global Security Assistant" style={{ display: 'block', width: '100%', height: 'auto' }} />
             <div style={{ marginTop: 8, fontFamily: 'var(--font-ui)', fontSize: 12, fontWeight: 600, letterSpacing: 'var(--tracking-wide)', textTransform: 'uppercase', color: 'var(--neutral-600)' }}>技術トラブル相談・セキュリティ診断</div>
           </div>
           <div>

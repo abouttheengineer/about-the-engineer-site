@@ -1,5 +1,5 @@
 /**
- * TechAssistantTermsPage — short terms of use for 「Global Tech Assistant」.
+ * TechAssistantTermsPage — short terms of use for 「Global Security Assistant」.
  * Same single-column prose layout as the privacy policy.
  */
 function TechAssistantTermsPage({ go }) {
@@ -9,7 +9,7 @@ function TechAssistantTermsPage({ go }) {
 
   const articles = [
     ['第1条（本サービスの内容）', [
-      '「Global Tech Assistant」（以下「本サービス」といいます。）は、合同会社About The Engineer（以下「当社」といいます。）が、お客様の技術的なトラブル（コード、Google Apps Script、Firebase、ドメイン・DNS・SSL、PC・ブラウザ・アカウントの設定など）について、原因の確認、修正、設定のご案内を行うサービスです。あわせて、簡易的なセキュリティ診断を行います。',
+      '「Global Security Assistant」（以下「本サービス」といいます。）は、合同会社About The Engineer（以下「当社」といいます。）が、お客様の技術的なトラブル（コード、Google Apps Script、Firebase、ドメイン・DNS・SSL、PC・ブラウザ・アカウントの設定など）について、原因の確認、修正、設定のご案内を行うサービスです。あわせて、簡易的なセキュリティ診断を行います。',
     ]],
     ['第2条（セキュリティ診断の性質）', [
       '本サービスのセキュリティ診断は、推奨される設定や、ありがちなミスを確認してご案内する、簡易的なチェックにとどまります。「診断」という名前ですが、本格的な脆弱性診断ではありません。',
@@ -60,7 +60,7 @@ function TechAssistantTermsPage({ go }) {
     <main>
       <PageHero
         kicker="Terms — ご利用規約"
-        lead="「Global Tech Assistant」のご利用規約です。セキュリティ診断は、簡易的なチェックであり、安全の保証や、法的な責任をともなうものではありません。" />
+        lead="「Global Security Assistant」のご利用規約です。セキュリティ診断は、簡易的なチェックであり、安全の保証や、法的な責任をともなうものではありません。" />
 
       <Container style={{ maxWidth: 760, paddingBottom: 120 }}>
         <Rule strong />
@@ -74,7 +74,7 @@ function TechAssistantTermsPage({ go }) {
           <p style={{ ...p, marginBottom: 0 }}>制定日：2026年11月8日</p>
         </div>
         <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', paddingTop: 8 }}>
-          <button onClick={() => go('tech-assistant')} style={window.btnOutline}>←&nbsp;Global Tech Assistantへ戻る</button>
+          <button onClick={() => go('tech-assistant')} style={window.btnOutline}>←&nbsp;Global Security Assistantへ戻る</button>
           <button onClick={() => go('privacy')} style={window.btnOutline}>プライバシーポリシー</button>
         </div>
       </Container>
