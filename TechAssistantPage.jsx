@@ -306,7 +306,7 @@ function TechAssistantPage({ go }) {
                 <input type="checkbox" required checked={agree} onChange={e => setAgree(e.target.checked)} style={{ marginTop: 6, width: 16, height: 16, accentColor: NAVY, flexShrink: 0 }} />
                 <span>
                   <a href="#tech-assistant-terms" target="_blank" rel="noopener" style={{ color: NAVY, fontWeight: 700 }}>ご利用規約</a>
-                  に同意します。セキュリティ診断は簡易的なチェックであり、安全を保証するものではないことを確認しました。
+                  に同意します。セキュリティ診断は簡易的なチェックであり、安全を保証するものではないことを確認しました。確認にAIの解析サービスを使う場合があること（秘密情報は除いて送ります。希望されない場合は、お困りごとの欄にご記入ください）も、了承します。
                 </span>
               </label>
 
